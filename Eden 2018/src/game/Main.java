@@ -1,5 +1,6 @@
 package game;
 
+//The starting Class
 public class Main {
 
 	public static void main(String[] args) {
@@ -7,8 +8,14 @@ public class Main {
 		
 		Screen sc = new Screen();
 		
-		while(true) {
+		long lastFrame = System.currentTimeMillis();
+		while(true){
+			long thisFrame = System.currentTimeMillis();
+			float tslf = (float)(thisFrame - lastFrame) / 1000f;
+			lastFrame = thisFrame;
 			sc.repaintScreen();
+			
+			Globals.player.Update(tslf);
 		}
 	}
 	

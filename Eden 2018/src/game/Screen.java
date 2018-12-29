@@ -7,11 +7,10 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+//The Screen as a JFrame filled with a Bufferstrategy 
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
 	private BufferStrategy strat;
-	
-	float x,y;
 	
 	//-------------------------------------------------------- Constructor
 	public Screen() {
@@ -28,6 +27,8 @@ public class Screen extends JFrame{
 		
 		this.setSize(Globals.width + Globals.insetX + i.right, Globals.height + Globals.insetY + i.bottom);
 		this.setLocationRelativeTo(null);
+		
+		this.addKeyListener(new Controls());
 	}
 	
 	//------------------------------------------------------------ Paints the Screen
@@ -43,5 +44,9 @@ public class Screen extends JFrame{
 		//Clear the Screen
 		g.setColor(Color.WHITE);
 		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, Globals.width, Globals.height);
+		
+		//Draw the Player
+		g.setColor(Color.BLACK);
+		Globals.player.show(g);
 	}
 }
