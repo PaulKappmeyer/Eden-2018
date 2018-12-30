@@ -7,16 +7,24 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-//The Screen as a JFrame filled with a Bufferstrategy 
+/**
+ * The screen as a JFrame filled with a BufferStrategy 
+ * @author Paul Kappmeyer
+ *
+ */
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
 	private BufferStrategy strat;
 	
-	//-------------------------------------------------------- Constructor
+	/**
+	 * Constructor; initializes the JFrame and the BufferStrategy
+	 */
 	public Screen() {
-		super("Eden");
+		this.setTitle("Eden");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setUndecorated(false);
 		this.setVisible(true);
+		this.setResizable(false);
 		
 		createBufferStrategy(2);
 		strat = getBufferStrategy();
@@ -31,7 +39,10 @@ public class Screen extends JFrame{
 		this.addKeyListener(new Controls());
 	}
 	
-	//------------------------------------------------------------ Paints the Screen
+	/**
+	 * This function gets called every frame to repaint the screen; calls the function show
+	 * {@link #show(Graphics g)}
+	 */
 	public void repaintScreen(){
 		Graphics g = strat.getDrawGraphics();
 		show(g);
@@ -39,14 +50,22 @@ public class Screen extends JFrame{
 		strat.show();
 	}
 	
-	//-------------------------------------------------------------- Drawing, every frame
+	/**
+	 * 
+	 * @param g A Graphics Object to draw
+	 */
 	public void show(Graphics g){
 		//Clear the Screen
 		g.setColor(Color.WHITE);
-		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, Globals.width, Globals.height);
+		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, this.getWidth(), this.getHeight());
 		
 		//Draw the Player
-		g.setColor(Color.BLACK);
 		Globals.player.show(g);
+		
+		Globals.enemy.show(g);
+		
+		for (Bullet b : Globals.player.bullets) {
+			b.show(g);
+		}
 	}
 }
