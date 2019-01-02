@@ -19,7 +19,6 @@ public class Globals {
 	public static int insetY;
 	public static Eden player = new Eden();
 	public static Random random = new Random();
-	public static int size = 16;
 	public static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
 	public static void checkCollisionBulletToWall(Bullet b) {

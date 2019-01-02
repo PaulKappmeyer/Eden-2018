@@ -52,8 +52,11 @@ public class Eden {
 	 * @see Graphics
 	 */
 	public void show(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor(Color.BLUE);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.setColor(Color.BLACK);
+		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		
 		for (Bullet b : bullets) {
 			b.show(g);
 		}
@@ -105,14 +108,16 @@ public class Eden {
 		}
 		
 		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
-		ArrayList<Enemy> toRemoveEnemy = new ArrayList<>();
 		for (Bullet b : bullets) {
 			b.update(tslf);
 			
 			for (Enemy e : Globals.enemies) {
-				if(b.checkCollisionToEnemy(e, Globals.size)) {
+				if(b.checkCollisionToEnemy(e, e.size)) {
 					e.getHitByBullet(b);
-					if(e.health <= 0) toRemoveEnemy.add(e);
+					if(e.health <= 0 && e.alive) {
+						e.dieAnimation = true;
+						e.alive = false;
+					}
 					toRemoveBullet.add(b);
 				}
 			}
@@ -120,8 +125,9 @@ public class Eden {
 		for (Bullet b : toRemoveBullet) {
 			bullets.remove(b);
 		}
-		for (Enemy e : toRemoveEnemy) {
-			Globals.enemies.remove(e);
+		for (int i = 0; i < Globals.enemies.size(); i++) {
+			Enemy e = Globals.enemies.get(i);
+			if(!e.alive && e.dieAnimation == false)Globals.enemies.remove(e);
 		}
 	}
 	

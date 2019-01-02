@@ -11,9 +11,10 @@ import java.awt.Graphics;
 public class Enemy {
 
 	float x,y;
+	int size = 16;
 	int triggerdistance = 300;
 	boolean followplayer;
-	int walkspeed = 50;
+	int walkspeed = 100;
 	float knockback = 2.25f;
 	int health = 200;
 	float blink;
@@ -21,6 +22,13 @@ public class Enemy {
 	float blinkfromStart;
 	float maxBlinkTime = 1f;
 	boolean hitAnimation = false;
+	float radius = 0;
+	float radiusIncrease = 800;
+	float maxRadius = 40;
+	boolean dieAnimation = false;
+	
+	
+	boolean alive = true;
 	
 	public Enemy(float x, float y) {
 		this.x = x;
@@ -34,18 +42,22 @@ public class Enemy {
 	 */
 	public void show(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, Globals.size, Globals.size);
+		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, Globals.size, Globals.size);
+		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 		if(hitAnimation) {
 			if(blink > blinktime) {
 				g.setColor(Color.WHITE);
-				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, Globals.size, Globals.size);
-				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, Globals.size, Globals.size);
+				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 			}
 			if(blink > blinktime*2) {
 				blink -= blinktime*2;
 			}
+		}
+		if(dieAnimation) {
+			g.setColor(Color.BLACK);
+			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
 	}
 
@@ -54,7 +66,7 @@ public class Enemy {
 	 * @param tslf
 	 */
 	public void update(float tslf) {
-		float halfsize = Globals.size/2;
+		float halfsize = this.size/2;
 		float playercenterx = Globals.player.x + halfsize;
 		float playercentery = Globals.player.y + halfsize;
 		float enemycenterx = this.x + halfsize;
@@ -63,8 +75,8 @@ public class Enemy {
 		if(!followplayer) {
 			float distx = enemycenterx - playercenterx;
 			float disty = enemycentery - playercentery;
-			float distanceToPlayer = (float) Math.hypot(distx, disty);
-			if(distanceToPlayer < triggerdistance) {
+			float distanceToPlayer = distx * distx + disty * disty;
+			if(distanceToPlayer < triggerdistance * triggerdistance) {
 				followplayer = true;
 			}
 		}
@@ -90,6 +102,13 @@ public class Enemy {
 			if(blinkfromStart > maxBlinkTime) {
 				blinkfromStart = 0;
 				hitAnimation = false;
+			}
+		}
+		
+		if(dieAnimation) {
+			radius += radiusIncrease * tslf;
+			if(radius >= maxRadius) {
+				dieAnimation = false;
 			}
 		}
 	}

@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
  */
 public class Main {
 
-	public static float tsls;
+	public static float tsls = 5;
 	
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Eden started");
@@ -22,7 +22,8 @@ public class Main {
 			float tslf = (float)(thisFrame - lastFrame) / 1000f;
 			lastFrame = thisFrame;
 			sc.repaintScreen();
-			
+//			Globals.enemies.add(new Enemy(100, 100));
+//			System.out.println(Globals.enemies.size());
 			tsls += tslf;
 			if(tsls >= 5) {
 				tsls -= 5;
@@ -39,7 +40,7 @@ public class Main {
 			
 			if(Controls.isKeyDown(KeyEvent.VK_ESCAPE))System.exit(0);
 			
-			Thread.sleep(5);
+			Thread.sleep(0);
 		}
 	}
 	
