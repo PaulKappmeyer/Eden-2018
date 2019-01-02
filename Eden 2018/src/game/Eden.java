@@ -21,8 +21,8 @@ public class Eden {
 	float shottime = 0.125f;
 	float tsls = shottime;
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	int bulletspray = 10;
-	float knockback = 1.25f;
+	int bulletspray = 7;
+	float knockback = 0.75f;
 	
 	final int IDLESTATE = 0;
 	final int SHOOTSTATE = 1;
@@ -33,6 +33,8 @@ public class Eden {
 	final int LEFT = 2;
 	final int RIGHT = 3;
 	int direction = 0;
+	
+	int size = 16;
 	
 	boolean canshot;
 	
@@ -51,7 +53,7 @@ public class Eden {
 	 */
 	public void show(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, 16, 16);
+		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		for (Bullet b : bullets) {
 			b.show(g);
 		}
@@ -92,6 +94,8 @@ public class Eden {
 			}
 		}
 		
+		checkCollisionPlayerToWall();
+		
 		if(tsls >= shottime) {
 			state = IDLESTATE;
 			canshot = true;
@@ -99,13 +103,25 @@ public class Eden {
 		}else {
 			tsls += tslf;	
 		}
-				
+		
+		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
+		ArrayList<Enemy> toRemoveEnemy = new ArrayList<>();
 		for (Bullet b : bullets) {
 			b.update(tslf);
-			if(b.checkCollisionToEnemy(Globals.enemy, Globals.size)) {
-				Globals.enemy.walkspeed = 0;
-				b.speed = 0;
+			
+			for (Enemy e : Globals.enemies) {
+				if(b.checkCollisionToEnemy(e, Globals.size)) {
+					e.getHitByBullet(b);
+					if(e.health <= 0) toRemoveEnemy.add(e);
+					toRemoveBullet.add(b);
+				}
 			}
+		}
+		for (Bullet b : toRemoveBullet) {
+			bullets.remove(b);
+		}
+		for (Enemy e : toRemoveEnemy) {
+			Globals.enemies.remove(e);
 		}
 	}
 	
@@ -117,17 +133,20 @@ public class Eden {
 		float angle = 0;
 		if(direction == UP) {
 			angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
 		}
 		if(direction == DOWN) {
 			angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
 		}
 		if(direction == LEFT){
 			angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
 		}
 		if(direction == RIGHT) {
 			angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
 		}
-		bullets.add(new Bullet(x + 6, y + 6, angle));
 		applyRecoil(angle);
 	}
 	
@@ -138,5 +157,20 @@ public class Eden {
 	public void applyRecoil(float angle) {
 		this.x -= (float) Math.sin(Math.toRadians(angle)) * knockback;
 		this.y -= (float) Math.cos(Math.toRadians(angle)) * knockback;
+	}
+	
+	public void checkCollisionPlayerToWall() {
+		if(this.x < 0) {
+			this.x = 0;
+		}
+		if(this.y < 0) {
+			this.y = 0;
+		}
+		if(this.x + this.size > Globals.width) {
+			this.x = Globals.width - this.size;
+		}
+		if(this.y + this.size > Globals.height) {
+			this.y = Globals.height - this.size;
+		}
 	}
 }

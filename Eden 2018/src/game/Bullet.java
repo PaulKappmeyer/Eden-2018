@@ -6,9 +6,10 @@ import java.awt.Graphics;
 public class Bullet {
 
 	float x,y;
-	int size = 4;
+	static int size = 6;
 	float velX,velY;
 	float speed = 450;
+	float angle;
 	
 	/**
 	 * 
@@ -19,6 +20,7 @@ public class Bullet {
 	public Bullet(float x, float y, float angle) {
 		this.x = x;
 		this.y = y;
+		this.angle = angle;
 		this.velX = (float) Math.sin(Math.toRadians(angle));
 		this.velY = (float) Math.cos(Math.toRadians(angle));
 	}
@@ -41,8 +43,11 @@ public class Bullet {
 	public void update(float tslf) {
 		this.x += velX * speed * tslf;
 		this.y += velY * speed * tslf;
+
+		Globals.checkCollisionBulletToWall(this);
 	}
-	
+
+
 	/**
 	 * 
 	 * @param e The enemy to check with
@@ -50,9 +55,9 @@ public class Bullet {
 	 * @return true if the collide; false if not
 	 */
 	public boolean checkCollisionToEnemy(Enemy e, float size) {
-		float cx = this.x + this.size/2;
-		float cy = this.y + this.size/2;
-		int r = this.size/2;
+		float cx = this.x + Bullet.size/2;
+		float cy = this.y + Bullet.size/2;
+		int r = Bullet.size/2;
 		
 		//Collision circle in the rectangle
 		if(cx > e.x && cx < e.x + size && cy > e.y && cy < e.y + size) {

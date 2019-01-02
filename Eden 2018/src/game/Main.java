@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
  */
 public class Main {
 
+	public static float tsls;
+	
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Eden started");
 		
@@ -21,8 +23,19 @@ public class Main {
 			lastFrame = thisFrame;
 			sc.repaintScreen();
 			
+			tsls += tslf;
+			if(tsls >= 5) {
+				tsls -= 5;
+				Globals.enemies.add(new Enemy(100, 100));
+				Globals.enemies.add(new Enemy(100, 500));
+				Globals.enemies.add(new Enemy(500, 100));
+				Globals.enemies.add(new Enemy(500, 500));
+			}
+			
 			Globals.player.update(tslf);
-			Globals.enemy.update(tslf);
+			for (Enemy e : Globals.enemies) {
+				e.update(tslf);
+			}
 			
 			if(Controls.isKeyDown(KeyEvent.VK_ESCAPE))System.exit(0);
 			

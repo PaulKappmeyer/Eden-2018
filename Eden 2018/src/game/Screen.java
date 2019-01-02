@@ -62,7 +62,9 @@ public class Screen extends JFrame{
 		//Draw the Player
 		Globals.player.show(g);
 		
-		Globals.enemy.show(g);
+		for (Enemy e : Globals.enemies) {
+			e.show(g);
+		}
 		
 		for (Bullet b : Globals.player.bullets) {
 			b.show(g);
