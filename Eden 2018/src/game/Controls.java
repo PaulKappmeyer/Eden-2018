@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
  * @see KeyListener
  */
 
+//TODO: implement mouse 
 public class Controls implements KeyListener{
 
 	private static boolean [] keys = new boolean[1024];

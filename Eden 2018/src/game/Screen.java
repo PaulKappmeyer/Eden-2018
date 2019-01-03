@@ -26,7 +26,7 @@ public class Screen extends JFrame{
 		this.setVisible(true);
 		this.setResizable(false);
 		
-		createBufferStrategy(2);
+		createBufferStrategy(4);
 		strat = getBufferStrategy();
 		
 		Insets i = getInsets();
@@ -69,5 +69,8 @@ public class Screen extends JFrame{
 		for (Bullet b : Globals.player.bullets) {
 			b.show(g);
 		}
+		
+		g.setColor(Color.BLACK);
+		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
 	}
 }

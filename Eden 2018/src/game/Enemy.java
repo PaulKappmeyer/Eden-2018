@@ -10,12 +10,13 @@ import java.awt.Graphics;
  */
 public class Enemy {
 
+	//TODO: Revise the variable mess
 	float x,y;
 	int size = 16;
 	int triggerdistance = 300;
 	boolean followplayer;
-	int walkspeed = 70;
-	float knockback = 2.25f;
+	int walkspeed = 40;
+	float knockback = 6.25f;
 	int health = 200;
 	float blink;
 	float blinktime = 0.05f;
@@ -29,9 +30,15 @@ public class Enemy {
 	
 	boolean alive = true;
 	
+	/**
+	 * Constructor; initializes the enemy
+	 * @param x The x-position
+	 * @param y The y-position
+	 */
 	public Enemy(float x, float y) {
 		this.x = x;
 		this.y = y;
+		this.walkspeed = walkspeed + -10 + Globals.random.nextInt(20);
 	}
 	
 	

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class Eden {
 
+	//TODO: revise the variable mess
 	float x,y;
 	int idlewalkspeed = 200;
 	int shotwalkspeed = 40;
@@ -23,6 +24,9 @@ public class Eden {
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	int bulletspray = 3;
 	float recoil = 0.75f;
+	
+	boolean tripleMachineGun = true;
+	float tripleMachineGunRadius = 7;
 	
 	float knockback = 40f;
 	float velX;
@@ -132,8 +136,9 @@ public class Eden {
 		if(gotHit) {
 			this.x += velX * tslf;
 			this.y += velY * tslf;
-//			this.velX *= 0.5 * tslf;
-//			this.velY *= 0.5 * tslf;
+			// TODO: slow down velX and velY
+//			this.velX *= (0.5 * tslf);
+//			this.velY *= (0.5 * tslf);
 		}
 		if(gotHit) {
 			blink += tslf;
@@ -184,21 +189,50 @@ public class Eden {
 	 */
 	public void shot() {
 		float angle = 0;
-		if(shotDirection == UP) {
-			angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-			bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
+		if(tripleMachineGun) {
+			if(shotDirection == UP) {
+				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle-tripleMachineGunRadius));
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle+tripleMachineGunRadius));
+			}
+			if(shotDirection == DOWN) {
+				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle-tripleMachineGunRadius));
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle+tripleMachineGunRadius));
+			}
+			if(shotDirection == LEFT){
+				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle-tripleMachineGunRadius));
+				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
+				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle+tripleMachineGunRadius));
+			}
+			if(shotDirection == RIGHT) {
+				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle-tripleMachineGunRadius));
+				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
+				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle+tripleMachineGunRadius));
+			}
 		}
-		if(shotDirection == DOWN) {
-			angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-			bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
-		}
-		if(shotDirection == LEFT){
-			angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-			bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
-		}
-		if(shotDirection == RIGHT) {
-			angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-			bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
+		//---------------------------------------------------------------------------------------------------
+		else {
+			if(shotDirection == UP) {
+				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
+			}
+			if(shotDirection == DOWN) {
+				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
+			}
+			if(shotDirection == LEFT){
+				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
+			}
+			if(shotDirection == RIGHT) {
+				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
+			}
 		}
 		applyRecoil(angle);
 	}
@@ -238,6 +272,7 @@ public class Eden {
 				float distx = pcx - ecx;
 				float disty = pcy - ecy;
 				
+				//TODO: Rework the angle system
 				float angle = (float) Math.atan(distx / disty);
 				angle = (float) Math.toDegrees(angle);
 				if(pcy > ecy) angle =  -90 - (90-angle);
@@ -250,7 +285,8 @@ public class Eden {
 	}
 	
 	public void applyKnockback(float angle) {
-		this.velX -= (float) Math.sin(Math.toRadians(angle)) * knockback;
-		this.velY -= (float) Math.cos(Math.toRadians(angle)) * knockback;
+		//TODO: Remove the - Math.sin
+		this.velX = (float) -Math.sin(Math.toRadians(angle)) * knockback;
+		this.velY = (float) -Math.cos(Math.toRadians(angle)) * knockback;
 	}
 }

@@ -20,7 +20,9 @@ public class Globals {
 	public static Eden player = new Eden();
 	public static Random random = new Random();
 	public static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	public static int fps;
 	
+	//TODO: change the method
 	public static void checkCollisionBulletToWall(Bullet b) {
 		if(b.x < 0) {
 			b.x = 0;

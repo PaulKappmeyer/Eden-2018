@@ -102,6 +102,9 @@ public class Bullet {
 		return false;
 	}
 	
+	/**
+	 * This function disables the bullet so it does not get updated and moves or does damage to enemies, the state is picked for example when the bullet hit the wall
+	 */
 	public void disable() {
 		this.angle = 0;
 		this.velX = 0;
