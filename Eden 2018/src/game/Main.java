@@ -22,8 +22,10 @@ public class Main {
 			float tslf = (float)(thisFrame - lastFrame) / 1000f;
 			lastFrame = thisFrame;
 			sc.repaintScreen();
+			
 //			Globals.enemies.add(new Enemy(100, 100));
 //			System.out.println(Globals.enemies.size());
+			
 			tsls += tslf;
 			if(tsls >= 5) {
 				tsls -= 5;

@@ -14,7 +14,7 @@ public class Enemy {
 	int size = 16;
 	int triggerdistance = 300;
 	boolean followplayer;
-	int walkspeed = 100;
+	int walkspeed = 70;
 	float knockback = 2.25f;
 	int health = 200;
 	float blink;
@@ -23,10 +23,9 @@ public class Enemy {
 	float maxBlinkTime = 1f;
 	boolean hitAnimation = false;
 	float radius = 0;
-	float radiusIncrease = 800;
-	float maxRadius = 40;
+	float radiusIncrease = 1600;
+	float maxRadius = 50;
 	boolean dieAnimation = false;
-	
 	
 	boolean alive = true;
 	
@@ -71,10 +70,10 @@ public class Enemy {
 		float playercentery = Globals.player.y + halfsize;
 		float enemycenterx = this.x + halfsize;
 		float enemycentery = this.y + halfsize;
+		float distx = enemycenterx - playercenterx;
+		float disty = enemycentery - playercentery;
 		
 		if(!followplayer) {
-			float distx = enemycenterx - playercenterx;
-			float disty = enemycentery - playercentery;
 			float distanceToPlayer = distx * distx + disty * disty;
 			if(distanceToPlayer < triggerdistance * triggerdistance) {
 				followplayer = true;
@@ -82,18 +81,16 @@ public class Enemy {
 		}
 		
 		if(followplayer) {
-			if(enemycenterx < playercenterx) {
-				this.x += walkspeed * tslf;
-			}
-			if(enemycenterx > playercenterx) {
-				this.x -= walkspeed * tslf;
-			}
-			if(enemycentery < playercentery) {
-				this.y += walkspeed * tslf;
-			}
-			if(enemycentery > playercentery) {
-				this.y -= walkspeed * tslf;
-			}
+			float angle = (float) Math.atan(distx / disty);
+			angle = (float) Math.toDegrees(angle);
+			if(playercentery > enemycentery) angle =  -90 - (90-angle);
+			if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
+			
+			float velX = (float) -Math.sin(Math.toRadians(angle));
+			float velY = (float) -Math.cos(Math.toRadians(angle));
+			
+			this.x += velX * walkspeed * tslf;
+			this.y += velY * walkspeed * tslf;
 		}
 		
 		if(hitAnimation) {

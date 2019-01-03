@@ -10,6 +10,7 @@ public class Bullet {
 	float velX,velY;
 	float speed = 450;
 	float angle;
+	boolean disabled = false;
 	
 	/**
 	 * 
@@ -41,11 +42,13 @@ public class Bullet {
 	 * @param tslf The time since the last frame in seconds; should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
 	 */
 	public void update(float tslf) {
-		this.x += velX * speed * tslf;
-		this.y += velY * speed * tslf;
-
-		Globals.checkCollisionBulletToWall(this);
-	}
+		if(!disabled) {
+			this.x += velX * speed * tslf;
+			this.y += velY * speed * tslf;
+			
+			Globals.checkCollisionBulletToWall(this);
+		}
+	}	
 
 
 	/**
@@ -97,5 +100,12 @@ public class Bullet {
 		}
 		//if no Collision happened
 		return false;
+	}
+	
+	public void disable() {
+		this.angle = 0;
+		this.velX = 0;
+		this.velY = 0;
+		this.disabled = true;
 	}
 }
