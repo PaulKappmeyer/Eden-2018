@@ -24,20 +24,23 @@ public class Globals {
 	
 	//TODO: change the method
 	public static void checkCollisionBulletToWall(Bullet b) {
-		if(b.x < 0) {
-			b.x = 0;
-			b.disable();
-		}
-		if(b.y < 0) {
-			b.y = 0;
-			b.disable();
-		}
-		if(b.x + Bullet.size > Globals.width) {
-			b.x = Globals.width - Bullet.size;
-			b.disable();
-		}
-		if(b.y + Bullet.size > Globals.height) {
-			b.y = Globals.height - Bullet.size;
+//		if(b.x < 0) {
+//			b.x = 0;
+//			b.disable();
+//		}
+//		if(b.y < 0) {
+//			b.y = 0;
+//			b.disable();
+//		}
+//		if(b.x + Bullet.size > Globals.width) {
+//			b.x = Globals.width - Bullet.size;
+//			b.disable();
+//		}
+//		if(b.y + Bullet.size > Globals.height) {
+//			b.y = Globals.height - Bullet.size;
+//			b.disable();
+//		}
+		if(b.x < 0 || b.y < 0 || b.x + Bullet.size > Globals.width || b.y + Bullet.size > Globals.height) {
 			b.disable();
 		}
 	}

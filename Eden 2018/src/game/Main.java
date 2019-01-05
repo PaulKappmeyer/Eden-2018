@@ -13,6 +13,7 @@ public class Main {
 	public static float tsls = 5;
 	public static long firstFrame;
 	public static int frames;
+	public static float spawntime = 5f;
 	
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Eden started");
@@ -34,24 +35,26 @@ public class Main {
 			
 			//TODO: Spawn algorithm
 			tsls += tslf;
-			if(tsls >= 5) {
-				tsls -= 5;
+			if(tsls >= spawntime) {
+				tsls -= spawntime;
 				Globals.enemies.add(new Enemy(100, 100));
 				Globals.enemies.add(new Enemy(100, 500));
 				Globals.enemies.add(new Enemy(500, 100));
 				Globals.enemies.add(new Enemy(500, 500));
+//				for (int i = 0; i < 4; i++) {
+//					Globals.enemies.add(new Enemy(Globals.random.nextInt(400), Globals.random.nextInt(400)));	
+//				}
 			}
 			
 			//TODO: Removal of the Bullet
-			if(Globals.player.bullets.size() >= 500) {
-				Globals.player.bullets.remove(0);
-			}
+//			if(Globals.player.bullets.size() >= 500) {
+//				Globals.player.bullets.remove(0);
+//			}
 			
-			//TODO: Update System
-			Globals.player.update(tslf);
-			for (Enemy e : Globals.enemies) {
-				e.update(tslf);
-			}
+			//TODO:Update System
+			sc.update(tslf);
+			
+			//TODO: Y-Sort
 			ysort();
 			
 			if(Controls.isKeyDown(KeyEvent.VK_ESCAPE))System.exit(0);

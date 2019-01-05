@@ -59,6 +59,11 @@ public class Screen extends JFrame{
 		g.setColor(Color.WHITE);
 		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, this.getWidth(), this.getHeight());
 		
+		//Screenshake
+		if(screenshake) {
+			g.translate(screenshakeX, screenshakeY);
+		}
+		
 		//Draw the Player
 		Globals.player.show(g);
 		
@@ -72,5 +77,38 @@ public class Screen extends JFrame{
 		
 		g.setColor(Color.BLACK);
 		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
+	}
+	
+	public static boolean screenshake;
+	public int screenshakeX;
+	public int screenshakeY;
+	public static int screenshakeStrength = 0;
+	public static float screenshakeDuration = 0;
+	public float tslsc;
+	
+	public void update(float tslf) {
+		//TODO: Update System
+		Globals.player.update(tslf);
+		for (Enemy e : Globals.enemies) {
+			e.update(tslf);
+		}
+		
+		if(screenshake) {
+			screenshakeX = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
+			screenshakeY = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
+			tslsc += tslf;
+			if(tslsc >= screenshakeDuration) {
+				tslsc = 0;
+				screenshake = false;
+				screenshakeStrength = 0;
+				screenshakeDuration = 0;
+			}
+		}
+	}
+	
+	public static void addScreenshake(int strength, float duration) {
+		screenshakeStrength = strength;
+		screenshakeDuration = duration;
+		screenshake = true;
 	}
 }

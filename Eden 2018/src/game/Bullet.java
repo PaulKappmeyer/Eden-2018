@@ -11,6 +11,10 @@ public class Bullet {
 	float speed = 450;
 	float angle;
 	boolean disabled = false;
+	float radius = 0;
+	float radiusIncrease = 1600;
+	float maxRadius = 80;
+	boolean dieAnimation = false;
 	
 	/**
 	 * 
@@ -35,6 +39,10 @@ public class Bullet {
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		if(dieAnimation) {
+			g.setColor(Color.BLACK);
+			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
+		}
 	}
 	
 	/**
@@ -48,6 +56,13 @@ public class Bullet {
 			
 			Globals.checkCollisionBulletToWall(this);
 		}
+		if(dieAnimation) {
+			Screen.addScreenshake(3, 0.05f);
+			radius += radiusIncrease * tslf;
+			if(radius >= maxRadius) {
+				dieAnimation = false;
+			}
+		}
 	}	
 
 
@@ -57,45 +72,45 @@ public class Bullet {
 	 * @param size The size of the enemy
 	 * @return true if the collide; false if not
 	 */
-	public boolean checkCollisionToEnemy(Enemy e, float size) {
+	public boolean checkCollisionToEnemy(Enemy e) {
 		float cx = this.x + Bullet.size/2;
 		float cy = this.y + Bullet.size/2;
 		int r = Bullet.size/2;
 		
 		//Collision circle in the rectangle
-		if(cx > e.x && cx < e.x + size && cy > e.y && cy < e.y + size) {
+		if(cx > e.x && cx < e.x + e.size && cy > e.y && cy < e.y + e.size) {
 			return true;
 		}
 		//Collision top side of the rectangle to the circle
-		if(cx > e.x && cx < e.x + size && Math.abs(e.y - cy) < r) {
+		if(cx > e.x && cx < e.x + e.size && Math.abs(e.y - cy) <= r) {
 			return true;
 		}
 		//Collision bottom side of the rectangle to the circle
-		if(cx > e.x && cx < e.x + size && Math.abs(e.y + size - cy) < r) {
+		if(cx > e.x && cx < e.x + e.size && Math.abs(e.y + e.size - cy) <= r) {
 			return true;
 		}
 		//Collision left side of the rectangle to the circle
-		if(cy > e.y && cy < e.y + size && Math.abs(e.x - cx) < r) {
+		if(cy > e.y && cy < e.y + e.size && Math.abs(e.x - cx) <= r) {
 			return true;
 		}
 		//Collision right side of the rectangle to the circle
-		if(cy > e.y && cy < e.y + size && Math.abs(e.x + size - cx) < r) {
+		if(cy > e.y && cy < e.y + e.size && Math.abs(e.x + e.size - cx) <= r) {
 			return true;
 		}
 		//Collision top left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - e.y)) < r) {
+		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - e.y)) <= r) {
 			return true;
 		}
 		//Collision top right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (e.x + size)), Math.abs(cy - e.y)) < r) {
+		if(Math.hypot(Math.abs(cx - (e.x + e.size)), Math.abs(cy - e.y)) <= r) {
 			return true;
 		}
 		//Collision bottom left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - (e.y + size))) < r) {
+		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - (e.y + e.size))) <= r) {
 			return true;
 		}
 		//Collision bottom right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (e.x + size)), Math.abs(cy - (e.y + size))) < r) {
+		if(Math.hypot(Math.abs(cx - (e.x + e.size)), Math.abs(cy - (e.y + size))) <= r) {
 			return true;
 		}
 		//if no Collision happened
@@ -110,5 +125,6 @@ public class Bullet {
 		this.velX = 0;
 		this.velY = 0;
 		this.disabled = true;
+		this.dieAnimation = true;
 	}
 }
