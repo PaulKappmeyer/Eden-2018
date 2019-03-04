@@ -3,52 +3,50 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 /**
  * This is the class of the player named "Eden"
  * @author Paul Kappmeyer
- * @param x The x-position of the player
- * @param y The y-position of the player
- * @param walkspeed This is the number of the pixels the player can run per second
+ * {@link #x} The x-position of the player <br>
+ * {@link #y} The y-position of the player <br>
+ * {@link #walkSpeed} This is the number of the pixels the player can run per second <br>
  */
 public class Eden {
 
 	//TODO: revise the variable mess
-	float x,y;
-	int idlewalkspeed = 200;
-	int shotwalkspeed = 100;
-	int walkspeed = idlewalkspeed;
-	float shottime = 0.125f;
-	float tsls = shottime;
-	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	int bulletspray = 3;
-	float recoil = 0.75f;
+	/**
+	 * The X-coordinate of the player
+	 */
+	float x;
+	/**
+	 * The Y-coordinate of the player
+	 */
+	float y;
+	/**
+	 * The walking speed in idle mode (in pixels per seconds)
+	 */
+	int idleWalkSpeed = 200;
+	int shotWalkSpeed = 100;
+	int walkSpeed = idleWalkSpeed;
 	
-	boolean tripleMachineGun = false;
-	float tripleMachineGunRadius = 10;
-	
-	boolean circleShot = false;
-	int numBulletsPerShot = 36;
+	Gun gun;
 	
 	float knockback = 40f;
 	float velX;
 	float velY;
 	
-	final int IDLESTATE = 0;
-	final int SHOOTSTATE = 1;
+	public static final int IDLESTATE = 0;
+	public static final int SHOOTSTATE = 1;
 	int state = 0;
 	
-	final int UP = 0;
-	final int DOWN = 1;
-	final int LEFT = 2;
-	final int RIGHT = 3;
+	public static final int UP = 0;
+	public static final int DOWN = 1;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
 	int direction;
 	int shotDirection = -1;
 	
 	int size = 16;
-	
-	boolean canshot;
 	
 	boolean gotHit = false;
 	float blink;
@@ -62,6 +60,7 @@ public class Eden {
 	public Eden() {
 		x = 400;
 		y = 400;
+		gun = new Gun(this);
 	}
 	
 	/**
@@ -69,7 +68,7 @@ public class Eden {
 	 * @param g A Graphics Object to draw the player
 	 * @see Graphics
 	 */
-	public void show(Graphics g) {
+	public void draw(Graphics g) {
 		g.setColor(Color.BLUE);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
@@ -85,10 +84,6 @@ public class Eden {
 				blink -= blinktime*2;
 			}
 		}
-		
-		for (Bullet b : bullets) {
-			b.show(g);
-		}
 	}
 	
 	/**
@@ -97,40 +92,14 @@ public class Eden {
 	 */
 	public void update(float tslf) {
 		if(state == SHOOTSTATE) {
-			walkspeed = shotwalkspeed;
+			walkSpeed = shotWalkSpeed;
 		}else if(state == IDLESTATE) {
-			walkspeed = idlewalkspeed;
+			walkSpeed = idleWalkSpeed;
 		}
 		
-		if(Controls.isKeyDown(KeyEvent.VK_W)) {
-			direction = UP;
-			y -= walkspeed * tslf;
-		}
-		if(Controls.isKeyDown(KeyEvent.VK_A)) {
-			direction = LEFT;
-			x -= walkspeed * tslf;
-		}
-		if(Controls.isKeyDown(KeyEvent.VK_S)) {
-			direction = DOWN;
-			y += walkspeed * tslf;
-		}
-		if(Controls.isKeyDown(KeyEvent.VK_D)) {
-			direction = RIGHT;
-			x += walkspeed * tslf;
-		}
-		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit) {
-			if(canshot) {
-				if(state == IDLESTATE) shotDirection = direction;
-				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
-				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
-				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
-				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
-				
-				state = SHOOTSTATE;
-				canshot = false;
-				shot();
-			}
-		}
+		updateInput(tslf);
+		
+		gun.update(tslf);
 		
 		checkCollisionPlayerToWall();
 		
@@ -152,119 +121,52 @@ public class Eden {
 			}
 		}
 		
-		//Shooting
-		if(tsls >= shottime) {
-			if(!Controls.isKeyDown(KeyEvent.VK_SPACE)) state = IDLESTATE;
-			canshot = true;
-			tsls -= shottime;
-		}else {
-			tsls += tslf;	
-		}
-		
-		//Bullets
-		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
-		for (Bullet b : bullets) {
-			b.update(tslf);
-			
-			if(b.dieAnimation == false && b.disabled == true) {
-				toRemoveBullet.add(b);
-			}
-			if(b.disabled) continue;
-			
-			for (Enemy e : Globals.enemies) {
-				if(b.checkCollisionToEnemy(e)) {
-					
-					e.getHitByBullet(b);      
-					b.maxRadius = 30;
-					b.disable();
-					
-				}
-			}
-		}
-		for (Bullet b : toRemoveBullet) {
-			bullets.remove(b);
-		}
+		//Enemies
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
 			if(!e.alive && e.dieAnimation == false)Globals.enemies.remove(e);
 		}
-	}
+	};
 	
 	/**
-	 * This function creates a new bullet when the player did a shot an applies recoil to the player
-	 * {@link #applyRecoil(float angle)}
+	 * This function checks the input, either update the {@link #x} or {@link #y} position or start shooting
+	 * @param tslf
 	 */
-	public void shot() {
-		//TODO: Shot mechanics
-		float angle = 0;
-		if(circleShot) {
-			for (int i = 0; i < numBulletsPerShot; i++) {
-				angle = 360/numBulletsPerShot * i;
-				float cx = (float) (x + size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * size);
-				float cy = (float) (y + size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * size);
-				bullets.add(new Bullet(cx, cy, angle));
-				if(numBulletsPerShot == 1)applyRecoil(angle);
+	public void updateInput(float tslf) {
+		if(Controls.isKeyDown(KeyEvent.VK_W)) {
+			direction = UP;
+			y -= walkSpeed * tslf;
+		}
+		if(Controls.isKeyDown(KeyEvent.VK_A)) {
+			direction = LEFT;
+			x -= walkSpeed * tslf;
+		}
+		if(Controls.isKeyDown(KeyEvent.VK_S)) {
+			direction = DOWN;
+			y += walkSpeed * tslf;
+		}
+		if(Controls.isKeyDown(KeyEvent.VK_D)) {
+			direction = RIGHT;
+			x += walkSpeed * tslf;
+		}
+		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit) {
+			if(gun.canShot) {
+				if(state == IDLESTATE) shotDirection = direction;
+//				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
+//				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
+//				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
+//				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
+				
+				state = SHOOTSTATE;
+				gun.shot();
 			}
 		}
-		//--------------------------------------------------------------------------------------------------
-		else if(tripleMachineGun) {
-			if(shotDirection == UP) {
-				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle - tripleMachineGunRadius));
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle + tripleMachineGunRadius));
-			}
-			if(shotDirection == DOWN) {
-				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle - tripleMachineGunRadius));
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle + tripleMachineGunRadius));
-			}
-			if(shotDirection == LEFT){
-				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle - tripleMachineGunRadius));
-				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
-				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle + tripleMachineGunRadius));
-			}
-			if(shotDirection == RIGHT) {
-				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle - tripleMachineGunRadius));
-				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
-				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle + tripleMachineGunRadius));
-			}
-			applyRecoil(angle);
-		}
-		//---------------------------------------------------------------------------------------------------
-		else {
-			if(shotDirection == UP) {
-				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
-			}
-			if(shotDirection == DOWN) {
-				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y + size, angle));
-			}
-			if(shotDirection == LEFT){
-				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x - Bullet.size, y + size/2 - Bullet.size/2, angle));
-			}
-			if(shotDirection == RIGHT) {
-				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				bullets.add(new Bullet(x + size, y + size/2 - Bullet.size/2, angle));
-			}
-			applyRecoil(angle);
-		}
-	}
+	};
+	
 	
 	/**
-	 * This function applies recoil to the player
-	 * @param angle The angle in which the player should get the recoil
+	 * This function checks the {@link #x} and {@link #y} position of the player and looks for collision with the bounding of the map
 	 */
-	public void applyRecoil(float angle) {
-		this.x -= (float) Math.sin(Math.toRadians(angle)) * recoil;
-		this.y -= (float) Math.cos(Math.toRadians(angle)) * recoil;
-	}
-	
 	public void checkCollisionPlayerToWall() {
 		if(this.x < 0) {
 			this.x = 0;
@@ -280,6 +182,10 @@ public class Eden {
 		}
 	}
 	
+	/**
+	 * This function checks for a collision with the player and a enemy
+	 * if there is a collision calls {@link #applyKnockback(float)}, and sets {@link #gotHit} true
+	 */
 	public void checkCollisionPlayerToEnemies() {
 		for (Enemy e : Globals.enemies) {
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
@@ -303,6 +209,10 @@ public class Eden {
 		}
 	}
 	
+	/**
+	 * This function applies knock-back to the player for example when he gets hit by an enemy
+	 * @param angle The angle in which the player gets knocked back
+	 */
 	public void applyKnockback(float angle) {
 		//TODO: Remove the - Math.sin
 		this.velX = (float) -Math.sin(Math.toRadians(angle)) * knockback;
