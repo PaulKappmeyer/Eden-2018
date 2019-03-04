@@ -59,6 +59,9 @@ public class Screen extends JFrame{
 		g.setColor(Color.WHITE);
 		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, this.getWidth(), this.getHeight());
 		
+		g.setColor(Color.BLACK);
+		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
+		
 		//Screenshake
 		if(screenshake) {
 			g.translate(screenshakeX, screenshakeY);
@@ -74,9 +77,6 @@ public class Screen extends JFrame{
 		for (Bullet b : Globals.player.bullets) {
 			b.show(g);
 		}
-		
-		g.setColor(Color.BLACK);
-		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
 	}
 	
 	public static boolean screenshake;
@@ -93,12 +93,13 @@ public class Screen extends JFrame{
 			e.update(tslf);
 		}
 		
+		
 		if(screenshake) {
 			screenshakeX = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
 			screenshakeY = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
 			tslsc += tslf;
 			if(tslsc >= screenshakeDuration) {
-				tslsc = 0;
+				tslsc = -screenshakeDuration;
 				screenshake = false;
 				screenshakeStrength = 0;
 				screenshakeDuration = 0;

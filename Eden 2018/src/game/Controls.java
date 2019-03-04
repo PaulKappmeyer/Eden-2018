@@ -32,5 +32,7 @@ public class Controls implements KeyListener{
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		if(keyCode >= 0 && keyCode<keys.length) keys[keyCode] = false;
 	}	
 }

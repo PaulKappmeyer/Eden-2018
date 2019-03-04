@@ -126,6 +126,10 @@ public class Enemy {
 		applyKnockback(b.angle);
 		hitAnimation = true;
 		health -= 50;
+		if(health <= 0 && alive) {
+			dieAnimation = true;
+			alive = false;
+		}
 	}
 	
 	/**

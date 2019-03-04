@@ -15,6 +15,7 @@ public class Bullet {
 	float radiusIncrease = 1600;
 	float maxRadius = 80;
 	boolean dieAnimation = false;
+	Color color;
 	
 	/**
 	 * 
@@ -28,6 +29,7 @@ public class Bullet {
 		this.angle = angle;
 		this.velX = (float) Math.sin(Math.toRadians(angle));
 		this.velY = (float) Math.cos(Math.toRadians(angle));
+		this.color = Color.YELLOW;
 	}
 	
 	/**
@@ -35,7 +37,7 @@ public class Bullet {
 	 * @param g The graphics object to draw
 	 */
 	public void show(Graphics g) {
-		g.setColor(Color.YELLOW);
+		g.setColor(color);
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
@@ -57,7 +59,8 @@ public class Bullet {
 			Globals.checkCollisionBulletToWall(this);
 		}
 		if(dieAnimation) {
-			Screen.addScreenshake(3, 0.05f);
+			Screen.addScreenshake(3, 0.005f);
+			
 			radius += radiusIncrease * tslf;
 			if(radius >= maxRadius) {
 				dieAnimation = false;
@@ -76,6 +79,7 @@ public class Bullet {
 		float cx = this.x + Bullet.size/2;
 		float cy = this.y + Bullet.size/2;
 		int r = Bullet.size/2;
+		
 		
 		//Collision circle in the rectangle
 		if(cx > e.x && cx < e.x + e.size && cy > e.y && cy < e.y + e.size) {

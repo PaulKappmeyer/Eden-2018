@@ -25,7 +25,7 @@ public class Eden {
 	int bulletspray = 3;
 	float recoil = 0.75f;
 	
-	boolean tripleMachineGun = true;
+	boolean tripleMachineGun = false;
 	float tripleMachineGunRadius = 10;
 	
 	boolean circleShot = false;
@@ -140,10 +140,10 @@ public class Eden {
 			this.x += velX * tslf;
 			this.y += velY * tslf;
 			// TODO: slow down velX and velY
-//			this.velX *= (0.5 * tslf);
-//			this.velY *= (0.5 * tslf);
-		}
-		if(gotHit) {
+			//			this.velX *= (0.5 * tslf);
+			//			this.velY *= (0.5 * tslf);
+			
+			//Animation
 			blink += tslf;
 			blinkfromStart += tslf;
 			if(blinkfromStart > maxBlinkTime) {
@@ -152,6 +152,7 @@ public class Eden {
 			}
 		}
 		
+		//Shooting
 		if(tsls >= shottime) {
 			if(!Controls.isKeyDown(KeyEvent.VK_SPACE)) state = IDLESTATE;
 			canshot = true;
@@ -160,24 +161,24 @@ public class Eden {
 			tsls += tslf;	
 		}
 		
+		//Bullets
 		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
 		for (Bullet b : bullets) {
 			b.update(tslf);
 			
-			for (Enemy e : Globals.enemies) {
-				if(b.checkCollisionToEnemy(e)) {
-					if(b.disabled) continue;
-					
-					e.getHitByBullet(b);
-					if(e.health <= 0 && e.alive) {
-						e.dieAnimation = true;
-						e.alive = false;
-					}
-					toRemoveBullet.add(b);
-				}
-			}
 			if(b.dieAnimation == false && b.disabled == true) {
 				toRemoveBullet.add(b);
+			}
+			if(b.disabled) continue;
+			
+			for (Enemy e : Globals.enemies) {
+				if(b.checkCollisionToEnemy(e)) {
+					
+					e.getHitByBullet(b);      
+					b.maxRadius = 30;
+					b.disable();
+					
+				}
 			}
 		}
 		for (Bullet b : toRemoveBullet) {
@@ -210,7 +211,7 @@ public class Eden {
 			if(shotDirection == UP) {
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
 				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle - tripleMachineGunRadius));
-				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle ));
+				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle));
 				bullets.add(new Bullet(x + size/2 - Bullet.size/2, y - Bullet.size, angle + tripleMachineGunRadius));
 			}
 			if(shotDirection == DOWN) {
