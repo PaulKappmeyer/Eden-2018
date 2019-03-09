@@ -29,6 +29,9 @@ public class Boss extends Enemy{
 
 	@Override
 	public void draw(Graphics g) {
+		//Drawing of the gun
+		gun.draw(g);
+		//Drawing of the boss
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
@@ -47,8 +50,6 @@ public class Boss extends Enemy{
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
-
-		gun.draw(g);
 	}
 
 	@Override

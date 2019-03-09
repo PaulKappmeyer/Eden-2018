@@ -60,7 +60,9 @@ public class Eden extends Object{
 	 * @see Graphics
 	 */
 	public void draw(Graphics g) {
-		//Player
+		//Drawing of the gun
+		gun.draw(g);
+		//Drawing of the player
 		g.setColor(Color.BLUE);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
@@ -77,9 +79,6 @@ public class Eden extends Object{
 				blink -= blinktime*2;
 			}
 		}
-		
-		//Gun
-		gun.draw(g);
 	}
 	
 	/**

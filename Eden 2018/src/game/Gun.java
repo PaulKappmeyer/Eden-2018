@@ -112,12 +112,13 @@ public class Gun {
 	public void shot() {
 		//TODO: Shot mechanics
 		float angle = 0;
-		float cx = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size);
-		float cy = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size);
+		//--------------------------------------------------------------------------
 		if(mode == CIRCLESHOT) {
 			for (int i = 0; i < numBulletsPerShot; i++) {
 				angle = 360/numBulletsPerShot * i;
-				bullets.add(new Bullet(cx, cy, angle));
+				float centerX = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size);
+				float centerY = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size);
+				bullets.add(new Bullet(centerX, centerY, angle));
 				if(numBulletsPerShot == 1)applyRecoil(angle);
 			}
 		}
@@ -169,7 +170,9 @@ public class Gun {
 			}
 			applyRecoil(angle);
 		}
-		shells.add(new Shell(owner.x, owner.y, owner.shotDirection));
+		float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2);
+		float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2);
+		shells.add(new Shell(shellCenterX, shellCenterY, owner.shotDirection));
 		//----------------------------------------------------------------------------------------------------
 		canShot = false;
 	}

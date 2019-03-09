@@ -51,6 +51,7 @@ public class Map {
 		Globals.enemies.add(new Enemy(500, 500));
 		Globals.player.x = 5;
 		Globals.player.gun.bullets.removeAll(Globals.player.gun.bullets);
+		Globals.player.gun.shells.removeAll(Globals.player.gun.shells);
 //		for (int i = 0; i < 4; i++) {
 //			Globals.enemies.add(new Enemy(Globals.random.nextInt(400), Globals.random.nextInt(400)));	
 //		}

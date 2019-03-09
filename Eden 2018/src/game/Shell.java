@@ -9,22 +9,24 @@ public class Shell {
 	float y;
 	float velocityX;
 	float velocityY;
+	int baseSpeed = 400;
+	int speedVariation = 200;
 	float speed;
-	int size;
+	static final int SIZE = 4;
 	int direction;
+	int angleVariation = 20;
 
 	public Shell(float x, float y, int direction) {
 		this.x = x;
 		this.y = y;
-		this.size = 5;
 		this.direction = direction;
 		this.setVelocity(direction);
-		this.speed = 300;
+		this.speed = baseSpeed + Globals.random.nextInt(speedVariation);
 	}
 
 	public void draw(Graphics g){
 		g.setColor(Color.BLACK);
-		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
 	}
 
 	public void update(float tslf) {
@@ -34,25 +36,27 @@ public class Shell {
 	}
 
 	public void setVelocity(int direction) {
+		int angle = 0; //in degrees;
 		switch (direction) {
 		case Eden.UP:
-			this.velocityY = 1;
-			this.velocityX = 0;
+			angle = 0;
 			break;
 		case Eden.DOWN:
-			this.velocityY = -1;
-			this.velocityX = 0;
+			angle = 180;
 			break;
 		case Eden.LEFT:
-			this.velocityY = 0;
-			this.velocityX = 1;
+			angle = 90;
 			break;
 		case Eden.RIGHT:
-			this.velocityY = 0;
-			this.velocityX = -1;
+			angle = 270;
 			break;
 		default:
 			break;
 		}
+		
+		angle += -angleVariation/2 + Globals.random.nextFloat()*angleVariation;
+		
+		this.velocityX = (float) Math.sin(Math.toRadians(angle));
+		this.velocityY = (float) Math.cos(Math.toRadians(angle));
 	}
 }
