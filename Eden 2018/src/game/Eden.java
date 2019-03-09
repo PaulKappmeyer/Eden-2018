@@ -11,22 +11,14 @@ import java.awt.event.KeyEvent;
  * {@link #y} The y-position of the player <br>
  * {@link #walkSpeed} This is the number of the pixels the player can run per second <br>
  */
-public class Eden {
+public class Eden extends Object{
 
 	//TODO: revise the variable mess
 	/**
-	 * The X-coordinate of the player
-	 */
-	float x;
-	/**
-	 * The Y-coordinate of the player
-	 */
-	float y;
-	/**
 	 * The walking speed in idle mode (in pixels per seconds)
 	 */
-	int idleWalkSpeed = 200;
-	int shotWalkSpeed = 100;
+	int idleWalkSpeed = 250;
+	int shotWalkSpeed = 75;
 	int walkSpeed = idleWalkSpeed;
 	
 	Gun gun;
@@ -44,9 +36,6 @@ public class Eden {
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	int direction;
-	int shotDirection = -1;
-	
-	int size = 16;
 	
 	boolean gotHit = false;
 	float blink;
@@ -58,8 +47,9 @@ public class Eden {
 	 * Constructor; initializes the player
 	 */
 	public Eden() {
-		x = 400;
-		y = 400;
+		this.x = 400;
+		this.y = 400;
+		this.size = 16;
 		gun = new Gun(this);
 	}
 	
@@ -69,11 +59,13 @@ public class Eden {
 	 * @see Graphics
 	 */
 	public void draw(Graphics g) {
+		//Player
 		g.setColor(Color.BLUE);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		
+		//Got-Hit-animation
 		if(gotHit) {
 			if(blink > blinktime) {
 				g.setColor(Color.WHITE);
@@ -84,6 +76,9 @@ public class Eden {
 				blink -= blinktime*2;
 			}
 		}
+		
+		//Gun
+		gun.draw(g);
 	}
 	
 	/**
@@ -91,15 +86,18 @@ public class Eden {
 	 * @param tslf The time since the last frame in seconds; should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
 	 */
 	public void update(float tslf) {
+		//Update the gun
+		gun.update(tslf);
+		
+		//Check input
+		updateInput(tslf);
+		
+		//Calculate the walk speed
 		if(state == SHOOTSTATE) {
 			walkSpeed = shotWalkSpeed;
 		}else if(state == IDLESTATE) {
 			walkSpeed = idleWalkSpeed;
 		}
-		
-		updateInput(tslf);
-		
-		gun.update(tslf);
 		
 		checkCollisionPlayerToWall();
 		
@@ -160,6 +158,9 @@ public class Eden {
 				state = SHOOTSTATE;
 				gun.shot();
 			}
+		}
+		if(state == SHOOTSTATE && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
+			state = Eden.IDLESTATE;
 		}
 	};
 	

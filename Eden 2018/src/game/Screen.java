@@ -73,10 +73,6 @@ public class Screen extends JFrame{
 		for (Enemy e : Globals.enemies) {
 			e.show(g);
 		}
-		
-		for (Bullet b : Globals.player.gun.bullets) {
-			b.show(g);
-		}
 	}
 	
 	public static boolean screenshake;

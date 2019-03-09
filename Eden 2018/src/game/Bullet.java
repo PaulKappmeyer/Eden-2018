@@ -15,7 +15,6 @@ public class Bullet {
 	float radiusIncrease = 1600;
 	float maxRadius = 80;
 	boolean dieAnimation = false;
-	Color color;
 	
 	/**
 	 * 
@@ -29,14 +28,13 @@ public class Bullet {
 		this.angle = angle;
 		this.velX = (float) Math.sin(Math.toRadians(angle));
 		this.velY = (float) Math.cos(Math.toRadians(angle));
-		this.color = Color.YELLOW;
 	}
 	
 	/**
 	 * This function draws the bullet as a yellow dot to the screen
 	 * @param g The graphics object to draw
 	 */
-	public void show(Graphics g) {
+	public void draw(Graphics g, Color color) {
 		g.setColor(color);
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
@@ -71,50 +69,49 @@ public class Bullet {
 
 	/**
 	 * 
-	 * @param e The enemy to check with
-	 * @param size The size of the enemy
+	 * @param obj The object to check with
 	 * @return true if the collide; false if not
 	 */
-	public boolean checkCollisionToEnemy(Enemy e) {
+	public boolean checkCollisionToObject(Object obj) {
 		float cx = this.x + Bullet.size/2;
 		float cy = this.y + Bullet.size/2;
 		int r = Bullet.size/2;
 		
 		
 		//Collision circle in the rectangle
-		if(cx > e.x && cx < e.x + e.size && cy > e.y && cy < e.y + e.size) {
+		if(cx > obj.x && cx < obj.x + obj.size && cy > obj.y && cy < obj.y + obj.size) {
 			return true;
 		}
 		//Collision top side of the rectangle to the circle
-		if(cx > e.x && cx < e.x + e.size && Math.abs(e.y - cy) <= r) {
+		if(cx > obj.x && cx < obj.x + obj.size && Math.abs(obj.y - cy) <= r) {
 			return true;
 		}
 		//Collision bottom side of the rectangle to the circle
-		if(cx > e.x && cx < e.x + e.size && Math.abs(e.y + e.size - cy) <= r) {
+		if(cx > obj.x && cx < obj.x + obj.size && Math.abs(obj.y + obj.size - cy) <= r) {
 			return true;
 		}
 		//Collision left side of the rectangle to the circle
-		if(cy > e.y && cy < e.y + e.size && Math.abs(e.x - cx) <= r) {
+		if(cy > obj.y && cy < obj.y + obj.size && Math.abs(obj.x - cx) <= r) {
 			return true;
 		}
 		//Collision right side of the rectangle to the circle
-		if(cy > e.y && cy < e.y + e.size && Math.abs(e.x + e.size - cx) <= r) {
+		if(cy > obj.y && cy < obj.y + obj.size && Math.abs(obj.x + obj.size - cx) <= r) {
 			return true;
 		}
 		//Collision top left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - e.y)) <= r) {
+		if(Math.hypot(Math.abs(cx - obj.x), Math.abs(cy - obj.y)) <= r) {
 			return true;
 		}
 		//Collision top right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (e.x + e.size)), Math.abs(cy - e.y)) <= r) {
+		if(Math.hypot(Math.abs(cx - (obj.x + obj.size)), Math.abs(cy - obj.y)) <= r) {
 			return true;
 		}
 		//Collision bottom left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - e.x), Math.abs(cy - (e.y + e.size))) <= r) {
+		if(Math.hypot(Math.abs(cx - obj.x), Math.abs(cy - (obj.y + obj.size))) <= r) {
 			return true;
 		}
 		//Collision bottom right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (e.x + e.size)), Math.abs(cy - (e.y + size))) <= r) {
+		if(Math.hypot(Math.abs(cx - (obj.x + obj.size)), Math.abs(cy - (obj.y + size))) <= r) {
 			return true;
 		}
 		//if no Collision happened

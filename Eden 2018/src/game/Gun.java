@@ -1,18 +1,18 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Gun {
 
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	
+
 	public static final int SINGLEFIRE = 1;
 	public static final int TRIPLEMACHINEGUN = 2;
 	public static final int CIRCLESHOT = 3;
 	int mode;
-	
+
 	//Single
 	int bulletspray = 3;
 	float recoil = 0.75f;
@@ -25,48 +25,63 @@ public class Gun {
 	float tsls = shottime;
 	//Can shot again?
 	boolean canShot;
-	
-	Eden owner;
-	
-	public Gun(Eden owner) {
+
+	float damage;
+
+	Object owner;
+
+	Color color;
+
+	public Gun(Object owner) {
 		this.owner = owner;
-		this.canShot = true;
+		this.canShot = false;
 		this.mode = SINGLEFIRE;
+		this.damage = 50;
+		this.color = Color.YELLOW;
 	}
-	
+
 	public void draw(Graphics g) {
 		for (Bullet b : bullets) {
-			b.show(g);
+			b.draw(g, color);
 		}
 	}
-	
+
 	public void update(float tslf) {
 		//Shooting
 		if(tsls >= shottime) {
-			if(!Controls.isKeyDown(KeyEvent.VK_SPACE)) owner.state = Eden.IDLESTATE;
 			canShot = true;
 			tsls -= shottime;
 		}else {
 			tsls += tslf;	
 		}
-		
+
 		//Bullets
 		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
 		for (Bullet b : bullets) {
 			b.update(tslf);
-			
+
 			if(b.dieAnimation == false && b.disabled == true) {
 				toRemoveBullet.add(b);
 			}
 			if(b.disabled) continue;
-			
-			for (Enemy e : Globals.enemies) {
-				if(b.checkCollisionToEnemy(e)) {
-					
-					e.getHitByBullet(b);      
+
+			if(owner == Globals.player) {
+				for (Enemy e : Globals.enemies) {
+					if(b.checkCollisionToObject(e)) {
+
+						e.getHitByBullet(b, damage);      
+						b.maxRadius = 30;
+						b.disable();
+
+					}
+				}
+			}else if(owner instanceof Enemy) {
+				if(b.checkCollisionToObject(Globals.player)) {
+
+					Globals.player.gotHit = true;
 					b.maxRadius = 30;
 					b.disable();
-					
+
 				}
 			}
 		}
@@ -74,10 +89,9 @@ public class Gun {
 			bullets.remove(b);
 		}
 	}
-	
+
 	/**
-	 * This function creates a new bullet when the player did a shot an applies recoil to the player
-	 * {@link }
+	 * This function creates a shot based on the {@link #mode}, adds bullets to the {@link #bullets}-array, and calls the function {@link #applyRecoil(float)}
 	 */
 	public void shot() {
 		//TODO: Shot mechanics
@@ -142,7 +156,7 @@ public class Gun {
 		//----------------------------------------------------------------------------------------------------
 		canShot = false;
 	}
-	
+
 	/**
 	 * This function applies recoil to the player
 	 * @param angle The angle in which the player should get the recoil
@@ -151,5 +165,5 @@ public class Gun {
 		owner.x -= (float) Math.sin(Math.toRadians(angle)) * recoil;
 		owner.y -= (float) Math.cos(Math.toRadians(angle)) * recoil;
 	}
-	
+
 }

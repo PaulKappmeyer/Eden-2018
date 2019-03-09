@@ -8,11 +8,9 @@ import java.awt.Graphics;
  * @author Paul Kappmeyer
  *
  */
-public class Enemy {
+public class Enemy extends Object{
 
 	//TODO: Revise the variable mess
-	float x,y;
-	int size = 16;
 	int triggerdistance = 300;
 	boolean followplayer;
 	int walkspeed = 40;
@@ -38,6 +36,7 @@ public class Enemy {
 	public Enemy(float x, float y) {
 		this.x = x;
 		this.y = y;
+		this.size = 16;
 		this.walkspeed = walkspeed + -10 + Globals.random.nextInt(20);
 	}
 	
@@ -122,10 +121,10 @@ public class Enemy {
 	 * @param b The bullet which hit the enemy
 	 * {@link #applyKnockback(float angle)}
 	 */
-	public void getHitByBullet(Bullet b) {
+	public void getHitByBullet(Bullet b, float damage) {
 		applyKnockback(b.angle);
 		hitAnimation = true;
-		health -= 50;
+		health -= damage;
 		if(health <= 0 && alive) {
 			dieAnimation = true;
 			alive = false;
