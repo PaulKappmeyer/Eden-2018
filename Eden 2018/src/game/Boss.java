@@ -9,9 +9,9 @@ import java.awt.Graphics;
  *
  */
 public class Boss extends Enemy{
-	
+
 	Gun gun;
-	
+
 	public Boss(float x, float y) {
 		super(x, y);
 		size = 32;
@@ -19,30 +19,58 @@ public class Boss extends Enemy{
 		followplayer = true;
 		health = 1000;
 		knockback = 0.5f;
+		//Gun
 		gun = new Gun(this);
 		gun.mode = Gun.CIRCLESHOT;
-		gun.shottime = 5;
+		gun.shottime = 5f;
 		gun.color = Color.RED;
+		radiusIncrease = 200;
 	}
-	
-	public void show(Graphics g) {
-		if(gun.canShot) {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
-		}else {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+
+	@Override
+	public void draw(Graphics g) {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.setColor(Color.BLACK);
+		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+		if(isInHitAnimation) {
+			if(blink > blinktime) {
+				g.setColor(Color.WHITE);
+				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			}
+			if(blink > blinktime*2) {
+				blink -= blinktime*2;
+			}
 		}
-		
+		if(isInDieAnimation) {
+			g.setColor(Color.BLACK);
+			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
+		}
+
 		gun.draw(g);
 	}
+
+	@Override
+		public boolean canBeRemoved() {
+			if(super.canBeRemoved()) {
+				for (Bullet bullet : gun.bullets) {
+					if(!bullet.canBeRemoved()) return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	
+	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		if(gun.canShot) {
-			gun.shot();
+		if(alive) {
+			if(gun.canShot) {
+				gun.shot();
+			}
 		}
-		
+
 		gun.update(tslf);
 	}
 }

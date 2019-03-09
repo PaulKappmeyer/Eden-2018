@@ -71,25 +71,27 @@ public class Screen extends JFrame{
 		Globals.player.draw(g);
 		
 		for (Enemy e : Globals.enemies) {
-			e.show(g);
+			e.draw(g);
+		}
+		
+		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT) {
+			g.setColor(Color.BLACK);
+			g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, (int)transitionX, Globals.height);
 		}
 	}
 	
+	//Screenshake
 	public static boolean screenshake;
 	public int screenshakeX;
 	public int screenshakeY;
 	public static int screenshakeStrength = 0;
 	public static float screenshakeDuration = 0;
 	public float tslsc;
+	//Transition
+	float transitionX = 0;
 	
 	public void update(float tslf) {
-		//TODO: Update System
-		Globals.player.update(tslf);
-		for (Enemy e : Globals.enemies) {
-			e.update(tslf);
-		}
-		
-		
+		//Updating the screenshake 
 		if(screenshake) {
 			screenshakeX = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
 			screenshakeY = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
@@ -99,6 +101,20 @@ public class Screen extends JFrame{
 				screenshake = false;
 				screenshakeStrength = 0;
 				screenshakeDuration = 0;
+			}
+		}
+		if(Game.state == Game.MAP_TRANSITION) {
+			transitionX += 800*tslf;
+			if(transitionX >= Globals.width) {
+				transitionX = Globals.width*2;
+				Game.state = Game.FREEZE;
+			}
+		}
+		if(Game.state == Game.MAP_TRANSITION_OUT) {
+			transitionX -= 800*tslf;
+			if(transitionX <= 0) {
+				transitionX = 0;
+				Game.state = Game.RUNNING;
 			}
 		}
 	}

@@ -119,10 +119,10 @@ public class Eden extends Object{
 			}
 		}
 		
-		//Enemies
+		//Removal of the enemies
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
-			if(!e.alive && e.dieAnimation == false)Globals.enemies.remove(e);
+			if(e.canBeRemoved())Globals.enemies.remove(e);
 		}
 	};
 	

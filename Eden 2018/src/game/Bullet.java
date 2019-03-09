@@ -11,9 +11,10 @@ public class Bullet {
 	float speed = 450;
 	float angle;
 	boolean disabled = false;
+	//Animation
 	float radius = 0;
-	float radiusIncrease = 1600;
-	float maxRadius = 80;
+	float explosionRadiusIncrease = 1600;
+	float maxExplosionRadius = 80;
 	boolean dieAnimation = false;
 	
 	/**
@@ -59,13 +60,20 @@ public class Bullet {
 		if(dieAnimation) {
 			Screen.addScreenshake(3, 0.005f);
 			
-			radius += radiusIncrease * tslf;
-			if(radius >= maxRadius) {
+			radius += explosionRadiusIncrease * tslf;
+			if(radius >= maxExplosionRadius) {
 				dieAnimation = false;
 			}
 		}
 	}	
 
+	
+	public boolean canBeRemoved() {
+		if(this.dieAnimation == false && this.disabled == true) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * 

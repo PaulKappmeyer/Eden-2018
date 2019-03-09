@@ -20,11 +20,11 @@ public class Enemy extends Object{
 	float blinktime = 0.05f;
 	float blinkfromStart;
 	float maxBlinkTime = 1f;
-	boolean hitAnimation = false;
+	boolean isInHitAnimation = false;
 	float radius = 0;
 	float radiusIncrease = 1600;
 	float maxRadius = 50;
-	boolean dieAnimation = false;
+	boolean isInDieAnimation = false;
 	
 	boolean alive = true;
 	
@@ -45,12 +45,12 @@ public class Enemy extends Object{
 	 * This function draws the enemy as a red rectangle to the screen
 	 * @param g The graphics object to draw
 	 */
-	public void show(Graphics g) {
+	public void draw(Graphics g) {
 		g.setColor(Color.RED);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-		if(hitAnimation) {
+		if(isInHitAnimation) {
 			if(blink > blinktime) {
 				g.setColor(Color.WHITE);
 				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
@@ -60,7 +60,7 @@ public class Enemy extends Object{
 				blink -= blinktime*2;
 			}
 		}
-		if(dieAnimation) {
+		if(isInDieAnimation) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
@@ -71,47 +71,49 @@ public class Enemy extends Object{
 	 * @param tslf
 	 */
 	public void update(float tslf) {
-		float halfsize = this.size/2;
-		float playercenterx = Globals.player.x + halfsize;
-		float playercentery = Globals.player.y + halfsize;
-		float enemycenterx = this.x + halfsize;
-		float enemycentery = this.y + halfsize;
-		float distx = enemycenterx - playercenterx;
-		float disty = enemycentery - playercentery;
-		
-		if(!followplayer) {
-			float distanceToPlayer = distx * distx + disty * disty;
-			if(distanceToPlayer < triggerdistance * triggerdistance) {
-				followplayer = true;
+		if(alive) {
+			float halfsize = this.size/2;
+			float playercenterx = Globals.player.x + halfsize;
+			float playercentery = Globals.player.y + halfsize;
+			float enemycenterx = this.x + halfsize;
+			float enemycentery = this.y + halfsize;
+			float distx = enemycenterx - playercenterx;
+			float disty = enemycentery - playercentery;
+
+			if(!followplayer) {
+				float distanceToPlayer = distx * distx + disty * disty;
+				if(distanceToPlayer < triggerdistance * triggerdistance) {
+					followplayer = true;
+				}
+			}
+
+			if(followplayer) {
+				float angle = (float) Math.atan(distx / disty);
+				angle = (float) Math.toDegrees(angle);
+				if(playercentery > enemycentery) angle =  -90 - (90-angle);
+				if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
+
+				float velX = (float) -Math.sin(Math.toRadians(angle));
+				float velY = (float) -Math.cos(Math.toRadians(angle));
+
+				this.x += velX * walkspeed * tslf;
+				this.y += velY * walkspeed * tslf;
 			}
 		}
 		
-		if(followplayer) {
-			float angle = (float) Math.atan(distx / disty);
-			angle = (float) Math.toDegrees(angle);
-			if(playercentery > enemycentery) angle =  -90 - (90-angle);
-			if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
-			
-			float velX = (float) -Math.sin(Math.toRadians(angle));
-			float velY = (float) -Math.cos(Math.toRadians(angle));
-			
-			this.x += velX * walkspeed * tslf;
-			this.y += velY * walkspeed * tslf;
-		}
-		
-		if(hitAnimation) {
+		if(isInHitAnimation) {
 			blink += tslf;
 			blinkfromStart += tslf;
 			if(blinkfromStart > maxBlinkTime) {
 				blinkfromStart = 0;
-				hitAnimation = false;
+				isInHitAnimation = false;
 			}
 		}
 		
-		if(dieAnimation) {
+		if(isInDieAnimation) {
 			radius += radiusIncrease * tslf;
 			if(radius >= maxRadius) {
-				dieAnimation = false;
+				isInDieAnimation = false;
 			}
 		}
 	}
@@ -123,12 +125,23 @@ public class Enemy extends Object{
 	 */
 	public void getHitByBullet(Bullet b, float damage) {
 		applyKnockback(b.angle);
-		hitAnimation = true;
+		isInHitAnimation = true;
 		health -= damage;
 		if(health <= 0 && alive) {
-			dieAnimation = true;
+			isInDieAnimation = true;
 			alive = false;
 		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean canBeRemoved() {
+		if(alive) return false;
+		if(isInDieAnimation) return false;
+		
+		return true;
 	}
 	
 	/**

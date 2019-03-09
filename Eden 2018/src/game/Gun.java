@@ -55,38 +55,50 @@ public class Gun {
 			tsls += tslf;	
 		}
 
+		for (Bullet b : bullets) {
+			b.update(tslf);
+		}
+
+		checkCollisionBulletsToObjects();
+
 		//Bullets
 		ArrayList<Bullet> toRemoveBullet = new ArrayList<Bullet>();
 		for (Bullet b : bullets) {
-			b.update(tslf);
 
-			if(b.dieAnimation == false && b.disabled == true) {
+			if(b.canBeRemoved()) {
 				toRemoveBullet.add(b);
-			}
-			if(b.disabled) continue;
-
-			if(owner == Globals.player) {
-				for (Enemy e : Globals.enemies) {
-					if(b.checkCollisionToObject(e)) {
-
-						e.getHitByBullet(b, damage);      
-						b.maxRadius = 30;
-						b.disable();
-
-					}
-				}
-			}else if(owner instanceof Enemy) {
-				if(b.checkCollisionToObject(Globals.player)) {
-
-					Globals.player.gotHit = true;
-					b.maxRadius = 30;
-					b.disable();
-
-				}
 			}
 		}
 		for (Bullet b : toRemoveBullet) {
 			bullets.remove(b);
+		}
+	}
+	
+	public void checkCollisionBulletsToObjects() {
+		if(owner == Globals.player) {
+			for (Bullet b : bullets) {
+				if(b.disabled) continue;
+				for (Enemy e : Globals.enemies) {
+					if(b.checkCollisionToObject(e)) {
+
+						e.getHitByBullet(b, damage);      
+						b.maxExplosionRadius = 30;
+						b.disable();
+
+					}
+				}
+			}
+		}else if(owner instanceof Enemy) {
+			for (Bullet b : bullets) {
+				if(b.disabled) continue;
+				if(b.checkCollisionToObject(Globals.player)) {
+
+					Globals.player.gotHit = true;
+					b.maxExplosionRadius = 30;
+					b.disable();
+
+				}
+			}
 		}
 	}
 
