@@ -5,9 +5,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Gun {
-
-	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-
 	public static final int SINGLEFIRE = 1;
 	public static final int TRIPLEMACHINEGUN = 2;
 	public static final int CIRCLESHOT = 3;
@@ -27,11 +24,12 @@ public class Gun {
 	boolean canShot;
 
 	float damage;
-
 	Object owner;
-
 	Color color;
-
+	
+	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	ArrayList<Shell> shells = new ArrayList<Shell>();
+	
 	public Gun(Object owner) {
 		this.owner = owner;
 		this.canShot = false;
@@ -41,8 +39,11 @@ public class Gun {
 	}
 
 	public void draw(Graphics g) {
-		for (Bullet b : bullets) {
-			b.draw(g, color);
+		for (Bullet bullet : bullets) {
+			bullet.draw(g, color);
+		}
+		for (Shell shell : shells) {
+			shell.draw(g);
 		}
 	}
 
@@ -55,8 +56,11 @@ public class Gun {
 			tsls += tslf;	
 		}
 
-		for (Bullet b : bullets) {
-			b.update(tslf);
+		for (Bullet bullet : bullets) {
+			bullet.update(tslf);
+		}
+		for (Shell shell : shells) {
+			shell.update(tslf);
 		}
 
 		checkCollisionBulletsToObjects();
@@ -108,11 +112,11 @@ public class Gun {
 	public void shot() {
 		//TODO: Shot mechanics
 		float angle = 0;
+		float cx = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size);
+		float cy = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size);
 		if(mode == CIRCLESHOT) {
 			for (int i = 0; i < numBulletsPerShot; i++) {
 				angle = 360/numBulletsPerShot * i;
-				float cx = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size);
-				float cy = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size);
 				bullets.add(new Bullet(cx, cy, angle));
 				if(numBulletsPerShot == 1)applyRecoil(angle);
 			}
@@ -165,6 +169,7 @@ public class Gun {
 			}
 			applyRecoil(angle);
 		}
+		shells.add(new Shell(owner.x, owner.y, owner.shotDirection));
 		//----------------------------------------------------------------------------------------------------
 		canShot = false;
 	}
