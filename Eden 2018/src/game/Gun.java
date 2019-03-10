@@ -38,12 +38,16 @@ public class Gun {
 		this.color = Color.YELLOW;
 	}
 
+	/**
+	 * This function draws the bullets and the shells
+	 * @param g
+	 */
 	public void draw(Graphics g) {
-		for (Bullet bullet : bullets) {
-			bullet.draw(g, color);
-		}
 		for (Shell shell : shells) {
 			shell.draw(g);
+		}
+		for (Bullet bullet : bullets) {
+			bullet.draw(g, color);
 		}
 	}
 
@@ -83,6 +87,7 @@ public class Gun {
 			for (Bullet b : bullets) {
 				if(b.disabled) continue;
 				for (Enemy e : Globals.enemies) {
+					if(!e.alive) continue;
 					if(b.checkCollisionToObject(e)) {
 
 						e.getHitByBullet(b, damage);      
@@ -116,9 +121,12 @@ public class Gun {
 		if(mode == CIRCLESHOT) {
 			for (int i = 0; i < numBulletsPerShot; i++) {
 				angle = 360/numBulletsPerShot * i;
-				float centerX = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size);
-				float centerY = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size);
+				float centerX = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
+				float centerY = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);
 				bullets.add(new Bullet(centerX, centerY, angle));
+				float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
+				float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
+				shells.add(new Shell(shellCenterX, shellCenterY, angle));
 				if(numBulletsPerShot == 1)applyRecoil(angle);
 			}
 		}
@@ -148,6 +156,11 @@ public class Gun {
 				bullets.add(new Bullet(owner.x + owner.size, owner.y + owner.size/2 - Bullet.size/2, angle));
 				bullets.add(new Bullet(owner.x + owner.size, owner.y + owner.size/2 - Bullet.size/2, angle + tripleMachineGunRadius));
 			}
+			float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
+			float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
+			shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			shells.add(new Shell(shellCenterX, shellCenterY, angle));
 			applyRecoil(angle);
 		}
 		//---------------------------------------------------------------------------------------------------
@@ -168,11 +181,11 @@ public class Gun {
 				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
 				bullets.add(new Bullet(owner.x + owner.size, owner.y + owner.size/2 - Bullet.size/2, angle));
 			}
+			float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
+			float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
+			shells.add(new Shell(shellCenterX, shellCenterY, angle));
 			applyRecoil(angle);
 		}
-		float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2);
-		float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2);
-		shells.add(new Shell(shellCenterX, shellCenterY, owner.shotDirection));
 		//----------------------------------------------------------------------------------------------------
 		canShot = false;
 	}

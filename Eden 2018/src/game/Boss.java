@@ -32,18 +32,20 @@ public class Boss extends Enemy{
 		//Drawing of the gun
 		gun.draw(g);
 		//Drawing of the boss
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
-		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-		if(isInHitAnimation) {
-			if(blink > blinktime) {
-				g.setColor(Color.WHITE);
-				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-			}
-			if(blink > blinktime*2) {
-				blink -= blinktime*2;
+		if(alive) {
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+			g.setColor(Color.BLACK);
+			g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			if(isInHitAnimation) {
+				if(blink > blinktime) {
+					g.setColor(Color.WHITE);
+					g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+					g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				}
+				if(blink > blinktime*2) {
+					blink -= blinktime*2;
+				}
 			}
 		}
 		if(isInDieAnimation) {
@@ -53,16 +55,17 @@ public class Boss extends Enemy{
 	}
 
 	@Override
-		public boolean canBeRemoved() {
-			if(super.canBeRemoved()) {
-				for (Bullet bullet : gun.bullets) {
-					if(!bullet.canBeRemoved()) return false;
-				}
-				return true;
+	public boolean canBeRemoved() {
+		if(super.canBeRemoved()) {
+			if(gun.shells.size() != 0) return false;
+			for (Bullet bullet : gun.bullets) {
+				if(!bullet.canBeRemoved()) return false;
 			}
-			return false;
+			return true;
 		}
-	
+		return false;
+	}
+
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
