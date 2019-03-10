@@ -41,7 +41,9 @@ public class Shell {
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
 			speed *= 0.9f;
-			if(speed <= 1) disabled = true; 
+			if(speed <= 1f) {
+				disabled = true;
+			}
 		}
 	}
 

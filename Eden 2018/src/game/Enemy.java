@@ -132,6 +132,15 @@ public class Enemy extends Object{
 			alive = false;
 		}
 	}
+	public void getHitByBullet(Rocket r, float damage) {
+		applyKnockback(r.angle);
+		isInHitAnimation = true;
+		health -= damage;
+		if(health <= 0 && alive) {
+			isInDieAnimation = true;
+			alive = false;
+		}
+	}
 	
 	/**
 	 * 

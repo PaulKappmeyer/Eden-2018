@@ -8,6 +8,7 @@ public class Gun {
 	public static final int SINGLEFIRE = 1;
 	public static final int TRIPLEMACHINEGUN = 2;
 	public static final int CIRCLESHOT = 3;
+	public static final int ROCKET_SINGLE_FIRE_MODE = 4;
 	int mode;
 
 	//Single
@@ -26,10 +27,11 @@ public class Gun {
 	float damage;
 	Object owner;
 	Color color;
-	
+
+	ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	ArrayList<Shell> shells = new ArrayList<Shell>();
-	
+
 	public Gun(Object owner) {
 		this.owner = owner;
 		this.canShot = false;
@@ -49,6 +51,9 @@ public class Gun {
 		for (Bullet bullet : bullets) {
 			bullet.draw(g, color);
 		}
+		for (Rocket rocket : rockets) {
+			rocket.draw(g);
+		}
 	}
 
 	public void update(float tslf) {
@@ -60,6 +65,9 @@ public class Gun {
 			tsls += tslf;	
 		}
 
+		for (Rocket rocket : rockets) {
+			rocket.update(tslf);
+		}
 		for (Bullet bullet : bullets) {
 			bullet.update(tslf);
 		}
@@ -81,31 +89,44 @@ public class Gun {
 			bullets.remove(b);
 		}
 	}
-	
+
 	public void checkCollisionBulletsToObjects() {
 		if(owner == Globals.player) {
-			for (Bullet b : bullets) {
-				if(b.disabled) continue;
-				for (Enemy e : Globals.enemies) {
-					if(!e.alive) continue;
+			for (Enemy e : Globals.enemies) {
+				if(!e.alive) continue;
+				for (Bullet b : bullets) {
+					if(b.disabled) continue;
 					if(b.checkCollisionToObject(e)) {
-
 						e.getHitByBullet(b, damage);      
 						b.maxExplosionRadius = 30;
 						b.disable();
-
+					}
+				}
+				for (Rocket r : rockets) {
+					if(r.disabled) continue;
+					if(r.checkCollisionToObject(e)) {
+						e.getHitByBullet(r, damage);      
+						r.maxExplosionRadius = 30;
+						r.disable();
 					}
 				}
 			}
+
 		}else if(owner instanceof Enemy) {
 			for (Bullet b : bullets) {
 				if(b.disabled) continue;
 				if(b.checkCollisionToObject(Globals.player)) {
-
 					Globals.player.gotHit = true;
 					b.maxExplosionRadius = 30;
 					b.disable();
-
+				}
+			}
+			for (Rocket r : rockets) {
+				if(r.disabled) continue;
+				if(r.checkCollisionToObject(Globals.player)) {
+					Globals.player.gotHit = true;
+					r.maxExplosionRadius = 30;
+					r.disable();
 				}
 			}
 		}
@@ -184,6 +205,28 @@ public class Gun {
 			float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
 			float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
 			shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			applyRecoil(angle);
+		}
+		//---------------------------------------------------------------------------------------------------
+		else if(mode == ROCKET_SINGLE_FIRE_MODE) {
+			if(owner.shotDirection == Eden.UP) {
+				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			}
+			if(owner.shotDirection == Eden.DOWN) {
+				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			}
+			if(owner.shotDirection == Eden.LEFT){
+				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			}
+			if(owner.shotDirection == Eden.RIGHT) {
+				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
+			}
+			float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
+			float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
+			shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			float centerX = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
+			float centerY = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);
+			rockets.add(new Rocket(centerX, centerY, angle));
 			applyRecoil(angle);
 		}
 		//----------------------------------------------------------------------------------------------------
