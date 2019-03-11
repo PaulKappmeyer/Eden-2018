@@ -9,6 +9,7 @@ public class Gun {
 	public static final int TRIPLEMACHINEGUN = 2;
 	public static final int CIRCLESHOT = 3;
 	public static final int ROCKET_SINGLE_FIRE_MODE = 4;
+	public static final int CIRCLESHOT_ROUND = 5;
 	int mode;
 
 	//Single
@@ -20,6 +21,7 @@ public class Gun {
 	int numBulletsPerShot = 36;
 	//Delay
 	float shottime = 0.125f;
+	//Time since last shot
 	float tsls = shottime;
 	//Can shot again?
 	boolean canShot;
@@ -230,9 +232,21 @@ public class Gun {
 			applyRecoil(angle);
 		}
 		//----------------------------------------------------------------------------------------------------
+		else if(mode == CIRCLESHOT_ROUND) {
+			angle = 360/numBulletsPerShot * a;
+			float centerX = (float) (owner.x + owner.size/2 - Bullet.size/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
+			float centerY = (float) (owner.y + owner.size/2 - Bullet.size/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);
+			bullets.add(new Bullet(centerX, centerY, angle));
+			shells.add(new Shell(centerX, centerY, angle));
+			applyRecoil(angle);
+			a++;
+		}
+		//----------------------------------------------------------------------------------------------------
 		canShot = false;
 	}
 
+	int a = 0;
+	
 	/**
 	 * This function applies recoil to the player
 	 * @param angle The angle in which the player should get the recoil

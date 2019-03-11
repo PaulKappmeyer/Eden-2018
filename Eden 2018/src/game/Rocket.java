@@ -10,7 +10,7 @@ public class Rocket {
 	float velocityX;
 	float velocityY;
 	float time;
-	float speed = 1;
+	float speed = 500;
 	boolean disabled;
 	float angle;
 	//Animation
@@ -18,7 +18,7 @@ public class Rocket {
 	float explosionRadiusIncrease = 1600;
 	float maxExplosionRadius = 80;
 	boolean dieAnimation = false;
-
+	
 	public Rocket(float x, float y, float angle) {
 		this.x = x;
 		this.y = y;
@@ -40,20 +40,28 @@ public class Rocket {
 
 	public void update(float tslf) {
 		if(!disabled) {
-			float value = (float) Math.sin(time-Math.PI/2);
-			this.x += Math.sin(Math.toRadians(angle-90)) * value * speed/2 * tslf;
-			this.y  += Math.cos(Math.toRadians(angle-90)) * value * speed/2 * tslf;
+			//			float value = (float) Math.sin(time-Math.PI/2);
+			//			this.x += Math.sin(Math.toRadians(angle-90)) * value * speed/2 * tslf;
+			//			this.y  += Math.cos(Math.toRadians(angle-90)) * value * speed/2 * tslf;
+			//			
+			//			this.x += velocityX * speed * tslf;
+			//			this.y += velocityY * speed * tslf;
+			//
+			//			speed += 500 * tslf;
+			//			time += Math.PI*2 * tslf;
+
+			searchEnemy(tslf);
 			
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
 
-			speed += 500 * tslf;
-			time += Math.PI*2 * tslf;
+//			speed += 500 * tslf;
+
 			Globals.checkCollisionRocketToWall(this);
 		}
 		if(dieAnimation) {
 			Screen.addScreenshake(3, 0.005f);
-			
+
 			radius += explosionRadiusIncrease * tslf;
 			if(radius >= maxExplosionRadius) {
 				dieAnimation = false;
@@ -62,6 +70,43 @@ public class Rocket {
 	}
 
 
+	public void searchEnemy(float tslf) {
+		float nearestDistance = Float.MAX_VALUE;
+		Enemy nearestEnemy = null;
+		for (Enemy enemy : Globals.enemies) {
+			float ecx = enemy.x + enemy.size/2;
+			float ecy = enemy.y + enemy.size/2;
+			float pcx = this.x + SIZE/2;
+			float pcy = this.y + SIZE/2;
+			
+			float distx = pcx - ecx;
+			float disty = pcy - ecy;
+			
+			if(distx * distx + disty * disty <= nearestDistance) {
+				nearestDistance = distx * distx + disty * disty;
+				nearestEnemy = enemy;
+			}
+		}
+		if(nearestEnemy != null) {
+			float ecx = nearestEnemy.x + nearestEnemy.size/2;
+			float ecy = nearestEnemy.y + nearestEnemy.size/2;
+			float pcx = this.x + SIZE/2;
+			float pcy = this.y + SIZE/2;
+			
+			float distx = pcx - ecx;
+			float disty = pcy - ecy;
+			
+			//TODO: Rework the angle system
+			float newAngle = (float) Math.atan(distx / disty);
+			newAngle = (float) Math.toDegrees(newAngle);
+			if(pcy > ecy) newAngle =  -90 - (90-newAngle);
+			if(pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
+			
+			this.velocityX = (float) Math.sin(Math.toRadians(newAngle));
+			this.velocityY = (float) Math.cos(Math.toRadians(newAngle));	
+		}
+	}
+	
 	/**
 	 * This function disables the bullet so it does not get updated and moves or does damage to enemies, the state is picked for example when the bullet hit the wall
 	 */
@@ -71,7 +116,7 @@ public class Rocket {
 		this.disabled = true;
 		this.dieAnimation = true;
 	}
-	
+
 	/**
 	 * 
 	 * @param obj The object to check with
@@ -81,8 +126,8 @@ public class Rocket {
 		float cx = this.x + Bullet.size/2;
 		float cy = this.y + Bullet.size/2;
 		int r = Bullet.size/2;
-		
-		
+
+
 		//Collision circle in the rectangle
 		if(cx > obj.x && cx < obj.x + obj.size && cy > obj.y && cy < obj.y + obj.size) {
 			return true;

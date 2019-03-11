@@ -42,13 +42,18 @@ public class Map {
 		ysort();
 	}
 	
+	int runs = 0;
 	public void switchMap() {
 		Globals.enemies.removeAll(Globals.enemies);
-		Globals.enemies.add(new Boss(250, 100));
+//		Globals.enemies.add(new Boss(250, 100));
 		Globals.enemies.add(new Enemy(100, 100));
 		Globals.enemies.add(new Enemy(100, 500));
 		Globals.enemies.add(new Enemy(500, 100));
 		Globals.enemies.add(new Enemy(500, 500));
+		for (int i = 0; i < runs; i++) {
+			Globals.enemies.add(new Enemy(600, 50 + Globals.random.nextInt(500)));
+		}
+		runs ++;
 		Globals.player.x = 5;
 		Globals.player.gun.bullets.removeAll(Globals.player.gun.bullets);
 		Globals.player.gun.shells.removeAll(Globals.player.gun.shells);

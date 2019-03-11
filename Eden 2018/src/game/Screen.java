@@ -106,7 +106,7 @@ public class Screen extends JFrame{
 		if(Game.state == Game.MAP_TRANSITION) {
 			transitionX += 800*tslf;
 			if(transitionX >= Globals.width) {
-				transitionX = Globals.width*2;
+				transitionX = Globals.width*1.25f;
 				Game.state = Game.FREEZE;
 			}
 		}
