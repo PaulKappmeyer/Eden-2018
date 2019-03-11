@@ -21,7 +21,7 @@ public class Eden extends Object{
 	int shotWalkSpeed = 75;
 	float walkSpeed;
 	
-	final float timeForSpeedUp = 5.125f; // time for full idleWalkSpeed in seconds
+	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
 	float timeSpeededUp;
 	
 	public static final int IDLE = 0;
@@ -140,28 +140,28 @@ public class Eden extends Object{
 	 * @param tslf
 	 */
 	public void updateInput(float tslf) {
-		if(Controls.isKeyDown(KeyEvent.VK_W)) {
+		if(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP)) {
 			if(state == IDLE) state = WALKING;
 			direction = UP;
 			y -= walkSpeed * tslf;
 		}
-		if(Controls.isKeyDown(KeyEvent.VK_A)) {
+		if(Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT)) {
 			if(state == IDLE) state = WALKING;
 			direction = LEFT;
 			x -= walkSpeed * tslf;
 		}
-		if(Controls.isKeyDown(KeyEvent.VK_S)) {
+		if(Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN)) {
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
 			y += walkSpeed * tslf;
 		}
-		if(Controls.isKeyDown(KeyEvent.VK_D)) {
+		if(Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT)) {
 			if(state == IDLE) state = WALKING;
 			direction = RIGHT;
 			x += walkSpeed * tslf;
 		}
 		
-		if(state == WALKING && !(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_D))) {
+		if(state == WALKING && !(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP) || Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT)|| Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN) || Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT))) {
 			timeSpeededUp = 0;
 			state = IDLE;
 		}

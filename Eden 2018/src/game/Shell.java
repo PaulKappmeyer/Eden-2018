@@ -9,8 +9,9 @@ public class Shell {
 	float y;
 	float velocityX;
 	float velocityY;
-	int baseSpeed = 400;
-	int speedVariation = 200;
+	float baseSpeed = 15;
+	float speedVariation = 5;
+	float finalSpeed;
 	float speed;
 	static final int SIZE = 4;
 	int direction;
@@ -22,26 +23,28 @@ public class Shell {
 		this.y = y;
 		this.direction = direction;
 		this.setVelocity(direction);
-		this.speed = baseSpeed + Globals.random.nextInt(speedVariation);
+		this.finalSpeed = (float)(baseSpeed + Globals.random.nextFloat()*speedVariation);
 	}
 	public Shell(float x, float y, float angle) {
 		this.x = x;
 		this.y = y;
 		this.setVelocity(angle - 180);
-		this.speed = baseSpeed + Globals.random.nextInt(speedVariation);
+		this.finalSpeed = (float)(baseSpeed + Globals.random.nextFloat()*speedVariation);
 	}
 
 	public void draw(Graphics g){
 		g.setColor(Color.BLACK);
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
 	}
-
+	
+	float time;
 	public void update(float tslf) {
 		if(!disabled) {
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
-			speed *= 0.9f;
-			if(speed <= 1f) {
+			time += tslf;
+			speed = finalSpeed * (0.5f / time);
+			if(speed <= finalSpeed) {
 				disabled = true;
 			}
 		}

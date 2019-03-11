@@ -4,8 +4,8 @@ import java.awt.event.KeyEvent;
 
 public class Game implements Runnable{
 	boolean running = true;
-	public static final int FPS = 120;
-	public static final long MAXLOOPTIME = 1000/FPS;
+	public static final int MAXFPS = 500;
+	public static final long MAXLOOPTIME = 1000/MAXFPS;
 	
 	public static long firstFrame;
 	public static int frames;
