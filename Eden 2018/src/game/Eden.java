@@ -19,17 +19,21 @@ public class Eden extends Object{
 	 */
 	int idleWalkSpeed = 250;
 	int shotWalkSpeed = 75;
-	int walkSpeed = idleWalkSpeed;
+	float walkSpeed;
+	
+	final float timeForSpeedUp = 5.125f; // time for full idleWalkSpeed in seconds
+	float timeSpeededUp;
+	
+	public static final int IDLE = 0;
+	public static final int WALKING = 1;
+	public static final int SHOOTING = 2;
+	int state = 0; // the state the player is currently in
 	
 	Gun gun;
 	
 	float knockback = 40f;
 	float velX;
 	float velY;
-	
-	public static final int IDLESTATE = 0;
-	public static final int SHOOTSTATE = 1;
-	int state = 0;
 	
 	public static final int UP = 0;
 	public static final int DOWN = 1;
@@ -51,7 +55,7 @@ public class Eden extends Object{
 		this.y = 400;
 		this.size = 16;
 		gun = new Gun(this);
-		gun.mode = Gun.ROCKET_SINGLE_FIRE_MODE;
+		gun.mode = Gun.SINGLEFIRE;
 	}
 	
 	/**
@@ -93,10 +97,15 @@ public class Eden extends Object{
 		updateInput(tslf);
 		
 		//Calculate the walk speed
-		if(state == SHOOTSTATE) {
+		if(state == SHOOTING) {
 			walkSpeed = shotWalkSpeed;
-		}else if(state == IDLESTATE) {
-			walkSpeed = idleWalkSpeed;
+		}else if(state == WALKING) {
+			if(timeSpeededUp >= timeForSpeedUp) {
+				walkSpeed = idleWalkSpeed;
+			}else {
+				timeSpeededUp += tslf;
+				walkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
+			}
 		}
 		
 		checkCollisionPlayerToWall();
@@ -132,35 +141,45 @@ public class Eden extends Object{
 	 */
 	public void updateInput(float tslf) {
 		if(Controls.isKeyDown(KeyEvent.VK_W)) {
+			if(state == IDLE) state = WALKING;
 			direction = UP;
 			y -= walkSpeed * tslf;
 		}
 		if(Controls.isKeyDown(KeyEvent.VK_A)) {
+			if(state == IDLE) state = WALKING;
 			direction = LEFT;
 			x -= walkSpeed * tslf;
 		}
 		if(Controls.isKeyDown(KeyEvent.VK_S)) {
+			if(state == IDLE) state = WALKING;
 			direction = DOWN;
 			y += walkSpeed * tslf;
 		}
 		if(Controls.isKeyDown(KeyEvent.VK_D)) {
+			if(state == IDLE) state = WALKING;
 			direction = RIGHT;
 			x += walkSpeed * tslf;
 		}
+		
+		if(state == WALKING && !(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_D))) {
+			timeSpeededUp = 0;
+			state = IDLE;
+		}
+		
 		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit) {
 			if(gun.canShot) {
-				if(state == IDLESTATE) shotDirection = direction;
+				if(state == IDLE || state == WALKING) shotDirection = direction;
 //				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
 //				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
 //				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
 //				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
 				
-				state = SHOOTSTATE;
+				state = SHOOTING;
 				gun.shot();
 			}
 		}
-		if(state == SHOOTSTATE && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
-			state = Eden.IDLESTATE;
+		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
+			state = Eden.IDLE;
 		}
 	};
 	

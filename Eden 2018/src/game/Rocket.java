@@ -10,7 +10,7 @@ public class Rocket {
 	float velocityX;
 	float velocityY;
 	float time;
-	float speed = 500;
+	float speed = 100;
 	boolean disabled;
 	float angle;
 	//Animation
@@ -55,7 +55,7 @@ public class Rocket {
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
 
-//			speed += 500 * tslf;
+			speed += 500 * tslf;
 
 			Globals.checkCollisionRocketToWall(this);
 		}
@@ -74,6 +74,7 @@ public class Rocket {
 		float nearestDistance = Float.MAX_VALUE;
 		Enemy nearestEnemy = null;
 		for (Enemy enemy : Globals.enemies) {
+			if(!enemy.alive)continue;
 			float ecx = enemy.x + enemy.size/2;
 			float ecy = enemy.y + enemy.size/2;
 			float pcx = this.x + SIZE/2;
@@ -126,8 +127,6 @@ public class Rocket {
 		float cx = this.x + Bullet.size/2;
 		float cy = this.y + Bullet.size/2;
 		int r = Bullet.size/2;
-
-
 		//Collision circle in the rectangle
 		if(cx > obj.x && cx < obj.x + obj.size && cy > obj.y && cy < obj.y + obj.size) {
 			return true;

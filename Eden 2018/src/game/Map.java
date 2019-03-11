@@ -45,7 +45,7 @@ public class Map {
 	int runs = 0;
 	public void switchMap() {
 		Globals.enemies.removeAll(Globals.enemies);
-//		Globals.enemies.add(new Boss(250, 100));
+		Globals.enemies.add(new Boss(250, 100));
 		Globals.enemies.add(new Enemy(100, 100));
 		Globals.enemies.add(new Enemy(100, 500));
 		Globals.enemies.add(new Enemy(500, 100));
