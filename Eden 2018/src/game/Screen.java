@@ -55,7 +55,7 @@ public class Screen extends JFrame{
 	 * @param g A Graphics Object to draw
 	 */
 	public void show(Graphics g){
-		//Clear the Screen
+		//Clear the screen
 		g.setColor(Color.WHITE);
 		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, this.getWidth(), this.getHeight());
 		
@@ -67,13 +67,23 @@ public class Screen extends JFrame{
 			g.translate(screenshakeX, screenshakeY);
 		}
 		
-		//Draw the Player
-		Globals.player.draw(g);
-		
+		//Draw the players gun
+		Globals.player.gun.draw(g);
+		//Draw the bosses gun
+		for (Enemy enemy : Globals.enemies) {
+			if(enemy instanceof Boss) {
+				Boss boss = (Boss) enemy;
+				boss.gun.draw(g);
+			}
+		}
+		//Draw the enemies
 		for (Enemy e : Globals.enemies) {
 			e.draw(g);
 		}
+		//Draw the player
+		Globals.player.draw(g);
 		
+		//Draw the map transition
 		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, (int)transitionX, Globals.height);

@@ -29,8 +29,6 @@ public class Boss extends Enemy{
 
 	@Override
 	public void draw(Graphics g) {
-		//Drawing of the gun
-		gun.draw(g);
 		//Drawing of the boss
 		if(alive) {
 			g.setColor(Color.DARK_GRAY);
