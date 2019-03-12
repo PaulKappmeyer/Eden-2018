@@ -49,6 +49,13 @@ public class Eden extends Object{
 	float blinkfromStart;
 	float maxBlinkTime = 2f;
 
+	boolean shockwave = false;
+	float shockwaveX;
+	float shockwaveY;
+	float maxStunRange = 200;
+	float stunRageIncrease = 1000;
+	float currentStunRange;
+	
 	/**
 	 * Constructor; initializes the player
 	 */
@@ -83,6 +90,10 @@ public class Eden extends Object{
 				blink -= blinktime*2;
 			}
 		}
+		
+		//Shockwave
+		g.setColor(Color.BLACK);
+		g.drawOval((int)(shockwaveX - currentStunRange/2 + Globals.insetX), (int)(shockwaveY - currentStunRange/2 + Globals.insetY), (int)currentStunRange, (int)currentStunRange);
 	}
 
 	/**
@@ -131,6 +142,15 @@ public class Eden extends Object{
 			}
 		}
 
+		//Shockwave
+		if(shockwave) {
+			currentStunRange += stunRageIncrease * tslf;
+			if(currentStunRange >= maxStunRange) {
+				shockwave = false;
+				currentStunRange = 0;
+			}
+		}
+		
 		//Removal of the enemies
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
@@ -183,6 +203,14 @@ public class Eden extends Object{
 		}
 		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
 			state = Eden.IDLE;
+		}
+		
+		//Shockwave
+		if(Controls.isKeyDown(KeyEvent.VK_R) && shockwave == false) {
+			shockwave = true;
+			shockwaveX = this.x + size/2;
+			shockwaveY = this.y + size/2;
+			currentStunRange = size;
 		}
 	};
 
