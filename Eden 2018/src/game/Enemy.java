@@ -131,6 +131,7 @@ public class Enemy extends Object{
 			isInDieAnimation = true;
 			alive = false;
 		}
+		if(!followplayer) followplayer = true;
 	}
 	public void getHitByBullet(Rocket r, float damage) {
 		applyKnockback(r.angle);
