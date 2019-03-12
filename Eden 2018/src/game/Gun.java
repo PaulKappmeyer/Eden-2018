@@ -118,6 +118,7 @@ public class Gun {
 			for (Bullet b : bullets) {
 				if(b.disabled) continue;
 				if(b.checkCollisionToObject(Globals.player)) {
+					Globals.player.applyKnockback(b.angle);
 					Globals.player.gotHit = true;
 					b.maxExplosionRadius = 30;
 					b.disable();
@@ -126,6 +127,7 @@ public class Gun {
 			for (Rocket r : rockets) {
 				if(r.disabled) continue;
 				if(r.checkCollisionToObject(Globals.player)) {
+					Globals.player.applyKnockback(r.angle);
 					Globals.player.gotHit = true;
 					r.maxExplosionRadius = 30;
 					r.disable();

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Rocket {
-
+	//TODO: Combine in one class with Bullet
 	float x,y;
 	static final int SIZE = 6;
 	float velocityX;

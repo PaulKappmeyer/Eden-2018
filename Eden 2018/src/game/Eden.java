@@ -20,33 +20,35 @@ public class Eden extends Object{
 	int idleWalkSpeed = 250;
 	int shotWalkSpeed = 75;
 	float walkSpeed;
-	
+
 	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
 	float timeSpeededUp;
-	
+
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
 	public static final int SHOOTING = 2;
 	int state = 0; // the state the player is currently in
-	
+
 	Gun gun;
-	
-	float knockback = 40f;
-	float velX;
-	float velY;
-	
+
+	float knockback = 10;
+	float knockbackVelocityX;
+	float knockbackVelocityY;
+	float knockbackSpeed;
+	float time;
+
 	public static final int UP = 0;
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	int direction;
-	
+
 	boolean gotHit = false;
 	float blink;
 	float blinktime = 0.05f;
 	float blinkfromStart;
 	float maxBlinkTime = 2f;
-	
+
 	/**
 	 * Constructor; initializes the player
 	 */
@@ -57,7 +59,7 @@ public class Eden extends Object{
 		gun = new Gun(this);
 		gun.mode = Gun.SINGLEFIRE;
 	}
-	
+
 	/**
 	 * This Function show the player on the screen; gets called every frame
 	 * @param g A Graphics Object to draw the player
@@ -71,7 +73,7 @@ public class Eden extends Object{
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
-		
+
 		//Got-Hit-animation
 		if(gotHit) {
 			if(blink > blinktime) {
@@ -84,7 +86,7 @@ public class Eden extends Object{
 			}
 		}
 	}
-	
+
 	/**
 	 * This function updates the player; gets called every frame; first checks for input; second updates the movement
 	 * @param tslf The time since the last frame in seconds; should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
@@ -92,10 +94,10 @@ public class Eden extends Object{
 	public void update(float tslf) {
 		//Update the gun
 		gun.update(tslf);
-		
+
 		//Check input
 		updateInput(tslf);
-		
+
 		//Calculate the walk speed
 		if(state == SHOOTING) {
 			walkSpeed = shotWalkSpeed;
@@ -107,34 +109,37 @@ public class Eden extends Object{
 				walkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
 			}
 		}
-		
+
 		checkCollisionPlayerToWall();
-		
+
 		if(!gotHit)checkCollisionPlayerToEnemies();
-		
+
 		if(gotHit) {
-			this.x += velX * tslf;
-			this.y += velY * tslf;
 			// TODO: slow down velX and velY
-			//			this.velX *= (0.5 * tslf);
-			//			this.velY *= (0.5 * tslf);
-			
+			if(time <= 1) {
+				time += tslf;
+				knockbackSpeed = knockback * (1 / time);
+				this.x += knockbackVelocityX * knockbackSpeed * tslf;
+				this.y += knockbackVelocityY * knockbackSpeed * tslf;
+			}
+
 			//Animation
 			blink += tslf;
 			blinkfromStart += tslf;
 			if(blinkfromStart > maxBlinkTime) {
 				blinkfromStart = 0;
+				time = 0;
 				gotHit = false;
 			}
 		}
-		
+
 		//Removal of the enemies
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
 			if(e.canBeRemoved())Globals.enemies.remove(e);
 		}
 	};
-	
+
 	/**
 	 * This function checks the input, either update the {@link #x} or {@link #y} position or start shooting
 	 * @param tslf
@@ -160,20 +165,20 @@ public class Eden extends Object{
 			direction = RIGHT;
 			x += walkSpeed * tslf;
 		}
-		
+
 		if(state == WALKING && !(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP) || Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT)|| Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN) || Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT))) {
 			timeSpeededUp = 0;
 			state = IDLE;
 		}
-		
+
 		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit) {
 			if(gun.canShot) {
 				if(state == IDLE || state == WALKING) shotDirection = direction;
-//				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
-//				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
-//				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
-//				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
-				
+				//				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
+				//				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
+				//				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
+				//				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
+
 				state = SHOOTING;
 				gun.shot();
 			}
@@ -182,8 +187,8 @@ public class Eden extends Object{
 			state = Eden.IDLE;
 		}
 	};
-	
-	
+
+
 	/**
 	 * This function checks the {@link #x} and {@link #y} position of the player and looks for collision with the bounding of the map
 	 */
@@ -201,41 +206,42 @@ public class Eden extends Object{
 			this.y = Globals.height - this.size;
 		}
 	}
-	
+
 	/**
 	 * This function checks for a collision with the player and a enemy
 	 * if there is a collision calls {@link #applyKnockback(float)}, and sets {@link #gotHit} true
 	 */
 	public void checkCollisionPlayerToEnemies() {
 		for (Enemy e : Globals.enemies) {
+			if(!e.alive) continue;
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
 				float ecx = e.x + e.size/2;
 				float ecy = e.y + e.size/2;
 				float pcx = this.x + this.size/2;
 				float pcy = this.y + this.size/2;
-				
+
 				float distx = pcx - ecx;
 				float disty = pcy - ecy;
-				
+
 				//TODO: Rework the angle system
 				float angle = (float) Math.atan(distx / disty);
 				angle = (float) Math.toDegrees(angle);
 				if(pcy > ecy) angle =  -90 - (90-angle);
 				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
-				
-				this.applyKnockback(angle);
+
+				this.applyKnockback(angle - 180);
 				this.gotHit = true;
 			}
 		}
 	}
-	
+
 	/**
 	 * This function applies knock-back to the player for example when he gets hit by an enemy
 	 * @param angle The angle in which the player gets knocked back
 	 */
 	public void applyKnockback(float angle) {
 		//TODO: Remove the - Math.sin
-		this.velX = (float) -Math.sin(Math.toRadians(angle)) * knockback;
-		this.velY = (float) -Math.cos(Math.toRadians(angle)) * knockback;
+		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
+		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Map {
 
 	public static float tsls = 5;
-	public static float spawntime = 6f;
+	public static float spawntime = 5f;
 	Eden player = Globals.player;
 	
 	public Map() {
