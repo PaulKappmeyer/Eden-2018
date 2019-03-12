@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class Map {
 
 	public static float tsls = 5;
-	public static float spawntime = 5f;
+	public static float spawntime = 6f;
 	Eden player = Globals.player;
+	static Stone stone;
 	
 	public Map() {
-		// TODO Auto-generated constructor stub
+		stone = new Stone(500, 400, 125, 20);
 	}
 	
 	public void update(float tslf) {
@@ -34,6 +35,8 @@ public class Map {
 		for (Enemy e : Globals.enemies) {
 			e.update(tslf);
 		}
+		
+		stone.update(tslf);
 		
 		//Map transition
 		checkCollisionPlayerToWall();

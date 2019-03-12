@@ -57,7 +57,7 @@ public class Eden extends Object{
 		this.y = 400;
 		this.size = 16;
 		gun = new Gun(this);
-		gun.mode = Gun.ROCKET_SINGLE_FIRE_MODE;
+		gun.mode = Gun.SINGLEFIRE;
 	}
 
 	/**

@@ -28,4 +28,59 @@ public class Globals {
 			projectile.disable();
 		}
 	}
+	
+	/**
+	 * 
+	 * @param circleX
+	 * @param circleY
+	 * @param circleSize
+	 * @param rectangleX
+	 * @param rectangleY
+	 * @param rectangleWidth
+	 * @param rectangleHeight
+	 * @return
+	 */
+	public static boolean checkCollisionRectangleToCircle(float circleX, float circleY, float circleSize, float rectangleX, float rectangleY, float rectangleWidth, float rectangleHeight) {
+		float cx = circleX + circleSize/2;
+		float cy = circleY + circleSize/2;
+		float r = circleSize/2;
+		//Collision circle in the rectangle
+		if(cx > rectangleX && cx < rectangleX + rectangleWidth && cy > rectangleY && cy < rectangleY + rectangleHeight) {
+			return true;
+		}
+		//Collision top side of the rectangle to the circle
+		if(cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY - cy) <= r) {
+			return true;
+		}
+		//Collision bottom side of the rectangle to the circle
+		if(cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY + rectangleHeight - cy) <= r) {
+			return true;
+		}
+		//Collision left side of the rectangle to the circle
+		if(cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX - cx) <= r) {
+			return true;
+		}
+		//Collision right side of the rectangle to the circle
+		if(cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX + rectangleWidth - cx) <= r) {
+			return true;
+		}
+		//Collision top left corner of the rectangle to the circle
+		if(Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - rectangleY)) <= r) {
+			return true;
+		}
+		//Collision top right corner of the rectangle to the circle
+		if(Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - rectangleY)) <= r) {
+			return true;
+		}
+		//Collision bottom left corner of the rectangle to the circle
+		if(Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
+			return true;
+		}
+		//Collision bottom right corner of the rectangle to the circle
+		if(Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
+			return true;
+		}
+		//if no Collision happened
+		return false;
+	}
 }

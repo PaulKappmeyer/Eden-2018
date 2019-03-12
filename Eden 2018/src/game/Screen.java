@@ -83,6 +83,8 @@ public class Screen extends JFrame{
 		//Draw the player
 		Globals.player.draw(g);
 		
+		Map.stone.draw(g);
+		
 		//Draw the map transition
 		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT) {
 			g.setColor(Color.BLACK);
