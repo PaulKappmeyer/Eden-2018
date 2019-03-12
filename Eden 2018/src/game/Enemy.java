@@ -13,7 +13,7 @@ public class Enemy extends Object{
 	//TODO: Revise the variable mess
 	int triggerdistance = 300;
 	boolean followplayer;
-	int walkspeed = 40;
+	int walkspeed = 100;
 	float knockback = 6.25f;
 	int health = 200;
 	float blink;
@@ -123,8 +123,8 @@ public class Enemy extends Object{
 	 * @param b The bullet which hit the enemy
 	 * {@link #applyKnockback(float angle)}
 	 */
-	public void getHitByBullet(Bullet b, float damage) {
-		applyKnockback(b.angle);
+	public void getHitByBullet(Projectile p, float damage) {
+		applyKnockback(p.angle);
 		isInHitAnimation = true;
 		health -= damage;
 		if(health <= 0 && alive) {

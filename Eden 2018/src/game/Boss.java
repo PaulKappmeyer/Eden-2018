@@ -23,7 +23,6 @@ public class Boss extends Enemy{
 		gun = new Gun(this);
 		gun.mode = Gun.CIRCLESHOT;
 		gun.shottime = 5f;
-		gun.color = Color.RED;
 		radiusIncrease = 200;
 	}
 
@@ -56,8 +55,8 @@ public class Boss extends Enemy{
 	public boolean canBeRemoved() {
 		if(super.canBeRemoved()) {
 			if(gun.shells.size() != 0) return false;
-			for (Bullet bullet : gun.bullets) {
-				if(!bullet.canBeRemoved()) return false;
+			for (Projectile projectile : gun.projectiles) {
+				if(!projectile.canBeRemoved()) return false;
 			}
 			return true;
 		}
