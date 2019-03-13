@@ -83,4 +83,23 @@ public class Globals {
 		//if no Collision happened
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @param rectangleX1
+	 * @param rectangleY1
+	 * @param rectangleWidth1
+	 * @param rectangleHeight1
+	 * @param rectangleX2
+	 * @param rectangleY2
+	 * @param rectangleWidth2
+	 * @param rectangleHeight2
+	 * @return
+	 */
+	public static boolean checkCollisionRectangleToRectangle(float rectangleX1, float rectangleY1, float rectangleWidth1, float rectangleHeight1, float rectangleX2, float rectangleY2, float rectangleWidth2, float rectangleHeight2) {
+		if(rectangleX1 <= rectangleX2 + rectangleWidth2 && rectangleX1 + rectangleWidth1 >= rectangleX2 && rectangleY1 <= rectangleY2 + rectangleHeight2 && rectangleY1 + rectangleHeight1 >= rectangleY2) {
+			return true;
+		}
+		return false;
+	}
 }
