@@ -14,19 +14,29 @@ public class Enemy extends Object{
 	int triggerdistance = 300;
 	boolean followplayer;
 	int walkspeed = 100;
-	float knockback = 6.25f;
 	int health = 200;
+	boolean alive = true;
+	//Got-Hit animation
+	boolean isInHitAnimation = false;
 	float blink;
 	float blinktime = 0.05f;
 	float blinkfromStart;
 	float maxBlinkTime = 1f;
-	boolean isInHitAnimation = false;
+	//Die animation
+	boolean isInDieAnimation = false;
 	float radius = 0;
 	float radiusIncrease = 1600;
 	float maxRadius = 50;
-	boolean isInDieAnimation = false;
-	
-	boolean alive = true;
+	//Knockback
+	boolean gotKnockbacked;
+	float maxKnockback;
+	float maxKnockbackTime;
+	float knockbackVelocityX;
+	float knockbackVelocityY;
+	float currentKnockbackSpeed;
+	float timeKnockedBack;
+	float bulletImpact = 325;
+	float bulletImpactTime = 0.1f;
 	
 	/**
 	 * Constructor; initializes the enemy
@@ -72,6 +82,7 @@ public class Enemy extends Object{
 	 */
 	public void update(float tslf) {
 		if(alive) {
+			//Check for range to start follow player
 			float halfsize = this.size/2;
 			float playercenterx = Globals.player.x + halfsize;
 			float playercentery = Globals.player.y + halfsize;
@@ -79,14 +90,13 @@ public class Enemy extends Object{
 			float enemycentery = this.y + halfsize;
 			float distx = enemycenterx - playercenterx;
 			float disty = enemycentery - playercentery;
-
 			if(!followplayer) {
 				float distanceToPlayer = distx * distx + disty * disty;
 				if(distanceToPlayer < triggerdistance * triggerdistance) {
 					followplayer = true;
 				}
 			}
-
+			//Movement follow player
 			if(followplayer) {
 				float angle = (float) Math.atan(distx / disty);
 				angle = (float) Math.toDegrees(angle);
@@ -101,6 +111,22 @@ public class Enemy extends Object{
 			}
 		}
 		
+		//Knockback
+		if(gotKnockbacked) {
+			if(timeKnockedBack <= maxKnockbackTime) {
+				timeKnockedBack += tslf;
+				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+				System.out.println(((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime) + "  " + currentKnockbackSpeed);
+				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
+				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
+			}else {
+				gotKnockbacked = false;
+				timeKnockedBack = 0;
+				currentKnockbackSpeed = 0;
+			}
+		}
+		
+		//Got-Hit animation
 		if(isInHitAnimation) {
 			blink += tslf;
 			blinkfromStart += tslf;
@@ -110,6 +136,7 @@ public class Enemy extends Object{
 			}
 		}
 		
+		//Die animation
 		if(isInDieAnimation) {
 			radius += radiusIncrease * tslf;
 			if(radius >= maxRadius) {
@@ -124,7 +151,7 @@ public class Enemy extends Object{
 	 * {@link #applyKnockback(float angle)}
 	 */
 	public void getHitByProjectile(Projectile p, float damage) {
-		applyKnockback(p.angle);
+		startKnockback(p.angle, this.bulletImpact, this.bulletImpactTime);
 		isInHitAnimation = true;
 		health -= damage;
 		if(health <= 0 && alive) {
@@ -155,12 +182,19 @@ public class Enemy extends Object{
 	}
 	
 	/**
-	 * This function applies knock-back to an enemy when it got hit by an bullet
-	 * @param angle The angle at which the bullet is flying and hit the enemy
-	 * {@link #knockback}
+	 * 
+	 * @param angle
+	 * @param ammount
 	 */
-	public void applyKnockback(float angle) {
-		this.x += (float) Math.sin(Math.toRadians(angle)) * knockback;
-		this.y += (float) Math.cos(Math.toRadians(angle)) * knockback;
+	public void startKnockback(float angle, float ammount, float time) {
+		if(gotKnockbacked) return;
+		gotKnockbacked = true;
+		calculateKnockbackVelocity(angle);
+		maxKnockback = ammount;
+		maxKnockbackTime = time;
+	}
+	private void calculateKnockbackVelocity(float angle) {
+		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
+		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}
 }

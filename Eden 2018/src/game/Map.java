@@ -4,32 +4,15 @@ import java.util.ArrayList;
 
 public class Map {
 
-	public static float tsls = 5;
-	public static float spawntime = 6f;
 	Eden player = Globals.player;
 	static Stone stone;
 	
 	public Map() {
 		stone = new Stone(500, 400, 125, 20);
+		Globals.enemies.add(new Enemy(500, 100));
 	}
 	
 	public void update(float tslf) {
-		//TODO: Spawn algorithm
-//		tsls += tslf;
-		if(tsls >= spawntime) {
-			tsls -= spawntime;
-			Globals.enemies.add(new Boss(250, 100));
-			Globals.enemies.add(new Enemy(100, 100));
-			Globals.enemies.add(new Enemy(100, 500));
-			Globals.enemies.add(new Enemy(500, 100));
-			Globals.enemies.add(new Enemy(500, 500));
-		}
-		
-		//TODO: Removal of the Bullet
-//		if(Globals.player.bullets.size() >= 500) {
-//			Globals.player.bullets.remove(0);
-//		}
-		
 		//TODO: Update System
 		Globals.player.update(tslf);
 		for (Enemy e : Globals.enemies) {
@@ -48,11 +31,11 @@ public class Map {
 	int runs = 0;
 	public void switchMap() {
 		Globals.enemies.removeAll(Globals.enemies);
-		Globals.enemies.add(new Boss(250, 100));
-		Globals.enemies.add(new Enemy(100, 100));
-		Globals.enemies.add(new Enemy(100, 500));
+		Globals.enemies.add(new Boss(450, 250));
 		Globals.enemies.add(new Enemy(500, 100));
-		Globals.enemies.add(new Enemy(500, 500));
+		Globals.enemies.add(new Enemy(500, 200));
+		Globals.enemies.add(new Enemy(500, 300));
+		Globals.enemies.add(new Enemy(500, 350));
 		for (int i = 0; i < runs; i++) {
 			Globals.enemies.add(new Enemy(600, 50 + Globals.random.nextInt(500)));
 		}

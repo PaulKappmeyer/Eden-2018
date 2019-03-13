@@ -34,24 +34,31 @@ public class Eden extends Object{
 
 	Gun gun;
 
-	float knockback = 10;
-	float knockbackVelocityX;
-	float knockbackVelocityY;
-	float knockbackSpeed;
-	float time;
-
 	public static final int UP = 0;
 	public static final int DOWN = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 3;
 	int direction;
 
+	//Knockback
+	boolean gotKnockbacked;
+	float maxKnockback;
+	float maxKnockbackTime = 0.2f;
+	float knockbackVelocityX;
+	float knockbackVelocityY;
+	float currentKnockbackSpeed;
+	float timeKnockedBack;
+	final float enemyImpact = 500;
+	final float bulletImpact = 250;
+	
+	//Got-Hit animation
 	boolean gotHit = false;
 	float blink;
 	float blinktime = 0.05f;
 	float blinkfromStart;
-	float maxBlinkTime = 2f;
+	float maxBlinkTime = 1f;
 
+	//Shockwave
 	boolean shockwave = false;
 	float shockwaveX;
 	float shockwaveY;
@@ -126,21 +133,28 @@ public class Eden extends Object{
 
 		if(!gotHit)checkCollisionPlayerToEnemies();
 
-		if(gotHit) {
-			// TODO: slow down velX and velY
-			if(time <= 1) {
-				time += tslf;
-				knockbackSpeed = knockback * (1 / time);
-				this.x += knockbackVelocityX * knockbackSpeed * tslf;
-				this.y += knockbackVelocityY * knockbackSpeed * tslf;
+		//Knockback
+		if(gotKnockbacked) {
+			if(timeKnockedBack <= maxKnockbackTime) {
+				timeKnockedBack += tslf;
+				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+				System.out.println(((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime) + "  " + currentKnockbackSpeed);
+				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
+				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
+			}else {
+				gotKnockbacked = false;
+				timeKnockedBack = 0;
+				currentKnockbackSpeed = 0;
 			}
-
+		}
+		
+		//Got-Hit-animation
+		if(gotHit) {
 			//Animation
 			blink += tslf;
 			blinkfromStart += tslf;
 			if(blinkfromStart > maxBlinkTime) {
 				blinkfromStart = 0;
-				time = 0;
 				gotHit = false;
 			}
 		}
@@ -168,7 +182,7 @@ public class Eden extends Object{
 					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
 
 					e.getDamaged(50);
-					e.applyKnockback(newAngle);
+					e.startKnockback(newAngle, e.bulletImpact, e.bulletImpactTime);
 				}
 			}
 		}
@@ -310,18 +324,29 @@ public class Eden extends Object{
 				if(pcy > ecy) angle =  -90 - (90-angle);
 				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
 
-				this.applyKnockback(angle - 180);
+				this.startKnockback(angle - 180, enemyImpact);
 				this.gotHit = true;
 			}
 		}
 	}
 
 	/**
+	 * 
+	 * @param angle
+	 * @param ammount
+	 */
+	public void startKnockback(float angle, float ammount) {
+		if(gotKnockbacked) return;
+		gotKnockbacked = true;
+		calculateKnockbackVelocity(angle);
+		maxKnockback = ammount;
+	}
+	
+	/**
 	 * This function applies knock-back to the player for example when he gets hit by an enemy
 	 * @param angle The angle in which the player gets knocked back
 	 */
-	public void applyKnockback(float angle) {
-		//TODO: Remove the - Math.sin
+	private void calculateKnockbackVelocity(float angle) {
 		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
 		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}

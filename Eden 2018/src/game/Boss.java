@@ -18,7 +18,7 @@ public class Boss extends Enemy{
 		walkspeed = 10;
 		followplayer = true;
 		health = 1000;
-		knockback = 0.5f;
+		bulletImpact = 50;
 		//Gun
 		gun = new Gun(this);
 		gun.mode = Gun.CIRCLESHOT;

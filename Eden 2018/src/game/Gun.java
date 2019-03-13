@@ -91,24 +91,24 @@ public class Gun {
 		if(owner == Globals.player) {
 			for (Enemy e : Globals.enemies) {
 				if(!e.alive) continue;
-				for (Projectile p : projectiles) {
-					if(p.disabled) continue;
-					if(p.checkCollisionToObject(e)) {
-						e.getHitByProjectile(p, damage);      
-						p.maxExplosionRadius = 30;
-						p.disable();
+				for (Projectile projectile : projectiles) {
+					if(projectile.disabled) continue;
+					if(projectile.checkCollisionToObject(e)) {
+						e.getHitByProjectile(projectile, damage);      
+						projectile.maxExplosionRadius = 30;
+						projectile.disable();
 					}
 				}
 			}
 
 		}else if(owner instanceof Enemy) {
-			for (Projectile p : projectiles) {
-				if(p.disabled) continue;
-				if(p.checkCollisionToObject(Globals.player)) {
-					Globals.player.applyKnockback(p.angle);
+			for (Projectile projectile : projectiles) {
+				if(projectile.disabled) continue;
+				if(projectile.checkCollisionToObject(Globals.player)) {
+					Globals.player.startKnockback(projectile.angle, Globals.player.bulletImpact);
 					Globals.player.gotHit = true;
-					p.maxExplosionRadius = 30;
-					p.disable();
+					projectile.maxExplosionRadius = 30;
+					projectile.disable();
 				}
 			}
 		}
