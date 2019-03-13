@@ -52,7 +52,7 @@ public class Eden extends Object{
 	boolean shockwave = false;
 	float shockwaveX;
 	float shockwaveY;
-	float maxStunRange = 200;
+	float maxStunRange = 600;
 	float stunRageIncrease = 1000;
 	float currentStunRange;
 	
@@ -148,6 +148,25 @@ public class Eden extends Object{
 			if(currentStunRange >= maxStunRange) {
 				shockwave = false;
 				currentStunRange = 0;
+			}
+			
+			for (Enemy e : Globals.enemies) {
+				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
+					float ecx = e.x + e.size/2;
+					float ecy = e.y + e.size/2;
+					
+					float distx = shockwaveX - ecx;
+					float disty = shockwaveY - ecy;
+					
+					//TODO: Rework the angle system
+					float newAngle = (float) Math.atan(distx / disty);
+					newAngle = (float) Math.toDegrees(newAngle);
+					if(shockwaveY > ecy) newAngle =  -90 - (90-newAngle);
+					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
+					
+					e.getDamaged(50);
+					e.applyKnockback(newAngle);
+				}
 			}
 		}
 		

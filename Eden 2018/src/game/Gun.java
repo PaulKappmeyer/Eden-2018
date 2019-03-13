@@ -94,7 +94,7 @@ public class Gun {
 				for (Projectile p : projectiles) {
 					if(p.disabled) continue;
 					if(p.checkCollisionToObject(e)) {
-						e.getHitByBullet(p, damage);      
+						e.getHitByProjectile(p, damage);      
 						p.maxExplosionRadius = 30;
 						p.disable();
 					}

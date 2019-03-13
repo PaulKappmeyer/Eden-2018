@@ -123,7 +123,7 @@ public class Enemy extends Object{
 	 * @param b The bullet which hit the enemy
 	 * {@link #applyKnockback(float angle)}
 	 */
-	public void getHitByBullet(Projectile p, float damage) {
+	public void getHitByProjectile(Projectile p, float damage) {
 		applyKnockback(p.angle);
 		isInHitAnimation = true;
 		health -= damage;
@@ -133,14 +133,14 @@ public class Enemy extends Object{
 		}
 		if(!followplayer) followplayer = true;
 	}
-	public void getHitByBullet(Rocket r, float damage) {
-		applyKnockback(r.angle);
+	public void getDamaged(float damage) {
 		isInHitAnimation = true;
 		health -= damage;
 		if(health <= 0 && alive) {
 			isInDieAnimation = true;
 			alive = false;
 		}
+		if(!followplayer) followplayer = true;
 	}
 	
 	/**
