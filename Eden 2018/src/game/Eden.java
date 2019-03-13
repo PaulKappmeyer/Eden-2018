@@ -73,8 +73,6 @@ public class Eden extends Object{
 		this.x = 400;
 		this.y = 400;
 		this.size = 16;
-		gun = new Gun(this);
-		gun.mode = Gun.SINGLEFIRE;
 	}
 
 	/**
@@ -112,7 +110,7 @@ public class Eden extends Object{
 	 */
 	public void update(float tslf) {
 		//Update the gun
-		gun.update(tslf);
+		if(gun != null) gun.update(tslf);
 
 		//Check input
 		updateInput(tslf);
@@ -257,7 +255,7 @@ public class Eden extends Object{
 			state = IDLE;
 		}
 
-		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit) {
+		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit && gun != null) {
 			if(gun.canShot) {
 				if(state == IDLE || state == WALKING) shotDirection = direction;
 				//				if(shotDirection == UP && direction == DOWN) shotDirection = direction;

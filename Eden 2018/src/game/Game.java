@@ -14,9 +14,10 @@ public class Game implements Runnable{
 	Map map = new Map();
 	
 	public static final int RUNNING = 1;
-	public static final int FREEZE = 2;
 	public static final int MAP_TRANSITION = 3;
+	public static final int RESET = 2;
 	public static final int MAP_TRANSITION_OUT = 4;
+	public static final int INTERACTING = 5;
 	public static int state = RUNNING;
 	
 	@Override
@@ -42,9 +43,9 @@ public class Game implements Runnable{
 			//----------------------------------Updating
 			
 			//TODO:Update System
-			if(state == RUNNING) map.update(tslf);
+			if(state == RUNNING || state == INTERACTING) map.update(tslf);
 			sc.update(tslf);
-			if(state == FREEZE) {
+			if(state == RESET) {
 				state = MAP_TRANSITION_OUT;
 				map.switchMap(); 
 			}

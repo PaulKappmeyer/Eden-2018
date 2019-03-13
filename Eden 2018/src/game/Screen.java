@@ -68,7 +68,7 @@ public class Screen extends JFrame{
 		}
 		
 		//Draw the players gun
-		Globals.player.gun.draw(g);
+		if(Globals.player.gun != null)Globals.player.gun.draw(g);
 		//Draw the bosses gun
 		for (Enemy enemy : Globals.enemies) {
 			if(enemy instanceof Boss) {
@@ -121,7 +121,7 @@ public class Screen extends JFrame{
 			transitionX += 800*tslf;
 			if(transitionX >= Globals.width) {
 				transitionX = Globals.width*1.25f;
-				Game.state = Game.FREEZE;
+				Game.state = Game.RESET;
 			}
 		}
 		if(Game.state == Game.MAP_TRANSITION_OUT) {

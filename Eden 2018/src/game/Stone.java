@@ -35,7 +35,7 @@ public class Stone {
 				float pcy = p.y + p.size/2;
 				float ecx = this.x + width/2;
 				float ecy = this.y + height/2;
-				
+
 				float distx = pcx - ecx;
 				float disty = pcy - ecy;
 
@@ -46,7 +46,7 @@ public class Stone {
 				if(pcx >= ecx && pcy >= ecy) newAngle = 180 - newAngle;
 				if(pcx <= ecx && pcy >= ecy) newAngle = 180 - newAngle;
 				if(pcx <= ecx && pcy <= ecy) newAngle = 360 - newAngle;
-				
+
 				if(newAngle >= 280 && newAngle <= 360 || newAngle >= 0 && newAngle <= 80) {
 					p.y = this.y - p.size;
 				}
@@ -63,10 +63,12 @@ public class Stone {
 		}
 
 		//Collision with bullets 
-		for (Projectile projectilce : Globals.player.gun.projectiles) {
-			if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
-				projectilce.maxExplosionRadius = 30;
-				projectilce.disable();
+		if(Globals.player.gun != null) {
+			for (Projectile projectilce : Globals.player.gun.projectiles) {
+				if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
+					projectilce.maxExplosionRadius = 30;
+					projectilce.disable();
+				}
 			}
 		}
 		for (Enemy e : Globals.enemies) {
@@ -95,12 +97,14 @@ public class Stone {
 		}
 
 		//Collision with shells
-		for (Shell s : Globals.player.gun.shells) {
-			if(s.collided) continue;
-			if(Globals.checkCollisionRectangleToCircle(s.x, s.y, Shell.SIZE, this.x, this.y, this.width, this.height)) {
-				s.velocityX *= -0.5;
-				s.velocityY *= -0.5;
-				s.collided = true;
+		if(Globals.player.gun != null) {
+			for (Shell s : Globals.player.gun.shells) {
+				if(s.collided) continue;
+				if(Globals.checkCollisionRectangleToCircle(s.x, s.y, Shell.SIZE, this.x, this.y, this.width, this.height)) {
+					s.velocityX *= -0.5;
+					s.velocityY *= -0.5;
+					s.collided = true;
+				}
 			}
 		}
 	}
