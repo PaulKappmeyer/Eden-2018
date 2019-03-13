@@ -11,7 +11,7 @@ import java.awt.Graphics;
 public class Enemy extends Object{
 
 	//TODO: Revise the variable mess
-	int triggerdistance = 300;
+	int triggerDistance = 300;
 	boolean followplayer;
 	int walkspeed = 100;
 	int health = 200;
@@ -92,7 +92,7 @@ public class Enemy extends Object{
 			float disty = enemycentery - playercentery;
 			if(!followplayer) {
 				float distanceToPlayer = distx * distx + disty * disty;
-				if(distanceToPlayer < triggerdistance * triggerdistance) {
+				if(distanceToPlayer < triggerDistance * triggerDistance) {
 					followplayer = true;
 				}
 			}
@@ -116,7 +116,6 @@ public class Enemy extends Object{
 			if(timeKnockedBack <= maxKnockbackTime) {
 				timeKnockedBack += tslf;
 				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				System.out.println(((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime) + "  " + currentKnockbackSpeed);
 				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
 				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
 			}else {

@@ -138,7 +138,6 @@ public class Eden extends Object{
 			if(timeKnockedBack <= maxKnockbackTime) {
 				timeKnockedBack += tslf;
 				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				System.out.println(((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime) + "  " + currentKnockbackSpeed);
 				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
 				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
 			}else {

@@ -80,10 +80,12 @@ public class Screen extends JFrame{
 		for (Enemy e : Globals.enemies) {
 			e.draw(g);
 		}
-		//Draw the player
-		Globals.player.draw(g);
 		
 		Map.stone.draw(g);
+		Map.chest.draw(g);
+		
+		//Draw the player
+		Globals.player.draw(g);
 		
 		//Draw the map transition
 		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT) {
