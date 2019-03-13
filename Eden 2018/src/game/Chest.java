@@ -39,7 +39,7 @@ public class Chest {
 				textbox.index++;
 				if(textbox.index >= textbox.text.length) {
 					textbox.index = textbox.text.length - 1;
-					textbox.moveDown();
+					textbox.disappear();
 					Globals.player.gun = new Gun(Globals.player);
 					Globals.player.gun.mode = Gun.SINGLEFIRE;
 					Game.state = Game.RUNNING;
@@ -72,11 +72,11 @@ public class Chest {
 		float distanceToPlayer = distx * distx + disty * disty;
 		if(distanceToPlayer < triggerDistance * triggerDistance) {
 			if(checkForPlayer) {
-				textbox.moveUp();
+				textbox.appear();
 			}
 		}else {
 			checkForPlayer = true;
-			textbox.moveDown();
+			textbox.disappear();
 		}
 	}
 }

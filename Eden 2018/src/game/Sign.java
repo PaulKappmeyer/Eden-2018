@@ -39,7 +39,7 @@ public class Sign {
 				textbox.index++;
 				if(textbox.index >= textbox.text.length) {
 					textbox.index = textbox.text.length - 1;
-					textbox.moveDown();
+					textbox.disappear();
 					Game.state = Game.RUNNING;
 
 				}
@@ -70,11 +70,11 @@ public class Sign {
 		float distanceToPlayer = distx * distx + disty * disty;
 		if(distanceToPlayer < triggerDistance * triggerDistance) {
 			if(checkForPlayer) {
-				textbox.moveUp();
+				textbox.appear();
 			}
 		}else {
 			checkForPlayer = true;
-			textbox.moveDown();
+			textbox.disappear();
 		}
 	}
 	

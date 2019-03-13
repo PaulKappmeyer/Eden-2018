@@ -11,10 +11,13 @@ public class Textbox {
 	public int height = 100;
 	public int speed = 1000;
 	public static final int HIDE = 0;
-	public static final int MOVE_UP = 1;
-	public static final int MOVE_DOWN = 2;
+	public static final int APPEAR = 1;
+	public static final int DISAPPEAR = 2;
 	public static final int HIGHEST_POINT = 3;
-	public int state;
+	public int state = HIDE;
+	public static final int FROM_TOP = 1;
+	public static final int FROM_BOTTOM = 2;
+	public int direction;
 	String[] text;
 	int index = 0;
 
@@ -31,27 +34,53 @@ public class Textbox {
 	}
 
 	public void update(float tslf) {
-		if(state == MOVE_UP) {
-			if(y <= Globals.height - height - 10) {
-				state = HIGHEST_POINT;
-				y = Globals.height - height - 10;
-			}else {
-				y -= speed * tslf;
+		if(state == APPEAR) {
+			if(direction == FROM_BOTTOM) {
+				if(y <= Globals.height - height - 10) {
+					state = HIGHEST_POINT;
+					y = Globals.height - height - 10;
+				}else {
+					y -= speed * tslf;
+				}
+			}else if(direction == FROM_TOP) {
+				if(y >= 10) {
+					state = HIGHEST_POINT;
+					y = 10;
+				}else {
+					y += speed * tslf;
+				}
 			}
-		}else if(state == MOVE_DOWN){
-			if(y >= Globals.height) {
-				y = Globals.height;
-				state = HIDE;
-			}else {
-				y += speed * tslf;
+		}else if(state == DISAPPEAR){
+			if(direction == FROM_BOTTOM) {
+				if(y >= Globals.height) {
+					y = Globals.height;
+					state = HIDE;
+				}else {
+					y += speed * tslf;
+				}
+			}else if(direction == FROM_TOP) {
+				if(y <= -height) {
+					y = -height;
+					state = HIDE;
+				}else {
+					y -= speed * tslf;
+				}
 			}
 		}
 	}
 
-	public void moveUp() {
-		state = MOVE_UP;
+	public void appear() {
+		if (Globals.player.y < Globals.height/2) {
+			direction = FROM_BOTTOM;
+			if(state == HIDE) y = Globals.height;
+		}else {
+			direction = FROM_TOP;
+			if(state == HIDE) y = -height;
+		}
+		state = APPEAR;
 	}
-	public void moveDown() {
-		state = MOVE_DOWN;
+	public void disappear() {
+		if(state == HIDE) return;
+		state = DISAPPEAR;
 	}
 }
