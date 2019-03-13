@@ -31,7 +31,7 @@ public class Stone {
 		if(p.x + p.size > this.x && p.x + p.size < this.x + a && p.x < this.x && p.y + p.size > this.y && p.y < this.y + this.height) {
 			p.x = this.x - p.size;
 		}
-		if(p.y < this.y + this.height && p.y + p.size > this.y + this.height && p.x + p.size > this.x && p.x < this.x + this.width) {
+		if(p.y < this.y + this.height && p.y > this.y + this.height - a && p.x + p.size > this.x && p.x < this.x + this.width) {
 			p.y = this.y + this.height;
 		}
 		if(p.y + p.size > this.y && p.y + p.size < this.y + a && p.y < this.y && p.x + p.size > this.x && p.x < this.x + this.width) {

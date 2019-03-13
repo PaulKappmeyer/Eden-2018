@@ -21,6 +21,9 @@ public class Eden extends Object{
 	int shotWalkSpeed = 75;
 	float walkSpeed;
 
+	float walkVelocityX;
+	float walkVeloctiyY;
+
 	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
 	float timeSpeededUp;
 
@@ -55,7 +58,7 @@ public class Eden extends Object{
 	float maxStunRange = 600;
 	float stunRageIncrease = 1000;
 	float currentStunRange;
-	
+
 	/**
 	 * Constructor; initializes the player
 	 */
@@ -90,7 +93,7 @@ public class Eden extends Object{
 				blink -= blinktime*2;
 			}
 		}
-		
+
 		//Shockwave
 		g.setColor(Color.BLACK);
 		g.drawOval((int)(shockwaveX - currentStunRange/2 + Globals.insetX), (int)(shockwaveY - currentStunRange/2 + Globals.insetY), (int)currentStunRange, (int)currentStunRange);
@@ -149,27 +152,27 @@ public class Eden extends Object{
 				shockwave = false;
 				currentStunRange = 0;
 			}
-			
+
 			for (Enemy e : Globals.enemies) {
 				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
 					float ecx = e.x + e.size/2;
 					float ecy = e.y + e.size/2;
-					
+
 					float distx = shockwaveX - ecx;
 					float disty = shockwaveY - ecy;
-					
+
 					//TODO: Rework the angle system
 					float newAngle = (float) Math.atan(distx / disty);
 					newAngle = (float) Math.toDegrees(newAngle);
 					if(shockwaveY > ecy) newAngle =  -90 - (90-newAngle);
 					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
-					
+
 					e.getDamaged(50);
 					e.applyKnockback(newAngle);
 				}
 			}
 		}
-		
+
 		//Removal of the enemies
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
@@ -182,28 +185,37 @@ public class Eden extends Object{
 	 * @param tslf
 	 */
 	public void updateInput(float tslf) {
-		if(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP)) {
+		//Up
+		if(isUpKeyDown() && !(isLeftKeyDown() || isRightKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			direction = UP;
-			y -= walkSpeed * tslf;
+			x += Math.sin(Math.toRadians(180)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(180)) * walkSpeed * tslf;
 		}
-		if(Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT)) {
-			if(state == IDLE) state = WALKING;
-			direction = LEFT;
-			x -= walkSpeed * tslf;
-		}
-		if(Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN)) {
+		//Down
+		if(isDownKeyDown() && !(isLeftKeyDown() || isRightKeyDown())){
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
-			y += walkSpeed * tslf;
+			x += Math.sin(Math.toRadians(0)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(0)) * walkSpeed * tslf;
 		}
-		if(Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT)) {
+		//Left
+		if(isLeftKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
+			if(state == IDLE) state = WALKING;
+			direction = LEFT ;
+			x += Math.sin(Math.toRadians(270)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(270)) * walkSpeed * tslf;
+		}
+		//Right
+		if(isRightKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			direction = RIGHT;
-			x += walkSpeed * tslf;
+			x += Math.sin(Math.toRadians(90)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(90)) * walkSpeed * tslf;
 		}
 
-		if(state == WALKING && !(Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP) || Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT)|| Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN) || Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT))) {
+		//Reset Walking
+		if(state == WALKING && !(isUpKeyDown() || isDownKeyDown() || isLeftKeyDown()|| isRightKeyDown())) {
 			timeSpeededUp = 0;
 			state = IDLE;
 		}
@@ -223,7 +235,7 @@ public class Eden extends Object{
 		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
 			state = Eden.IDLE;
 		}
-		
+
 		//Shockwave
 		if(Controls.isKeyDown(KeyEvent.VK_R) && shockwave == false) {
 			shockwave = true;
@@ -288,5 +300,19 @@ public class Eden extends Object{
 		//TODO: Remove the - Math.sin
 		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
 		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
+	}
+
+	//Key inputs
+	public boolean isUpKeyDown() {
+		return Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP);
+	}
+	public boolean isDownKeyDown() {
+		return Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN);
+	}
+	public boolean isLeftKeyDown() {
+		return Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT);
+	}
+	public boolean isRightKeyDown() {
+		return Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT);
 	}
 }
