@@ -7,10 +7,12 @@ public class Map {
 	Eden player = Globals.player;
 	static Stone stone;
 	static Chest chest;
-
+	static Sign sign;
+	
 	public Map() {
 		stone = new Stone(500, 400, 125, 20);
 		chest = new Chest(100, 100);
+		sign = new Sign(150, 550);
 		Globals.enemies.add(new Enemy(500, 100));
 	}
 
@@ -25,7 +27,8 @@ public class Map {
 		}
 
 		chest.update(tslf);
-
+		sign.update(tslf);
+		
 		//Map transition
 		checkCollisionPlayerToWall();
 

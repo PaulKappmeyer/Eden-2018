@@ -83,6 +83,7 @@ public class Screen extends JFrame{
 		
 		Map.stone.draw(g);
 		Map.chest.draw(g);
+		Map.sign.draw(g);
 		
 		//Draw the player
 		Globals.player.draw(g);
