@@ -17,6 +17,8 @@ public class Shell {
 	int direction;
 	int angleVariation = 30;
 	boolean disabled = false;
+	
+	boolean collided = false;
 
 	public Shell(float x, float y, int direction) {
 		this.x = x;

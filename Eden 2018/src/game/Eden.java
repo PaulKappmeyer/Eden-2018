@@ -192,12 +192,36 @@ public class Eden extends Object{
 			x += Math.sin(Math.toRadians(180)) * walkSpeed * tslf;
 			y += Math.cos(Math.toRadians(180)) * walkSpeed * tslf;
 		}
+		if(isUpKeyDown() && isLeftKeyDown()) {
+			if(state == IDLE) state = WALKING;
+			direction = UP;
+			x += Math.sin(Math.toRadians(180 + 45)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(180 + 45)) * walkSpeed * tslf;
+		}
+		if(isUpKeyDown() && isRightKeyDown()) {
+			if(state == IDLE) state = WALKING;
+			direction = UP;
+			x += Math.sin(Math.toRadians(180 - 45)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(180 - 45)) * walkSpeed * tslf;
+		}
 		//Down
 		if(isDownKeyDown() && !(isLeftKeyDown() || isRightKeyDown())){
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
 			x += Math.sin(Math.toRadians(0)) * walkSpeed * tslf;
 			y += Math.cos(Math.toRadians(0)) * walkSpeed * tslf;
+		}
+		if(isDownKeyDown() && isLeftKeyDown()){
+			if(state == IDLE) state = WALKING;
+			direction = DOWN;
+			x += Math.sin(Math.toRadians(0 - 45)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(0 - 45)) * walkSpeed * tslf;
+		}
+		if(isDownKeyDown() && isRightKeyDown()){
+			if(state == IDLE) state = WALKING;
+			direction = DOWN;
+			x += Math.sin(Math.toRadians(0 + 45)) * walkSpeed * tslf;
+			y += Math.cos(Math.toRadians(0 + 45)) * walkSpeed * tslf;
 		}
 		//Left
 		if(isLeftKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
