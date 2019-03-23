@@ -64,25 +64,30 @@ public class Gun {
 		}else {
 			tsls += tslf;	
 		}
-
-		for (Projectile projectile : projectiles) {
-			projectile.update(tslf);
-		}
+		
+		//Updating the shells
 		for (Shell shell : shells) {
 			shell.update(tslf);
 		}
-
-		checkCollisionBulletsToObjects();
-
-		//Removal of the bullets
-		ArrayList<Projectile> removableProjectiles = new ArrayList<Projectile>();
-		for (Projectile projectile : projectiles) {
-			if(projectile.canBeRemoved()) {
-				removableProjectiles.add(projectile);
+		
+		//Updating the projectiles
+		if(!projectiles.isEmpty()) {
+			for (Projectile projectile : projectiles) {
+				projectile.update(tslf);
 			}
-		}
-		for (Projectile p : removableProjectiles) {
-			projectiles.remove(p);
+
+			checkCollisionBulletsToObjects();
+
+			//Removal of the bullets
+			ArrayList<Projectile> removableProjectiles = new ArrayList<Projectile>();
+			for (Projectile projectile : projectiles) {
+				if(projectile.canBeRemoved()) {
+					removableProjectiles.add(projectile);
+				}
+			}
+			for (Projectile p : removableProjectiles) {
+				projectiles.remove(p);
+			}
 		}
 	}
 
@@ -225,7 +230,7 @@ public class Gun {
 	}
 
 	int a = 0;
-	
+
 	/**
 	 * This function applies recoil to the player
 	 * @param angle The angle in which the player should get the recoil

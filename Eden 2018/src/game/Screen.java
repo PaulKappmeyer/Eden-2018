@@ -57,7 +57,7 @@ public class Screen extends JFrame{
 	public void show(Graphics g){
 		//Clear the screen
 		g.setColor(Color.WHITE);
-		g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, this.getWidth(), this.getHeight());
+		g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
 		
 		g.setColor(Color.BLACK);
 		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
@@ -93,6 +93,10 @@ public class Screen extends JFrame{
 			g.setColor(Color.BLACK);
 			g.fillRect(0 + Globals.insetX, 0 + Globals.insetY, (int)transitionX, Globals.height);
 		}
+		else if(Game.state == Game.INTERACTING) {
+			g.setColor(new Color(100, 100, 100, 50));
+			g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
+		}
 	}
 	
 	//Screenshake
@@ -125,7 +129,7 @@ public class Screen extends JFrame{
 				Game.state = Game.RESET;
 			}
 		}
-		if(Game.state == Game.MAP_TRANSITION_OUT) {
+		else if(Game.state == Game.MAP_TRANSITION_OUT) {
 			transitionX -= 800*tslf;
 			if(transitionX <= 0) {
 				transitionX = 0;
@@ -134,6 +138,11 @@ public class Screen extends JFrame{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param strength
+	 * @param duration
+	 */
 	public static void addScreenshake(int strength, float duration) {
 		screenshakeStrength = strength;
 		screenshakeDuration = duration;

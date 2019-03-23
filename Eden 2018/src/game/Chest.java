@@ -14,7 +14,7 @@ public class Chest {
 	boolean checkForPlayer = true;
 
 	Textbox textbox;
-	
+
 	public Chest(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -27,7 +27,7 @@ public class Chest {
 		g.fillRect(x + Globals.insetX, y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawRect(x + Globals.insetX, y + Globals.insetY, size, size);
-		
+
 		textbox.draw(g);
 	}
 
@@ -40,10 +40,11 @@ public class Chest {
 				if(textbox.index >= textbox.text.length) {
 					textbox.index = textbox.text.length - 1;
 					textbox.disappear();
-					Globals.player.gun = new Gun(Globals.player);
-					Globals.player.gun.mode = Gun.SINGLEFIRE;
+					if(Globals.player.gun == null) {
+						Globals.player.gun = new Gun(Globals.player);
+						Globals.player.gun.mode = Gun.SINGLEFIRE;
+					}
 					Game.state = Game.RUNNING;
-
 				}
 				pressed = true;
 			}
@@ -57,7 +58,7 @@ public class Chest {
 		checkForPlayer();
 
 		textbox.update(tslf);
-		
+
 		interact();
 	}
 

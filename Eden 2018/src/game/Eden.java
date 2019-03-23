@@ -321,7 +321,9 @@ public class Eden extends Object{
 				angle = (float) Math.toDegrees(angle);
 				if(pcy > ecy) angle =  -90 - (90-angle);
 				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
-
+				
+				e.resetWalkspeed();
+				
 				this.startKnockback(angle - 180, enemyImpact);
 				this.gotHit = true;
 			}

@@ -8,27 +8,34 @@ public class RoundEnemy extends Enemy{
 
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	ArrayList<Float> angles = new ArrayList<>();
-	float radius = 30;
+	float radius;
+	boolean shotAtPlayer = true;
 
 	public RoundEnemy(float x, float y) {
 		super(x, y);
 		size = 20;
+		radius = size + 1;
 		this.maxWalkspeed = 20;
 	}
 
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		float enemyCenterX = this.x + size/2;
-		float enemyCenterY = this.y + size/2;
+		//Catch the bullets
 		if(Globals.player.gun != null) {
+			float enemyCenterX = this.x + size/2;
+			float enemyCenterY = this.y + size/2;
 			for (Projectile projectile : Globals.player.gun.projectiles) {
 				float bulletCenterX = projectile.x + Bullet.SIZE / 2;
 				float bulletCenterY = projectile.y + Bullet.SIZE / 2;
 
 				float distance = Globals.distanceSquared(enemyCenterX, enemyCenterY, bulletCenterX, bulletCenterY);
 				if(distance <= radius * radius) {
+					if(!followplayer) followplayer = true;
+					//Add a new Bullet
 					Bullet b = new Bullet(projectile.x, projectile.y, projectile.angle - 180);
+					b.velocityX = 0;
+					b.velocityY = 0;
 					this.bullets.add(b);
 					this.angles.add(new Float(0));
 					//Remove old
@@ -39,20 +46,53 @@ public class RoundEnemy extends Enemy{
 			}
 		}
 
-		//Bullets
+		//Turning the bullet around the enemy
 		int index = -1;
+		if(!angles.isEmpty()) {
+			for (Float angle : angles) {
+				index++;
+				if(angle == -1f) continue;
+				Bullet bullet = bullets.get(index);
+				if(!bullet.disabled) {
+					if(angle < 360 * 2) {
+						bullet.x = (float) (this.x + size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(bullet.angle + angle)) * radius);
+						bullet.y = (float) (this.y + size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(bullet.angle + angle)) * radius);
+						angle += bullet.speed * tslf;
+						angles.set(index, angle);
+					}else {
+						if(shotAtPlayer) {
+							float ecx = this.x + this.size/2;
+							float ecy = this.y + this.size/2;
+							float pcx = Globals.player.x + Globals.player.size/2;
+							float pcy = Globals.player.y + Globals.player.size/2;
+
+							float distx = pcx - ecx;
+							float disty = pcy - ecy;
+
+							//TODO: Rework the angle system
+							float newAngle = (float) Math.atan(distx / disty);
+							newAngle = (float) Math.toDegrees(newAngle);
+							if(pcy > ecy) newAngle =  -90 - (90-newAngle);
+							if(pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
+
+							bullet.velocityX = (float) Math.sin(Math.toRadians(newAngle + 180));
+							bullet.velocityY = (float) Math.cos(Math.toRadians(newAngle + 180));
+						}else {
+							bullet.velocityX = (float) Math.sin(Math.toRadians(bullet.angle + angle));
+							bullet.velocityY = (float) Math.cos(Math.toRadians(bullet.angle + angle));
+						}
+						resetWalkspeed();
+						angle = -1f;
+						angles.set(index, angle);
+					}
+				}
+			}
+		}
+		//Updating the bullets
 		for (Bullet bullet : bullets) {
-			index++;
-			Float angle = angles.get(index);
-			if(angle < 360) {
-				bullet.x = (float) (this.x + size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(bullet.angle + angle)) * radius);
-				bullet.y = (float) (this.y + size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(bullet.angle + angle)) * radius);
-				angle += 620 * tslf;
-				angles.set(index, angle);
-			}else {
-				bullet.update(tslf);
-				//Hit the player?
-				if(bullet.disabled) continue;
+			bullet.update(tslf);
+			//Hit the player?
+			if(!bullet.disabled) {
 				if(bullet.checkCollisionToObject(Globals.player)) {
 					Globals.player.startKnockback(bullet.angle, Globals.player.bulletImpact);
 					Globals.player.gotHit = true;
@@ -61,20 +101,19 @@ public class RoundEnemy extends Enemy{
 				}
 			}
 		}
-		//Removal
-		ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
-		index = 0;
-		for (Bullet bullet : bullets) {
-			if(bullet.canBeRemoved()) {
-				removableBullets.add(bullet);
-				angles.remove(index);
+		//Removal of the bullets
+		if(!bullets.isEmpty()) {
+			ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
+			for (Bullet bullet : bullets) {
+				if(bullet.canBeRemoved()) {
+					removableBullets.add(bullet);
+				}
 			}
-			index++;
+			for (Bullet b : removableBullets) {
+				angles.remove(bullets.indexOf(b));
+				bullets.remove(b);
+			}
 		}
-		for (Bullet b : removableBullets) {
-			bullets.remove(b);
-		}
-
 	}
 
 	@Override
