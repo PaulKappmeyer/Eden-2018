@@ -93,6 +93,14 @@ public class Stone {
 						projectilce.disable();
 					}
 				}
+			}else if(e instanceof RoundEnemy) {
+				RoundEnemy r = (RoundEnemy)e;
+				for (Projectile projectilce : r.bullets) {
+					if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
+						projectilce.maxExplosionRadius = 30;
+						projectilce.disable();
+					}
+				}
 			}
 		}
 

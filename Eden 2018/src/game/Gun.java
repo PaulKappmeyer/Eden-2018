@@ -74,10 +74,9 @@ public class Gun {
 
 		checkCollisionBulletsToObjects();
 
-		//Bullets
+		//Removal of the bullets
 		ArrayList<Projectile> removableProjectiles = new ArrayList<Projectile>();
 		for (Projectile projectile : projectiles) {
-
 			if(projectile.canBeRemoved()) {
 				removableProjectiles.add(projectile);
 			}

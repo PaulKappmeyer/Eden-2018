@@ -14,6 +14,7 @@ public class Map {
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);
 		Globals.enemies.add(new Enemy(500, 100));
+		Globals.enemies.add(new RoundEnemy(600, 100));
 	}
 
 	public void update(float tslf) {

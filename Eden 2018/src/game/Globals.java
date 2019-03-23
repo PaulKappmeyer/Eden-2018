@@ -31,6 +31,20 @@ public class Globals {
 	
 	/**
 	 * 
+	 * @param centerX1
+	 * @param centerY1
+	 * @param centerX2
+	 * @param centerY2
+	 * @return
+	 */
+	public static float distanceSquared(float centerX1, float centerY1, float centerX2, float centerY2) {
+		float distX = centerX1 - centerX2;
+		float distY = centerY1 - centerY2;
+		return distX * distX + distY * distY;
+	}
+	
+	/**
+	 * 
 	 * @param circleX
 	 * @param circleY
 	 * @param circleSize
