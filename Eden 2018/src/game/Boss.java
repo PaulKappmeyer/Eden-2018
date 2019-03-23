@@ -15,7 +15,7 @@ public class Boss extends Enemy{
 	public Boss(float x, float y) {
 		super(x, y);
 		size = 32;
-		walkspeed = 10;
+		maxWalkspeed = 10;
 		followplayer = true;
 		health = 1000;
 		bulletImpact = 50;

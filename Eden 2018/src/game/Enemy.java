@@ -11,9 +11,15 @@ import java.awt.Graphics;
 public class Enemy extends Object{
 
 	//TODO: Revise the variable mess
+	//Follow player distance
 	int triggerDistance = 300;
 	boolean followplayer;
-	int walkspeed = 100;
+	//Movement
+	int maxWalkspeed = 80;
+	float currentWalkspeed = 0;
+	float timeForSpeedUp = 0.65f;
+	float timeSpeededUp;
+	//Health
 	int health = 200;
 	boolean alive = true;
 	//Got-Hit animation
@@ -47,7 +53,7 @@ public class Enemy extends Object{
 		this.x = x;
 		this.y = y;
 		this.size = 16;
-		this.walkspeed = walkspeed + -10 + Globals.random.nextInt(20);
+		this.maxWalkspeed = maxWalkspeed + -10 + Globals.random.nextInt(20);
 	}
 	
 	
@@ -106,8 +112,13 @@ public class Enemy extends Object{
 				float velX = (float) -Math.sin(Math.toRadians(angle));
 				float velY = (float) -Math.cos(Math.toRadians(angle));
 
-				this.x += velX * walkspeed * tslf;
-				this.y += velY * walkspeed * tslf;
+				if(currentWalkspeed < maxWalkspeed) {
+					timeSpeededUp += tslf;
+					currentWalkspeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
+				}
+				
+				this.x += velX * currentWalkspeed * tslf;
+				this.y += velY * currentWalkspeed * tslf;
 			}
 		}
 		
@@ -151,13 +162,7 @@ public class Enemy extends Object{
 	 */
 	public void getHitByProjectile(Projectile p, float damage) {
 		startKnockback(p.angle, this.bulletImpact, this.bulletImpactTime);
-		isInHitAnimation = true;
-		health -= damage;
-		if(health <= 0 && alive) {
-			isInDieAnimation = true;
-			alive = false;
-		}
-		if(!followplayer) followplayer = true;
+		getDamaged(damage);
 	}
 	public void getDamaged(float damage) {
 		isInHitAnimation = true;
@@ -166,7 +171,13 @@ public class Enemy extends Object{
 			isInDieAnimation = true;
 			alive = false;
 		}
+		resetWalkspeed();
 		if(!followplayer) followplayer = true;
+	}
+	
+	public void resetWalkspeed() {
+		currentWalkspeed = 0;
+		timeSpeededUp = 0;
 	}
 	
 	/**
