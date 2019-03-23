@@ -31,16 +31,6 @@ public class Rocket extends Projectile{
 	@Override
 	public void update(float tslf) {
 		if(!disabled) {
-			//			float value = (float) Math.sin(time-Math.PI/2);
-			//			this.x += Math.sin(Math.toRadians(angle-90)) * value * speed/2 * tslf;
-			//			this.y  += Math.cos(Math.toRadians(angle-90)) * value * speed/2 * tslf;
-			//			
-			//			this.x += velocityX * speed * tslf;
-			//			this.y += velocityY * speed * tslf;
-			//
-			//			speed += 500 * tslf;
-			//			time += Math.PI*2 * tslf;
-
 			searchEnemy(tslf);
 			
 			this.x += velocityX * speed * tslf;

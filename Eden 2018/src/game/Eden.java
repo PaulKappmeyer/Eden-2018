@@ -73,7 +73,7 @@ public class Eden extends Object{
 		this.x = 400;
 		this.y = 400;
 		this.size = 16;
-		this.gun = new Gun(this);
+		this.gun = new SinglefireGun(this);
 	}
 
 	/**

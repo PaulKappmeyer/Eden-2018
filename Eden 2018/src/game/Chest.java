@@ -41,8 +41,7 @@ public class Chest {
 					textbox.index = textbox.text.length - 1;
 					textbox.disappear();
 					if(Globals.player.gun == null) {
-						Globals.player.gun = new Gun(Globals.player);
-						Globals.player.gun.mode = Gun.SINGLEFIRE;
+						Globals.player.gun = new SinglefireGun(Globals.player);
 					}
 					Game.state = Game.RUNNING;
 				}

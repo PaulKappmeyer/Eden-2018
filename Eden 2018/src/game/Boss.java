@@ -20,8 +20,7 @@ public class Boss extends Enemy{
 		health = 1000;
 		bulletImpact = 50;
 		//Gun
-		gun = new Gun(this);
-		gun.mode = Gun.CIRCLESHOT;
+		gun = new CirclefireGun(this, CirclefireGun.CIRCLESHOT);
 		gun.shottime = 5f;
 		radiusIncrease = 200;
 	}
