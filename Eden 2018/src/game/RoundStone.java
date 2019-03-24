@@ -3,33 +3,33 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Stone {
+public class RoundStone {
 
 	int x;
 	int y;
-	int width;
-	int height;
-
-	public Stone(int x, int y, int width, int height) {
+	int size;
+	
+	public RoundStone(int x, int y, int size) {
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
+		this.size = size;
 	}
-
+	
 	public void draw(Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.fillOval(x + Globals.insetX, y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.drawOval(x + Globals.insetX, y + Globals.insetY, size, size);
 	}
-
+	
 	public void update(float tslf) {
 		//TODO: new Collision system
+		float width = this.size;
+		float height = this.size;
 		//Collision with player
 		{
 			Eden p = Globals.player;
-			if(Globals.checkCollisionRectangleToRectangle(p.x, p.y, p.size, p.size, this.x, this.y, this.width, this.height)) {
+			if(Globals.checkCollisionRectangleToRectangle(p.x, p.y, p.size, p.size, this.x, this.y, width, height)) {
 				float pcx = p.x + p.size/2;
 				float pcy = p.y + p.size/2;
 				float ecx = this.x + width/2;
@@ -50,10 +50,10 @@ public class Stone {
 					p.y = this.y - p.size;
 				}
 				if(newAngle >= 80 && newAngle <= 100) {
-					p.x = this.x + this.width;
+					p.x = this.x + width;
 				}
 				if(newAngle >= 100 && newAngle <= 255) {
-					p.y = this.y + this.height;
+					p.y = this.y + height;
 				}
 				if(newAngle >= 255 && newAngle <= 280) {
 					p.x = this.x - p.size;
@@ -63,7 +63,7 @@ public class Stone {
 
 		//Collision with Enemies 
 		for (Enemy e : Globals.enemies) {
-			if(Globals.checkCollisionRectangleToRectangle(e.x, e.y, e.size, e.size, this.x, this.y, this.width, this.height)) {
+			if(Globals.checkCollisionRectangleToRectangle(e.x, e.y, e.size, e.size, this.x, this.y, width, height)) {
 				float pcx = e.x + e.size/2;
 				float pcy = e.y + e.size/2;
 				float ecx = this.x + width/2;
@@ -84,10 +84,10 @@ public class Stone {
 					e.y = this.y - e.size;
 				}
 				if(newAngle >= 80 && newAngle <= 100) {
-					e.x = this.x + this.width;
+					e.x = this.x + width;
 				}
 				if(newAngle >= 100 && newAngle <= 255) {
-					e.y = this.y + this.height;
+					e.y = this.y + height;
 				}
 				if(newAngle >= 255 && newAngle <= 280) {
 					e.x = this.x - e.size;

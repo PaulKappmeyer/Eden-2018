@@ -36,6 +36,22 @@ public class Globals {
 		return distX * distX + distY * distY;
 	}
 	
+	public static boolean checkCollisionCircleToCircle(float circleX1, float circleY1, float circleSize1, float circleX2, float circleY2, float circleSize2) {
+		float cr1 = circleSize1/2;
+		float cr2 = circleSize2/2;
+		float cx1 = circleX1 + cr1;
+		float cy1 = circleY1 + cr1;
+		float cx2 = circleX2 + cr2;
+		float cy2 = circleY2 + cr2;
+		float absx = cx1 - cx2;
+		float absy = cy1 - cy2;
+		float abs = absx * absx + absy * absy;
+		if(abs <= (cr1 + cr2) * (cr1 + cr2)){
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * 
 	 * @param circleX

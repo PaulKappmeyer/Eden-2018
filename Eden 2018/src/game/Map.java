@@ -8,13 +8,15 @@ public class Map {
 	static Stone stone;
 	static Chest chest;
 	static Sign sign;
+	static RoundStone stoneRound;
 	
 	public Map() {
 		stone = new Stone(500, 400, 125, 20);
+		stoneRound = new RoundStone(400, 230, 30);
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);
-		Globals.enemies.add(new JumpEnemy(500, 100));
-		Globals.enemies.add(new RoundEnemy(600, 100));
+		//Globals.enemies.add(new JumpEnemy(500, 100));
+		//Globals.enemies.add(new RoundEnemy(600, 100));
 	}
 
 	public void update(float tslf) {
@@ -25,6 +27,7 @@ public class Map {
 				e.update(tslf);
 			}
 			stone.update(tslf);
+			stoneRound.update(tslf);
 		}
 
 		chest.update(tslf);
@@ -79,17 +82,6 @@ public class Map {
 	 */
 	public static void ysort() {
 		//TODO: using Collections . sort();
-		//		Collections.sort(Globals.enemies, new Comparator<Enemy>() {
-		//			@Override
-		//			public int compare(Enemy e, Enemy e1)
-		//			{
-		//				if(e.y > e1.y) {
-		//					return Globals.enemies.indexOf(e1);
-		//				}
-		//				return Globals.enemies.indexOf(e1);
-		//			}
-		//		});
-
 		ArrayList<Enemy> newEnemies = Globals.enemies;
 		for (int i = 0; i < newEnemies.size() - 1; i++) {
 			Enemy e = Globals.enemies.get(i);

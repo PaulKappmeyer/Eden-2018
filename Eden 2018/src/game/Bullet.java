@@ -69,6 +69,11 @@ public class Bullet extends Projectile{
 			this.maxExplosionRadius = 30;
 			this.disable();
 		}
+		RoundStone rs = Map.stoneRound;
+		if(Globals.checkCollisionCircleToCircle(this.x, this.y, Bullet.SIZE, rs.x, rs.y, rs.size)) {
+			this.maxExplosionRadius = 30;
+			this.disable();
+		}
 	}
 	/**
 	 * 
