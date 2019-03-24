@@ -29,6 +29,9 @@ public class Textbox {
 		if(state != HIDE) {
 			g.setColor(Color.BLACK);
 			g.drawRoundRect((int) (x + Globals.insetX), (int) (y + Globals.insetY), width, height, 10, 10);
+			g.setColor(new Color(100, 100, 100, 100));
+			g.fillRoundRect((int) (x + Globals.insetX), (int) (y + Globals.insetY), width, height, 10, 10);
+			g.setColor(Color.BLACK);
 			g.drawString(text[index], (int)(x + Globals.insetX + 10), (int)(y + Globals.insetY + 15 ));
 		}
 	}

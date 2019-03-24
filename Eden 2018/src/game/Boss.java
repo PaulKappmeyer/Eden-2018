@@ -16,7 +16,6 @@ public class Boss extends Enemy{
 		super(x, y);
 		size = 32;
 		maxWalkspeed = 12;
-		followplayer = true;
 		health = 1000;
 		bulletImpact = 50;
 		//Gun
@@ -66,9 +65,11 @@ public class Boss extends Enemy{
 	public void update(float tslf) {
 		super.update(tslf);
 		if(alive) {
-			if(gun.canShot) {
-				gun.shot();
-				resetWalkspeed();
+			if(followplayer) {
+				if(gun.canShot) {
+					gun.shot();
+					resetWalkspeed();
+				}
 			}
 		}
 

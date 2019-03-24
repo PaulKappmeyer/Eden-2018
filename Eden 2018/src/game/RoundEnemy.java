@@ -41,7 +41,6 @@ public class RoundEnemy extends Enemy{
 					//Remove old
 					projectile.disable();
 					projectile.dieAnimation = false;
-
 				}
 			}
 		}
@@ -114,6 +113,19 @@ public class RoundEnemy extends Enemy{
 				bullets.remove(b);
 			}
 		}
+	}
+	
+	@Override
+	public void getHitByProjectile(Projectile p, float damage) {
+		//Add a new Bullet
+		Bullet b = new Bullet(p.x, p.y, p.angle - 180);
+		b.velocityX = 0;
+		b.velocityY = 0;
+		this.bullets.add(b);
+		this.angles.add(new Float(0));
+		//Remove old
+		p.disable();
+		p.dieAnimation = false;
 	}
 
 	@Override

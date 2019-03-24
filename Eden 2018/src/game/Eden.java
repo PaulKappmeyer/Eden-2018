@@ -266,6 +266,7 @@ public class Eden extends Object{
 
 				state = SHOOTING;
 				gun.shot();
+				resetWalkspeed();
 			}
 		}
 		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
@@ -349,6 +350,14 @@ public class Eden extends Object{
 	private void calculateKnockbackVelocity(float angle) {
 		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
 		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
+	}
+	
+	/**
+	 * 
+	 */
+	public void resetWalkspeed() {
+		walkSpeed = 0;
+		timeSpeededUp = 0;
 	}
 
 	//Key inputs

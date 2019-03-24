@@ -13,7 +13,7 @@ public class Map {
 		stone = new Stone(500, 400, 125, 20);
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);
-		Globals.enemies.add(new Enemy(500, 100));
+		Globals.enemies.add(new JumpEnemy(500, 100));
 		Globals.enemies.add(new RoundEnemy(600, 100));
 	}
 
@@ -40,11 +40,12 @@ public class Map {
 	int runs = 0;
 	public void switchMap() {
 		Globals.enemies.removeAll(Globals.enemies);
-		Globals.enemies.add(new Boss(450, 250));
-		Globals.enemies.add(new Enemy(500, 100));
+		Globals.enemies.add(new Boss(650, 250));
+		Globals.enemies.add(new JumpEnemy(500, 100));
 		Globals.enemies.add(new Enemy(500, 200));
 		Globals.enemies.add(new Enemy(500, 300));
 		Globals.enemies.add(new Enemy(500, 350));
+		Globals.enemies.add(new RoundEnemy(600, 100));
 		for (int i = 0; i < runs; i++) {
 			Globals.enemies.add(new Enemy(600, 50 + Globals.random.nextInt(500)));
 		}

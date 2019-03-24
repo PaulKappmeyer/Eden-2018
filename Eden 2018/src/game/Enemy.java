@@ -19,6 +19,7 @@ public class Enemy extends Object{
 	float currentWalkspeed = 0;
 	float timeForSpeedUp = 0.65f;
 	float timeSpeededUp;
+	boolean speedUp = true;
 	//Health
 	int health = 200;
 	boolean alive = true;
@@ -43,7 +44,7 @@ public class Enemy extends Object{
 	float timeKnockedBack;
 	float bulletImpact = 325;
 	float bulletImpactTime = 0.1f;
-	
+
 	/**
 	 * Constructor; initializes the enemy
 	 * @param x The x-position
@@ -55,8 +56,8 @@ public class Enemy extends Object{
 		this.size = 16;
 		this.maxWalkspeed = maxWalkspeed + -10 + Globals.random.nextInt(20);
 	}
-	
-	
+
+
 	/**
 	 * This function draws the enemy as a red rectangle to the screen
 	 * @param g The graphics object to draw
@@ -112,16 +113,22 @@ public class Enemy extends Object{
 				float velX = (float) -Math.sin(Math.toRadians(angle));
 				float velY = (float) -Math.cos(Math.toRadians(angle));
 
-				if(currentWalkspeed < maxWalkspeed) {
-					timeSpeededUp += tslf;
-					currentWalkspeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
+				if(speedUp) {
+					if(currentWalkspeed < maxWalkspeed) {
+						timeSpeededUp += tslf;
+						currentWalkspeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
+					}else {
+						timeSpeededUp = 0;
+						currentWalkspeed = maxWalkspeed;
+						speedUp = false;
+					}
 				}
-				
+
 				this.x += velX * currentWalkspeed * tslf;
 				this.y += velY * currentWalkspeed * tslf;
 			}
 		}
-		
+
 		//Knockback
 		if(gotKnockbacked) {
 			if(timeKnockedBack <= maxKnockbackTime) {
@@ -135,7 +142,7 @@ public class Enemy extends Object{
 				currentKnockbackSpeed = 0;
 			}
 		}
-		
+
 		//Got-Hit animation
 		if(isInHitAnimation) {
 			blink += tslf;
@@ -145,7 +152,7 @@ public class Enemy extends Object{
 				isInHitAnimation = false;
 			}
 		}
-		
+
 		//Die animation
 		if(isInDieAnimation) {
 			radius += radiusIncrease * tslf;
@@ -154,7 +161,7 @@ public class Enemy extends Object{
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param b The bullet which hit the enemy
@@ -174,12 +181,13 @@ public class Enemy extends Object{
 		resetWalkspeed();
 		if(!followplayer) followplayer = true;
 	}
-	
+
 	public void resetWalkspeed() {
 		currentWalkspeed = 0;
 		timeSpeededUp = 0;
+		speedUp = true;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -187,10 +195,10 @@ public class Enemy extends Object{
 	public boolean canBeRemoved() {
 		if(alive) return false;
 		if(isInDieAnimation) return false;
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * 
 	 * @param angle

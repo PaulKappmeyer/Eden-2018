@@ -8,6 +8,7 @@ public class SinglefireGun extends Gun{
 	public SinglefireGun(Object owner) {
 		super(owner);
 		mode = SINGLEFIRE;
+		damage = 0;
 	}
 
 	@Override
