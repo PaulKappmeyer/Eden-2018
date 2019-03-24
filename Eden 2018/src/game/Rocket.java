@@ -38,7 +38,8 @@ public class Rocket extends Projectile{
 
 			speed += 500 * tslf;
 
-			Globals.checkCollisionProjectileToWall(this);
+			checkCollisionRocketToStone();
+			checkCollisionRocketToWall();
 		}
 		if(dieAnimation) {
 			Screen.addScreenshake(3, 0.005f);
@@ -50,6 +51,24 @@ public class Rocket extends Projectile{
 		}
 	}
 
+	/**
+	 * 
+	 */
+	public void checkCollisionRocketToStone() {
+		Stone stone = Map.stone;
+		if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+			this.maxExplosionRadius = 30;
+			this.disable();
+		}
+	}
+	/**
+	 * 
+	 */
+	public void checkCollisionRocketToWall() {
+		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Globals.width || this.y + Rocket.SIZE > Globals.height) {
+			this.disable();
+		}
+	}
 
 	public void searchEnemy(float tslf) {
 		float nearestDistance = Float.MAX_VALUE;

@@ -62,15 +62,7 @@ public class Stone {
 			}
 		}
 
-		//Collision with bullets 
-		if(Globals.player.gun != null) {
-			for (Projectile projectilce : Globals.player.gun.projectiles) {
-				if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
-					projectilce.maxExplosionRadius = 30;
-					projectilce.disable();
-				}
-			}
-		}
+		//Collision with Enemies 
 		for (Enemy e : Globals.enemies) {
 			if(e.x + e.size > this.x && e.x + e.size < this.x + a && e.x < this.x && e.y + e.size > this.y && e.y < this.y + this.height) {
 				e.x = this.x - e.size;
@@ -85,35 +77,6 @@ public class Stone {
 				e.x = this.x + this.width;
 			}
 
-			if(e instanceof Boss) {
-				Boss b = (Boss) e;
-				for (Projectile projectilce : b.gun.projectiles) {
-					if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
-						projectilce.maxExplosionRadius = 30;
-						projectilce.disable();
-					}
-				}
-			}else if(e instanceof RoundEnemy) {
-				RoundEnemy r = (RoundEnemy)e;
-				for (Projectile projectilce : r.bullets) {
-					if(Globals.checkCollisionRectangleToCircle(projectilce.x, projectilce.y, Bullet.SIZE, this.x, this.y, this.width, this.height)) {
-						projectilce.maxExplosionRadius = 30;
-						projectilce.disable();
-					}
-				}
-			}
-		}
-
-		//Collision with shells
-		if(Globals.player.gun != null) {
-			for (Shell s : Globals.player.gun.shells) {
-				if(s.collided) continue;
-				if(Globals.checkCollisionRectangleToCircle(s.x, s.y, Shell.SIZE, this.x, this.y, this.width, this.height)) {
-					s.velocityX *= -0.5;
-					s.velocityY *= -0.5;
-					s.collided = true;
-				}
-			}
 		}
 	}
 }

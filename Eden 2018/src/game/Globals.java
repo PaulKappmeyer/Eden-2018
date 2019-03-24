@@ -21,13 +21,6 @@ public class Globals {
 	public static Random random = new Random();
 	public static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	public static int fps;
-
-	//TODO: change the method
-	public static void checkCollisionProjectileToWall(Projectile projectile) {
-		if(projectile.x < 0 || projectile.y < 0 || projectile.x + Bullet.SIZE > Globals.width || projectile.y + Bullet.SIZE > Globals.height) {
-			projectile.disable();
-		}
-	}
 	
 	/**
 	 * 

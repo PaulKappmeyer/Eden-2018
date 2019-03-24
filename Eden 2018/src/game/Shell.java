@@ -49,9 +49,24 @@ public class Shell {
 			if(speed <= finalSpeed) {
 				disabled = true;
 			}
+			
+			checkCollisionToStone();
 		}
 	}
 
+	/**
+	 * 
+	 */
+	public void checkCollisionToStone() {
+		if(this.collided) return;
+		Stone stone = Map.stone;
+		if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+			this.velocityX *= -0.5;
+			this.velocityY *= -0.5;
+			this.collided = true;
+		}
+	}
+	
 	/**
 	 * This function takes a calculated angle and just sets the velocity
 	 * @param angle The calculated angle

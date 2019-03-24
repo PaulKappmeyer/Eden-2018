@@ -47,7 +47,8 @@ public class Bullet extends Projectile{
 			x += velocityX * speed * tslf;
 			y += velocityY * speed * tslf;
 			
-			Globals.checkCollisionProjectileToWall(this);
+			checkCollisionBulletToStone();
+			checkCollisionBulletToWall();
 		}
 		if(dieAnimation) {
 			Screen.addScreenshake(3, 0.005f);
@@ -57,8 +58,27 @@ public class Bullet extends Projectile{
 				dieAnimation = false;
 			}
 		}
-	}	
+	}
 
+	/**
+	 * 
+	 */
+	public void checkCollisionBulletToStone() {
+		Stone stone = Map.stone;
+		if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Bullet.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+			this.maxExplosionRadius = 30;
+			this.disable();
+		}
+	}
+	/**
+	 * 
+	 */
+	public void checkCollisionBulletToWall() {
+		if(this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Globals.width || this.y + Bullet.SIZE > Globals.height) {
+			this.disable();
+		}
+	}
+	
 	@Override
 	public boolean canBeRemoved() {
 		if(this.dieAnimation == false && this.disabled == true) {
