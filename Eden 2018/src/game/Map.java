@@ -11,7 +11,7 @@ public class Map {
 	static RoundStone stoneRound;
 	
 	public Map() {
-		stone = new Stone(500, 400, 125, 20);
+		stone = new Stone(500, 400, 125, 125);
 		stoneRound = new RoundStone(400, 230, 30);
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);

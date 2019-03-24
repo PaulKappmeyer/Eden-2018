@@ -22,8 +22,8 @@ public class Eden extends Object{
 	int shotWalkSpeed = 75;
 	float walkSpeed;
 
-	float walkVelocityX;
-	float walkVeloctiyY;
+	double walkVelocityX;
+	double walkVelocityY;
 
 	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
 	float timeSpeededUp;
@@ -122,6 +122,20 @@ public class Eden extends Object{
 		//Update the gun
 		if(gun != null) gun.update(tslf);
 
+		//Knockback
+		if(gotKnockbacked) {
+			if(timeKnockedBack <= maxKnockbackTime) {
+				timeKnockedBack += tslf;
+				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
+				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
+			}else {
+				gotKnockbacked = false;
+				timeKnockedBack = 0;
+				currentKnockbackSpeed = 0;
+			}
+		}
+		
 		//Check input
 		updateInput(tslf);
 
@@ -136,24 +150,16 @@ public class Eden extends Object{
 				walkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
 			}
 		}
-
+		
+		System.out.println(walkVelocityX + "  " + walkVelocityY);
+		
+		x += walkVelocityX * walkSpeed * tslf;
+		y += walkVelocityY * walkSpeed * tslf;
+		
+		//Collision
 		checkCollisionPlayerToWall();
-
+		//Collision to enemies
 		if(!gotHit)checkCollisionPlayerToEnemies();
-
-		//Knockback
-		if(gotKnockbacked) {
-			if(timeKnockedBack <= maxKnockbackTime) {
-				timeKnockedBack += tslf;
-				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
-				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
-			}else {
-				gotKnockbacked = false;
-				timeKnockedBack = 0;
-				currentKnockbackSpeed = 0;
-			}
-		}
 		
 		//Got-Hit-animation
 		if(gotHit) {
@@ -219,58 +225,58 @@ public class Eden extends Object{
 		if(isUpKeyDown() && !(isLeftKeyDown() || isRightKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			direction = UP;
-			x += Math.sin(Math.toRadians(180)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(180)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI);
+			walkVelocityY = Math.cos(Math.PI);
 		}
 		if(isUpKeyDown() && isLeftKeyDown()) {
 			if(state == IDLE) state = WALKING;
 			direction = UP;
-			x += Math.sin(Math.toRadians(180 + 45)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(180 + 45)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 5/4);
+			walkVelocityY = Math.cos(Math.PI * 5/4);
 		}
 		if(isUpKeyDown() && isRightKeyDown()) {
 			if(state == IDLE) state = WALKING;
 			direction = UP;
-			x += Math.sin(Math.toRadians(180 - 45)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(180 - 45)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 3/4);
+			walkVelocityY = Math.cos(Math.PI * 3/4);
 		}
 		//Down
 		if(isDownKeyDown() && !(isLeftKeyDown() || isRightKeyDown())){
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
-			x += Math.sin(Math.toRadians(0)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(0)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(0);
+			walkVelocityY = Math.cos(0);
 		}
 		if(isDownKeyDown() && isLeftKeyDown()){
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
-			x += Math.sin(Math.toRadians(0 - 45)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(0 - 45)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 7/4);
+			walkVelocityY = Math.cos(Math.PI * 7/4);
 		}
 		if(isDownKeyDown() && isRightKeyDown()){
 			if(state == IDLE) state = WALKING;
 			direction = DOWN;
-			x += Math.sin(Math.toRadians(0 + 45)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(0 + 45)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 1/4);
+			walkVelocityY = Math.cos(Math.PI * 1/4);
 		}
 		//Left
 		if(isLeftKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			direction = LEFT ;
-			x += Math.sin(Math.toRadians(270)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(270)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 3/2);
+			walkVelocityY = Math.cos(Math.PI * 3/2);
 		}
 		//Right
 		if(isRightKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			direction = RIGHT;
-			x += Math.sin(Math.toRadians(90)) * walkSpeed * tslf;
-			y += Math.cos(Math.toRadians(90)) * walkSpeed * tslf;
+			walkVelocityX = Math.sin(Math.PI * 1/2);
+			walkVelocityY = Math.cos(Math.PI * 1/2);
 		}
 
 		//Reset Walking
 		if(state == WALKING && !(isUpKeyDown() || isDownKeyDown() || isLeftKeyDown()|| isRightKeyDown())) {
-			timeSpeededUp = 0;
+			resetWalking();
 			state = IDLE;
 		}
 
@@ -284,7 +290,7 @@ public class Eden extends Object{
 
 				state = SHOOTING;
 				gun.shot();
-				resetWalkspeed();
+				resetWalking();
 			}
 		}
 		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
@@ -379,7 +385,9 @@ public class Eden extends Object{
 	/**
 	 * 
 	 */
-	public void resetWalkspeed() {
+	public void resetWalking() {
+		walkVelocityX = 0;
+		walkVelocityY = 0;
 		walkSpeed = 0;
 		timeSpeededUp = 0;
 	}
