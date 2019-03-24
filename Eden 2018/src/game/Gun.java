@@ -74,14 +74,11 @@ public abstract class Gun {
 			checkCollisionProjectilesToObjects();
 
 			//Removal of the bullets
-			ArrayList<Projectile> removableProjectiles = new ArrayList<Projectile>();
-			for (Projectile projectile : projectiles) {
+			for (int i = 0; i < projectiles.size(); i++) {
+				Projectile projectile = projectiles.get(i);
 				if(projectile.canBeRemoved()) {
-					removableProjectiles.add(projectile);
+					projectiles.remove(projectile);
 				}
-			}
-			for (Projectile p : removableProjectiles) {
-				projectiles.remove(p);
 			}
 		}
 	}

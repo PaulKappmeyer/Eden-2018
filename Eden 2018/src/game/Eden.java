@@ -3,6 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 /**
  * This is the class of the player named "Eden"
@@ -66,6 +67,9 @@ public class Eden extends Object{
 	float stunRageIncrease = 1000;
 	float currentStunRange;
 
+	//Bombs
+	ArrayList<Bomb> bombs = new ArrayList<>();
+	
 	/**
 	 * Constructor; initializes the player
 	 */
@@ -103,6 +107,11 @@ public class Eden extends Object{
 		//Shockwave
 		g.setColor(Color.BLACK);
 		g.drawOval((int)(shockwaveX - currentStunRange/2 + Globals.insetX), (int)(shockwaveY - currentStunRange/2 + Globals.insetY), (int)currentStunRange, (int)currentStunRange);
+		
+		//Bombs
+		for (Bomb bomb : bombs) {
+			bomb.draw(g);
+		}
 	}
 
 	/**
@@ -189,6 +198,15 @@ public class Eden extends Object{
 		for (int i = 0; i < Globals.enemies.size(); i++) {
 			Enemy e = Globals.enemies.get(i);
 			if(e.canBeRemoved())Globals.enemies.remove(e);
+		}
+		//Bombs
+		for (Bomb bomb : bombs) {
+			bomb.update(tslf);
+		}
+		//Removal of the bombs
+		for (int i = 0; i < bombs.size(); i++) {
+			Bomb b = bombs.get(i);
+			if(!b.ticking && !b.explode) bombs.remove(b);
 		}
 	};
 
@@ -279,6 +297,12 @@ public class Eden extends Object{
 			shockwaveX = this.x + size/2;
 			shockwaveY = this.y + size/2;
 			currentStunRange = size;
+		}
+		
+		//Bombs
+		if(Controls.isKeyDown(KeyEvent.VK_Q)) {
+			if(gun.canShot) bombs.add(new Bomb(this.x, this.y));
+			gun.canShot = false;
 		}
 	};
 
