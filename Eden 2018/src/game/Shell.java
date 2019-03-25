@@ -17,7 +17,7 @@ public class Shell {
 	int direction;
 	int angleVariation = 30;
 	boolean disabled = false;
-	
+
 	boolean collided = false;
 
 	public Shell(float x, float y, int direction) {
@@ -38,7 +38,7 @@ public class Shell {
 		g.setColor(Color.BLACK);
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
 	}
-	
+
 	float time;
 	public void update(float tslf) {
 		if(!disabled) {
@@ -49,7 +49,7 @@ public class Shell {
 			if(speed <= finalSpeed) {
 				disabled = true;
 			}
-			
+
 			checkCollisionToStone();
 		}
 	}
@@ -59,14 +59,15 @@ public class Shell {
 	 */
 	public void checkCollisionToStone() {
 		if(this.collided) return;
-		Stone stone = Map.stone;
-		if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, stone.x, stone.y, stone.width, stone.height)) {
-			this.velocityX *= -0.5;
-			this.velocityY *= -0.5;
-			this.collided = true;
+		for (Stone stone : Map.stones) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+				this.velocityX *= -0.5;
+				this.velocityY *= -0.5;
+				this.collided = true;
+			}
 		}
 	}
-	
+
 	/**
 	 * This function takes a calculated angle and just sets the velocity
 	 * @param angle The calculated angle

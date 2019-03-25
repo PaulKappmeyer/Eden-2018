@@ -51,7 +51,7 @@ public class Eden extends Object{
 	float timeKnockedBack;
 	final float enemyImpact = 500;
 	final float bulletImpact = 250;
-	
+
 	//Got-Hit animation
 	boolean gotHit = false;
 	float blink;
@@ -69,7 +69,7 @@ public class Eden extends Object{
 
 	//Bombs
 	ArrayList<Bomb> bombs = new ArrayList<>();
-	
+
 	/**
 	 * Constructor; initializes the player
 	 */
@@ -107,7 +107,7 @@ public class Eden extends Object{
 		//Shockwave
 		g.setColor(Color.BLACK);
 		g.drawOval((int)(shockwaveX - currentStunRange/2 + Globals.insetX), (int)(shockwaveY - currentStunRange/2 + Globals.insetY), (int)currentStunRange, (int)currentStunRange);
-		
+
 		//Bombs
 		for (Bomb bomb : bombs) {
 			bomb.draw(g);
@@ -136,7 +136,7 @@ public class Eden extends Object{
 				currentKnockbackSpeed = 0;
 			}
 		}
-		
+
 		//Check input
 		updateInput(tslf);
 
@@ -151,62 +151,66 @@ public class Eden extends Object{
 				walkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
 			}
 		}
-		
+
 		//Collision with stone
-		
+
 		//Left side of stone
 		if(walkVelocityX > 0 && walkVelocityX <= 1) {
 			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
 			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
-			Stone stone = Map.stone;
-			if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-				System.out.println("Collision Left Side");
-				walkVelocityX = 0;
-				this.x = stone.x - size;
+			for (Stone stone : Map.stones) {
+				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
+					System.out.println("Collision Left Side");
+					walkVelocityX = 0;
+					this.x = stone.x - size;
+				}
 			}
 		}
 		//Right side of stone
 		if(walkVelocityX < 0 && walkVelocityX >= -1) {
 			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
 			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
-			Stone stone = Map.stone;
-			if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-				System.out.println("Collision Right Side");
-				walkVelocityX = 0;
-				this.x = stone.x + stone.width;
+			for (Stone stone : Map.stones) {
+				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
+					System.out.println("Collision Right Side");
+					walkVelocityX = 0;
+					this.x = stone.x + stone.width;
+				}	
 			}
 		}
 		//Top side of stone
 		if(walkVelocityY > 0 && walkVelocityY <= 1) {
 			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
 			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
-			Stone stone = Map.stone;
-			if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
-				System.out.println("Collision Top Side");
-				walkVelocityY = 0;
-				this.y = stone.y - size;
+			for (Stone stone : Map.stones) {
+				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
+					System.out.println("Collision Top Side");
+					walkVelocityY = 0;
+					this.y = stone.y - size;
+				}
 			}
 		}
 		//Bottom side of stone
 		if(walkVelocityY < 0 && walkVelocityY >= -1) {
 			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
 			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
-			Stone stone = Map.stone;
-			if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
-				System.out.println("Collsion Bottom Side");
-				walkVelocityY = 0;
-				this.y = stone.y + stone.height;
+			for (Stone stone : Map.stones) {
+				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
+					System.out.println("Collsion Bottom Side");
+					walkVelocityY = 0;
+					this.y = stone.y + stone.height;
+				}
 			}
 		}
-		
+
 		x += walkVelocityX * walkSpeed * tslf;
 		y += walkVelocityY * walkSpeed * tslf;
-		
+
 		//Collision
 		checkCollisionPlayerToWall();
 		//Collision to enemies
 		if(!gotHit)checkCollisionPlayerToEnemies();
-		
+
 		//Got-Hit-animation
 		if(gotHit) {
 			//Animation
@@ -350,7 +354,7 @@ public class Eden extends Object{
 			shockwaveY = this.y + size/2;
 			currentStunRange = size;
 		}
-		
+
 		//Bombs
 		if(Controls.isKeyDown(KeyEvent.VK_Q)) {
 			if(gun.canShot) bombs.add(new Bomb(this.x, this.y));
@@ -398,9 +402,9 @@ public class Eden extends Object{
 				angle = (float) Math.toDegrees(angle);
 				if(pcy > ecy) angle =  -90 - (90-angle);
 				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
-				
+
 				e.resetWalkspeed();
-				
+
 				this.startKnockback(angle - 180, enemyImpact);
 				this.gotHit = true;
 			}
@@ -418,7 +422,7 @@ public class Eden extends Object{
 		calculateKnockbackVelocity(angle);
 		maxKnockback = ammount;
 	}
-	
+
 	/**
 	 * This function applies knock-back to the player for example when he gets hit by an enemy
 	 * @param angle The angle in which the player gets knocked back
@@ -427,7 +431,7 @@ public class Eden extends Object{
 		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
 		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}
-	
+
 	/**
 	 * 
 	 */

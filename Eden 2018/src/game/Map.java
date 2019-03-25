@@ -5,14 +5,19 @@ import java.util.ArrayList;
 public class Map {
 
 	Eden player = Globals.player;
-	static Stone stone;
+	static ArrayList<Stone> stones;
 	static Chest chest;
 	static Sign sign;
 	static RoundStone stoneRound;
 	
 	public Map() {
-		stone = new Stone(500, 400, 125, 125);
-		stoneRound = new RoundStone(400, 230, 30);
+		stones = new ArrayList<>();
+		stones.add(new Stone(500, 400, 125, 125));
+		stones.add(new Stone(300, 250, 25, 100));
+		stones.add(new Stone(300, 350, 125, 25));
+		stones.add(new Stone(400, 250, 25, 100));
+		stones.add(new Stone(300, 225, 75, 25));
+		stoneRound = new RoundStone(100, 230, 30);
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);
 		//Globals.enemies.add(new JumpEnemy(500, 100));
@@ -26,7 +31,9 @@ public class Map {
 			for (Enemy e : Globals.enemies) {
 				e.update(tslf);
 			}
-			stone.update(tslf);
+			for (Stone stone : stones) {
+				stone.update(tslf);	
+			}
 			stoneRound.update(tslf);
 		}
 

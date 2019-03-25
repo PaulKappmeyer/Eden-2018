@@ -6,7 +6,7 @@ import java.awt.Graphics;
 public class Rocket extends Projectile{
 	//TODO: Combine in one class with Bullet
 	public static final int SIZE = 6;
-	
+
 	public Rocket(float x, float y, float angle) {
 		this.x = x;
 		this.y = y;
@@ -32,7 +32,7 @@ public class Rocket extends Projectile{
 	public void update(float tslf) {
 		if(!disabled) {
 			searchEnemy(tslf);
-			
+
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
 
@@ -55,10 +55,11 @@ public class Rocket extends Projectile{
 	 * 
 	 */
 	public void checkCollisionRocketToStone() {
-		Stone stone = Map.stone;
-		if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, stone.x, stone.y, stone.width, stone.height)) {
-			this.maxExplosionRadius = 30;
-			this.disable();
+		for (Stone stone : Map.stones) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+				this.maxExplosionRadius = 30;
+				this.disable();
+			}
 		}
 	}
 	/**
@@ -79,10 +80,10 @@ public class Rocket extends Projectile{
 			float ecy = enemy.y + enemy.size/2;
 			float pcx = this.x + SIZE/2;
 			float pcy = this.y + SIZE/2;
-			
+
 			float distx = pcx - ecx;
 			float disty = pcy - ecy;
-			
+
 			if(distx * distx + disty * disty <= nearestDistance) {
 				nearestDistance = distx * distx + disty * disty;
 				nearestEnemy = enemy;
@@ -93,16 +94,16 @@ public class Rocket extends Projectile{
 			float ecy = nearestEnemy.y + nearestEnemy.size/2;
 			float pcx = this.x + SIZE/2;
 			float pcy = this.y + SIZE/2;
-			
+
 			float distx = pcx - ecx;
 			float disty = pcy - ecy;
-			
+
 			//TODO: Rework the angle system
 			float newAngle = (float) Math.atan(distx / disty);
 			newAngle = (float) Math.toDegrees(newAngle);
 			if(pcy > ecy) newAngle =  -90 - (90-newAngle);
 			if(pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
-			
+
 			this.velocityX = (float) Math.sin(Math.toRadians(newAngle));
 			this.velocityY = (float) Math.cos(Math.toRadians(newAngle));	
 		}
@@ -115,7 +116,7 @@ public class Rocket extends Projectile{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 
 	 * @param obj The object to check with

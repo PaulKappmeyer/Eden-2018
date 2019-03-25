@@ -82,7 +82,9 @@ public class Screen extends JFrame{
 		}
 		
 		Map.stoneRound.draw(g);
-		Map.stone.draw(g);
+		for (Stone stone : Map.stones) {
+			stone.draw(g);
+		}
 		Map.chest.draw(g);
 		Map.sign.draw(g);
 		
