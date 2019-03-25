@@ -153,11 +153,10 @@ public class Eden extends Object{
 		}
 
 		//Collision with stone
-
+		float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
+		float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
 		//Left side of stone
 		if(walkVelocityX > 0 && walkVelocityX <= 1) {
-			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
-			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
 			for (Stone stone : Map.stones) {
 				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
 					System.out.println("Collision Left Side");
@@ -168,8 +167,6 @@ public class Eden extends Object{
 		}
 		//Right side of stone
 		if(walkVelocityX < 0 && walkVelocityX >= -1) {
-			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
-			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
 			for (Stone stone : Map.stones) {
 				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
 					System.out.println("Collision Right Side");
@@ -180,8 +177,6 @@ public class Eden extends Object{
 		}
 		//Top side of stone
 		if(walkVelocityY > 0 && walkVelocityY <= 1) {
-			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
-			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
 			for (Stone stone : Map.stones) {
 				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
 					System.out.println("Collision Top Side");
@@ -192,8 +187,6 @@ public class Eden extends Object{
 		}
 		//Bottom side of stone
 		if(walkVelocityY < 0 && walkVelocityY >= -1) {
-			float nextX = (float) (this.x + walkVelocityX * walkSpeed * tslf);
-			float nextY = (float) (this.y + walkVelocityY * walkSpeed * tslf);
 			for (Stone stone : Map.stones) {
 				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
 					System.out.println("Collsion Bottom Side");
@@ -202,7 +195,7 @@ public class Eden extends Object{
 				}
 			}
 		}
-
+		//Movement
 		x += walkVelocityX * walkSpeed * tslf;
 		y += walkVelocityY * walkSpeed * tslf;
 

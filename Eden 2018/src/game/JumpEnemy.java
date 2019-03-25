@@ -52,7 +52,6 @@ public class JumpEnemy extends Enemy{
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		
 		//Check for range to start follow player
 		float halfsize = this.size/2;
 		float playercenterx = Globals.player.x + halfsize;
