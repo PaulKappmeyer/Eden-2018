@@ -13,6 +13,15 @@ public class Map {
 	public Map() {
 		stones = new ArrayList<>();
 		stones.add(new Stone(500, 400, 125, 125));
+		
+		stones.add(new Stone(175, 250, 25, 100));
+		stones.add(new Stone(200, 250, 25, 100));
+		stones.add(new Stone(225, 250, 25, 100));
+		
+		stones.add(new Stone(175, 100, 100, 25));
+		stones.add(new Stone(175, 125, 100, 25));
+		stones.add(new Stone(175, 150, 100, 25));
+		
 		stones.add(new Stone(300, 250, 25, 100));
 		stones.add(new Stone(300, 350, 125, 25));
 		stones.add(new Stone(400, 250, 25, 100));

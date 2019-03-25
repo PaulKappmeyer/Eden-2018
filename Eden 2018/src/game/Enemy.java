@@ -91,6 +91,18 @@ public class Enemy extends Object{
 	 */
 	public void update(float tslf) {
 		if(alive) {
+			//Knockback
+			if(gotKnockbacked) {
+				if(timeKnockedBack <= maxKnockbackTime) {
+					timeKnockedBack += tslf;
+					currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+				}else {
+					gotKnockbacked = false;
+					timeKnockedBack = 0;
+					currentKnockbackSpeed = 0;
+				}
+			}
+			
 			//Check for range to start follow player
 			float halfsize = this.size/2;
 			float playercenterx = Globals.player.x + halfsize;
@@ -112,8 +124,8 @@ public class Enemy extends Object{
 				if(playercentery > enemycentery) angle =  -90 - (90-angle);
 				if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
 
-				walkVelocityX =  -Math.sin(Math.toRadians(angle));
-				walkVelocityY =  -Math.cos(Math.toRadians(angle));
+				walkVelocityX = -Math.sin(Math.toRadians(angle));
+				walkVelocityY = -Math.cos(Math.toRadians(angle));
 
 				if(speedUp) {
 					if(currentWalkspeed < maxWalkspeed) {
@@ -127,65 +139,7 @@ public class Enemy extends Object{
 				}
 
 				//Collision with stone
-				float nextX = (float) (this.x + walkVelocityX * currentWalkspeed * tslf);
-				float nextY = (float) (this.y + walkVelocityY * currentWalkspeed * tslf);
-				//Left side of stone
-				if(walkVelocityX > 0 && walkVelocityX <= 1) {
-					for (Stone stone : Map.stones) {
-						if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-							System.out.println("Collision Left Side");
-							walkVelocityX = 0;
-							this.x = stone.x - size;
-						}
-					}
-				}
-				//Right side of stone
-				if(walkVelocityX < 0 && walkVelocityX >= -1) {
-					for (Stone stone : Map.stones) {
-						if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-							System.out.println("Collision Right Side");
-							walkVelocityX = 0;
-							this.x = stone.x + stone.width;
-						}	
-					}
-				}
-				//Top side of stone
-				if(walkVelocityY > 0 && walkVelocityY <= 1) {
-					for (Stone stone : Map.stones) {
-						if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
-							System.out.println("Collision Top Side");
-							walkVelocityY = 0;
-							this.y = stone.y - size;
-						}
-					}
-				}
-				//Bottom side of stone
-				if(walkVelocityY < 0 && walkVelocityY >= -1) {
-					for (Stone stone : Map.stones) {
-						if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
-							System.out.println("Collsion Bottom Side");
-							walkVelocityY = 0;
-							this.y = stone.y + stone.height;
-						}
-					}
-				}
-				//Movement
-				x += walkVelocityX * currentWalkspeed * tslf;
-				y += walkVelocityY * currentWalkspeed * tslf;
-			}
-		}
-
-		//Knockback
-		if(gotKnockbacked) {
-			if(timeKnockedBack <= maxKnockbackTime) {
-				timeKnockedBack += tslf;
-				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				this.x += knockbackVelocityX * currentKnockbackSpeed * tslf;
-				this.y += knockbackVelocityY * currentKnockbackSpeed * tslf;
-			}else {
-				gotKnockbacked = false;
-				timeKnockedBack = 0;
-				currentKnockbackSpeed = 0;
+				checkCollisionToStones(tslf);
 			}
 		}
 
@@ -208,6 +162,62 @@ public class Enemy extends Object{
 		}
 	}
 
+	/**
+	 * 
+	 * @param tslf
+	 */
+	public void checkCollisionToStones(float tslf) {
+		double finalVelocityX = walkVelocityX + knockbackVelocityX;
+		double finalVelocityY = walkVelocityY + knockbackVelocityY;
+		if(finalVelocityX == 0 && finalVelocityY == 0) return;
+		
+		float nextX = (float) (this.x + (walkVelocityX * currentWalkspeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		float nextY = (float) (this.y + (walkVelocityY * currentWalkspeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		//Left side of stone
+		if(finalVelocityX > 0 && finalVelocityX <= 2) {
+			for (Stone stone : Map.stones) {
+				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					this.x = stone.x - size;
+				}
+			}
+		}
+		//Right side of stone
+		if(finalVelocityX < 0 && finalVelocityX >= -2) {
+			for (Stone stone : Map.stones) {
+				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					this.x = stone.x + stone.width;
+				}	
+			}
+		}
+		//Top side of stone
+		if(finalVelocityY > 0 && finalVelocityY <= 2) {
+			for (Stone stone : Map.stones) {
+				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
+					walkVelocityY = 0;
+					knockbackVelocityY = 0;
+					this.y = stone.y - size;
+				}
+			}
+		}
+		//Bottom side of stone
+		if(finalVelocityY < 0 && finalVelocityY >= -2) {
+			for (Stone stone : Map.stones) {
+				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
+					walkVelocityY = 0;
+					knockbackVelocityY = 0;
+					this.y = stone.y + stone.height;
+				}
+			}
+		}
+		//Movement
+		this.x += (float) ((walkVelocityX * currentWalkspeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		this.y += (float) ((walkVelocityY * currentWalkspeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+	}
+	
 	/**
 	 * 
 	 * @param b The bullet which hit the enemy

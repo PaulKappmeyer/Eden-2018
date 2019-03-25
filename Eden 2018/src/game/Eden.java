@@ -20,7 +20,7 @@ public class Eden extends Object{
 	 */
 	int idleWalkSpeed = 250;
 	int shotWalkSpeed = 75;
-	float walkSpeed;
+	float currentWalkSpeed;
 
 	double walkVelocityX;
 	double walkVelocityY;
@@ -138,68 +138,22 @@ public class Eden extends Object{
 
 		//Calculate the walk speed
 		if(state == SHOOTING) {
-			walkSpeed = shotWalkSpeed;
+			currentWalkSpeed = shotWalkSpeed;
 		}else if(state == WALKING) {
 			if(timeSpeededUp >= timeForSpeedUp) {
-				walkSpeed = idleWalkSpeed;
+				currentWalkSpeed = idleWalkSpeed;
 			}else {
 				timeSpeededUp += tslf;
-				walkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
+				currentWalkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
 			}
 		}
 
 		//Collision with stone
-		double finalVelocityX = walkVelocityX + knockbackVelocityX;
-		double finalVelocityY = walkVelocityY + knockbackVelocityY;
-		float nextX = (float) (this.x + (walkVelocityX * walkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		float nextY = (float) (this.y + (walkVelocityY * walkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-		//Left side of stone
-		if(finalVelocityX > 0 && finalVelocityX <= 2) {
-			for (Stone stone : Map.stones) {
-				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-					System.out.println("Collision Left Side");
-					walkVelocityX = 0;
-					stopKnockback();
-					this.x = stone.x - size;
-				}
-			}
-		}
-		//Right side of stone
-		if(finalVelocityX < 0 && finalVelocityX >= -2) {
-			for (Stone stone : Map.stones) {
-				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-					System.out.println("Collision Right Side");
-					walkVelocityX = 0;
-					stopKnockback();
-					this.x = stone.x + stone.width;
-				}	
-			}
-		}
-		//Top side of stone
-		if(finalVelocityY > 0 && finalVelocityY <= 2) {
-			for (Stone stone : Map.stones) {
-				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
-					System.out.println("Collision Top Side");
-					walkVelocityY = 0;
-					stopKnockback();
-					this.y = stone.y - size;
-				}
-			}
-		}
-		//Bottom side of stone
-		if(finalVelocityY < 0 && finalVelocityY >= -2) {
-			for (Stone stone : Map.stones) {
-				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
-					System.out.println("Collsion Bottom Side");
-					walkVelocityY = 0;
-					stopKnockback();
-					this.y = stone.y + stone.height;
-				}
-			}
-		}
+		checkCollisionToStones(tslf);
+
 		//Movement
-		this.x += (float) ((walkVelocityX * walkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		this.y += (float) ((walkVelocityY * walkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		this.x += (float) ((walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		this.y += (float) ((walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 
 		//Collision
 		checkCollisionPlayerToWall();
@@ -261,6 +215,86 @@ public class Eden extends Object{
 		}
 	};
 
+	public void checkCollisionToStones(float tslf) {
+		double finalVelocityX = walkVelocityX + knockbackVelocityX;
+		double finalVelocityY = walkVelocityY + knockbackVelocityY;
+		if(finalVelocityX == 0 && finalVelocityY == 0) return;
+
+		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		//Top side of stone
+		if(finalVelocityY > 0 && finalVelocityY <= 2) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {  
+					System.out.println("Collision Top Side");
+					walkVelocityY = 0;
+					knockbackVelocityY = 0;
+					this.y = stone.y - size;
+				}
+			}
+		}
+		//Bottom side of stone
+		if(finalVelocityY < 0 && finalVelocityY >= -2) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
+					System.out.println("Collsion Bottom Side");
+					walkVelocityY = 0;
+					knockbackVelocityY = 0;
+					this.y = stone.y + stone.height;
+				}
+			}
+		}
+		//Left side of stone
+		if(finalVelocityX > 0 && finalVelocityX <= 2) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
+					System.out.println("Collision Left Side");
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					nextX = this.x;
+					this.x = stone.x - size;
+				}
+			}
+		}
+		//Right side of stone
+		if(finalVelocityX < 0 && finalVelocityX >= -2) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
+					System.out.println("Collision Right Side");
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					nextX = this.x;
+					this.x = stone.x + stone.width;
+				}	
+			}
+		}
+	}
+	
+	private boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
+			return true;
+		}
+		return false;
+	}
+	private boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
+			return true;
+		}
+		return false;
+	}
+	private boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
+			return true;
+		}
+		return false;
+	}
+	private boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
+			return true;
+		}
+		return false;
+	}
+
 	public void stopKnockback() {
 		knockbackVelocityX = 0;
 		knockbackVelocityY = 0;
@@ -268,7 +302,7 @@ public class Eden extends Object{
 		timeKnockedBack = 0;
 		currentKnockbackSpeed = 0;
 	}
-	
+
 	/**
 	 * This function checks the input, either update the {@link #x} or {@link #y} position or start shooting
 	 * @param tslf
@@ -333,13 +367,10 @@ public class Eden extends Object{
 			state = IDLE;
 		}
 
+		//Shooting
 		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit && gun != null) {
 			if(gun.canShot) {
 				if(state == IDLE || state == WALKING) shotDirection = direction;
-				//				if(shotDirection == UP && direction == DOWN) shotDirection = direction;
-				//				if(shotDirection == DOWN && direction == UP) shotDirection = direction;	
-				//				if(shotDirection == LEFT && direction == RIGHT) shotDirection = direction;
-				//				if(shotDirection == RIGHT && direction == LEFT) shotDirection = direction;
 
 				state = SHOOTING;
 				gun.shot();
@@ -441,7 +472,7 @@ public class Eden extends Object{
 	public void resetWalking() {
 		walkVelocityX = 0;
 		walkVelocityY = 0;
-		walkSpeed = 0;
+		currentWalkSpeed = 0;
 		timeSpeededUp = 0;
 	}
 
