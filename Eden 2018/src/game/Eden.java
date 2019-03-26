@@ -193,7 +193,7 @@ public class Eden extends Object{
 					if(shockwaveY > ecy) newAngle =  -90 - (90-newAngle);
 					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
 
-					e.getDamaged(50);
+					//e.getDamaged(50);
 					e.startKnockback(newAngle, e.bulletImpact, e.bulletImpactTime);
 				}
 			}
@@ -216,17 +216,14 @@ public class Eden extends Object{
 	};
 
 	public void checkCollisionToStones(float tslf) {
-		double finalVelocityX = walkVelocityX + knockbackVelocityX;
-		double finalVelocityY = walkVelocityY + knockbackVelocityY;
-		if(finalVelocityX == 0 && finalVelocityY == 0) return;
-
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		if(nextX == this.x && nextY == this.y) return;
+		
 		//Top side of stone
-		if(finalVelocityY > 0 && finalVelocityY <= 2) {
+		if(this.y < nextY) {
 			for (Stone stone : Map.stones) {
 				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {  
-					System.out.println("Collision Top Side");
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y - size;
@@ -234,10 +231,9 @@ public class Eden extends Object{
 			}
 		}
 		//Bottom side of stone
-		if(finalVelocityY < 0 && finalVelocityY >= -2) {
+		if(this.y > nextY) {
 			for (Stone stone : Map.stones) {
 				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
-					System.out.println("Collsion Bottom Side");
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y + stone.height;
@@ -245,50 +241,47 @@ public class Eden extends Object{
 			}
 		}
 		//Left side of stone
-		if(finalVelocityX > 0 && finalVelocityX <= 2) {
+		if(this.x < nextX) {
 			for (Stone stone : Map.stones) {
 				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
-					System.out.println("Collision Left Side");
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
-					nextX = this.x;
+					stopKnockback();
 					this.x = stone.x - size;
 				}
 			}
 		}
 		//Right side of stone
-		if(finalVelocityX < 0 && finalVelocityX >= -2) {
+		if(this.x > nextX) {
 			for (Stone stone : Map.stones) {
 				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
-					System.out.println("Collision Right Side");
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
-					nextX = this.x;
 					this.x = stone.x + stone.width;
 				}	
 			}
 		}
 	}
 	
-	private boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
+	public boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
 		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
 			return true;
 		}
 		return false;
 	}
-	private boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
+	public boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
 		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
 			return true;
 		}
 		return false;
 	}
-	private boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
+	public boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x - size < stone.x && nextX + size > stone.x) {
 			return true;
 		}
 		return false;
 	}
-	private boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
+	public boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
 		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
 			return true;
 		}
@@ -439,8 +432,11 @@ public class Eden extends Object{
 
 				e.resetWalkspeed();
 
+				if(distx == 0 && disty == 0) angle = 0;
+				
 				this.startKnockback(angle - 180, enemyImpact);
 				this.gotHit = true;
+				return;
 			}
 		}
 	}

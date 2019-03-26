@@ -18,7 +18,7 @@ public class Enemy extends Object{
 	double walkVelocityX;
 	double walkVelocityY;
 	int maxWalkspeed = 80;
-	float currentWalkspeed = 0;
+	float currentWalkSpeed = 0;
 	float timeForSpeedUp = 0.65f;
 	float timeSpeededUp;
 	boolean speedUp = true;
@@ -92,17 +92,8 @@ public class Enemy extends Object{
 	public void update(float tslf) {
 		if(alive) {
 			//Knockback
-			if(gotKnockbacked) {
-				if(timeKnockedBack <= maxKnockbackTime) {
-					timeKnockedBack += tslf;
-					currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				}else {
-					gotKnockbacked = false;
-					timeKnockedBack = 0;
-					currentKnockbackSpeed = 0;
-				}
-			}
-			
+			updateKnockback(tslf);
+
 			//Check for range to start follow player
 			float halfsize = this.size/2;
 			float playercenterx = Globals.player.x + halfsize;
@@ -127,23 +118,53 @@ public class Enemy extends Object{
 				walkVelocityX = -Math.sin(Math.toRadians(angle));
 				walkVelocityY = -Math.cos(Math.toRadians(angle));
 
+				if(distx == 0 && disty == 0) {
+					walkVelocityX = 0;
+					walkVelocityY = 0;
+				}
+				
 				if(speedUp) {
-					if(currentWalkspeed < maxWalkspeed) {
+					if(currentWalkSpeed < maxWalkspeed) {
 						timeSpeededUp += tslf;
-						currentWalkspeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
+						currentWalkSpeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
 					}else {
 						timeSpeededUp = 0;
-						currentWalkspeed = maxWalkspeed;
+						currentWalkSpeed = maxWalkspeed;
 						speedUp = false;
 					}
 				}
 
 				//Collision with stone
 				checkCollisionToStones(tslf);
+
+				//Movement
+				this.x += (float) ((walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+				this.y += (float) ((walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 			}
 		}
 
 		//Got-Hit animation
+		updateGotHitAnimation(tslf);
+
+		//Die animation
+		updateDieAnimation(tslf);
+	}
+
+	public void updateKnockback(float tslf) {
+		if(gotKnockbacked) {
+			if(timeKnockedBack <= maxKnockbackTime) {
+				timeKnockedBack += tslf;
+				resetWalkspeed();
+				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+			}else {
+				gotKnockbacked = false;
+				timeKnockedBack = 0;
+				currentKnockbackSpeed = 0;
+			}
+		}
+	}
+
+	public void updateGotHitAnimation(float tslf) {
 		if(isInHitAnimation) {
 			blink += tslf;
 			blinkfromStart += tslf;
@@ -152,8 +173,9 @@ public class Enemy extends Object{
 				isInHitAnimation = false;
 			}
 		}
+	}
 
-		//Die animation
+	public void updateDieAnimation(float tslf) {
 		if(isInDieAnimation) {
 			radius += radiusIncrease * tslf;
 			if(radius >= maxRadius) {
@@ -167,36 +189,14 @@ public class Enemy extends Object{
 	 * @param tslf
 	 */
 	public void checkCollisionToStones(float tslf) {
-		double finalVelocityX = walkVelocityX + knockbackVelocityX;
-		double finalVelocityY = walkVelocityY + knockbackVelocityY;
-		if(finalVelocityX == 0 && finalVelocityY == 0) return;
+		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		if(nextX == this.x && nextY == this.y) return;
 		
-		float nextX = (float) (this.x + (walkVelocityX * currentWalkspeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		float nextY = (float) (this.y + (walkVelocityY * currentWalkspeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-		//Left side of stone
-		if(finalVelocityX > 0 && finalVelocityX <= 2) {
-			for (Stone stone : Map.stones) {
-				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x - size;
-				}
-			}
-		}
-		//Right side of stone
-		if(finalVelocityX < 0 && finalVelocityX >= -2) {
-			for (Stone stone : Map.stones) {
-				if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x + stone.width;
-				}	
-			}
-		}
 		//Top side of stone
-		if(finalVelocityY > 0 && finalVelocityY <= 2) {
+		if(this.y < nextY) {
 			for (Stone stone : Map.stones) {
-				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
+				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y - size;
@@ -204,20 +204,64 @@ public class Enemy extends Object{
 			}
 		}
 		//Bottom side of stone
-		if(finalVelocityY < 0 && finalVelocityY >= -2) {
+		if(this.y > nextY) {
 			for (Stone stone : Map.stones) {
-				if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
+				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y + stone.height;
 				}
 			}
 		}
-		//Movement
-		this.x += (float) ((walkVelocityX * currentWalkspeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		this.y += (float) ((walkVelocityY * currentWalkspeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		//Left side of stone
+		if(this.x < nextX) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					knockbackVelocityY = 0;
+					this.x = stone.x - size;
+				}
+			}
+		}
+		//Right side of stone
+		if(this.x > nextX) {
+			for (Stone stone : Map.stones) {
+				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
+					walkVelocityX = 0;
+					knockbackVelocityX = 0;
+					knockbackVelocityY = 0;
+					this.x = stone.x + stone.width;
+				}	
+			}
+		}
 	}
-	
+
+	public boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
+			return true;
+		}
+		return false;
+	}
+	public boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
+			return true;
+		}
+		return false;
+	}
+	public boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
+			return true;
+		}
+		return false;
+	}
+	public boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 
 	 * @param b The bullet which hit the enemy
@@ -239,7 +283,7 @@ public class Enemy extends Object{
 	}
 
 	public void resetWalkspeed() {
-		currentWalkspeed = 0;
+		currentWalkSpeed = 0;
 		timeSpeededUp = 0;
 		speedUp = true;
 	}

@@ -56,7 +56,7 @@ public class Map {
 		ysort();
 	}
 
-	int runs = 0;
+	int runs = 10;
 	public void switchMap() {
 		Globals.enemies.removeAll(Globals.enemies);
 		Globals.enemies.add(new Boss(650, 250));
