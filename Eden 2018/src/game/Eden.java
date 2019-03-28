@@ -179,7 +179,7 @@ public class Eden extends Object{
 				currentStunRange = 0;
 			}
 
-			for (Enemy e : Globals.enemies) {
+			for (Enemy e : Game.currentMap.enemies) {
 				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
 					float ecx = e.x + e.size/2;
 					float ecy = e.y + e.size/2;
@@ -198,12 +198,7 @@ public class Eden extends Object{
 				}
 			}
 		}
-
-		//Removal of the enemies
-		for (int i = 0; i < Globals.enemies.size(); i++) {
-			Enemy e = Globals.enemies.get(i);
-			if(e.canBeRemoved())Globals.enemies.remove(e);
-		}
+		
 		//Bombs
 		for (Bomb bomb : bombs) {
 			bomb.update(tslf);
@@ -222,7 +217,7 @@ public class Eden extends Object{
 		
 		//Top side of stone
 		if(this.y < nextY) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(Collision.isCollidingTopSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
@@ -232,7 +227,7 @@ public class Eden extends Object{
 		}
 		//Bottom side of stone
 		if(this.y > nextY) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(Collision.isCollidingBottomSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
@@ -242,18 +237,17 @@ public class Eden extends Object{
 		}
 		//Left side of stone
 		if(this.x < nextX) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(Collision.isCollidingLeftSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
-					stopKnockback();
 					this.x = stone.x - size;
 				}
 			}
 		}
 		//Right side of stone
 		if(this.x > nextX) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(Collision.isCollidingRightSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
@@ -388,7 +382,7 @@ public class Eden extends Object{
 	 * if there is a collision calls {@link #applyKnockback(float)}, and sets {@link #gotHit} true
 	 */
 	public void checkCollisionPlayerToEnemies() {
-		for (Enemy e : Globals.enemies) {
+		for (Enemy e : Game.currentMap.enemies) {
 			if(!e.alive) continue;
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
 				float ecx = e.x + e.size/2;

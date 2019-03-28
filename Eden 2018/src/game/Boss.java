@@ -51,7 +51,6 @@ public class Boss extends Enemy{
 	@Override
 	public boolean canBeRemoved() {
 		if(super.canBeRemoved()) {
-			if(gun.shells.size() != 0) return false;
 			for (Projectile projectile : gun.projectiles) {
 				if(!projectile.canBeRemoved()) return false;
 			}

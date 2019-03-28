@@ -64,17 +64,17 @@ public class Bullet extends Projectile{
 	 * 
 	 */
 	public void checkCollisionBulletToStone() {
-		for (Stone stone : Map.stones) {
+		for (Stone stone : Game.currentMap.stones) {
 			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Bullet.SIZE, stone.x, stone.y, stone.width, stone.height)) {
 				this.maxExplosionRadius = 30;
 				this.disable();
 			}
 		}
-		RoundStone rs = Map.stoneRound;
-		if(Globals.checkCollisionCircleToCircle(this.x, this.y, Bullet.SIZE, rs.x, rs.y, rs.size)) {
-			this.maxExplosionRadius = 30;
-			this.disable();
-		}
+//		RoundStone rs = Game.currentMap.stoneRound;
+//		if(Globals.checkCollisionCircleToCircle(this.x, this.y, Bullet.SIZE, rs.x, rs.y, rs.size)) {
+//			this.maxExplosionRadius = 30;
+//			this.disable();
+//		}
 	}
 	/**
 	 * 

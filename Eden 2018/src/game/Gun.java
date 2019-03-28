@@ -21,14 +21,12 @@ public abstract class Gun {
 	Object owner;
 
 	ArrayList<Projectile> projectiles;
-	ArrayList<Shell> shells;
 
 	public Gun(Object owner) {
 		this.owner = owner;
 		this.canShot = false;
 		this.damage = 50;
 		
-		shells = new ArrayList<>();
 		projectiles = new ArrayList<>();
 	}
 
@@ -37,9 +35,6 @@ public abstract class Gun {
 	 * @param g
 	 */
 	public void draw(Graphics g) {
-		for (Shell shell : shells) {
-			shell.draw(g);
-		}
 		Color c = Color.BLACK;
 		if(owner instanceof Eden) c = Color.YELLOW;
 		if(owner instanceof Enemy) c = Color.RED;
@@ -60,11 +55,6 @@ public abstract class Gun {
 			tsls -= shottime;
 		}else {
 			tsls += tslf;	
-		}
-		
-		//Updating the shells
-		for (Shell shell : shells) {
-			shell.update(tslf);
 		}
 		
 		//Updating the projectiles
@@ -90,7 +80,7 @@ public abstract class Gun {
 	 */
 	public void checkCollisionProjectilesToObjects() {
 		if(owner == Globals.player) {
-			for (Enemy e : Globals.enemies) {
+			for (Enemy e : Game.currentMap.enemies) {
 				if(!e.alive) continue;
 				for (Projectile projectile : projectiles) {
 					if(projectile.disabled) continue;

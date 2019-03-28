@@ -1,6 +1,5 @@
 package game;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -19,7 +18,6 @@ public class Globals {
 	public static int insetY;
 	public static Eden player = new Eden();
 	public static Random random = new Random();
-	public static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	public static int fps;
 	
 	/**

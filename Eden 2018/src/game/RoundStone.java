@@ -62,7 +62,7 @@ public class RoundStone {
 		}
 
 		//Collision with Enemies 
-		for (Enemy e : Globals.enemies) {
+		for (Enemy e : Game.currentMap.enemies) {
 			if(Globals.checkCollisionRectangleToRectangle(e.x, e.y, e.size, e.size, this.x, this.y, width, height)) {
 				float pcx = e.x + e.size/2;
 				float pcy = e.y + e.size/2;

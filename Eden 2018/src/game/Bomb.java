@@ -62,7 +62,7 @@ public class Bomb {
 				explode = true;
 				
 				//Collision
-				for (Enemy e : Globals.enemies) {
+				for (Enemy e : Game.currentMap.enemies) {
 					if(Globals.checkCollisionRectangleToCircle(this.x + size/2 - maxRadius/2, this.y + size/2 -maxRadius/2, maxRadius, e.x, e.y, e.size, e.size)) {
 						float ecx = e.x + e.size/2;
 						float ecy = e.y + e.size/2;

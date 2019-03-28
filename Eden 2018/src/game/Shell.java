@@ -59,7 +59,7 @@ public class Shell {
 	 */
 	public void checkCollisionToStone() {
 		if(this.collided) return;
-		for (Stone stone : Map.stones) {
+		for (Stone stone : Game.currentMap.stones) {
 			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, stone.x, stone.y, stone.width, stone.height)) {
 				this.velocityX *= -0.5;
 				this.velocityY *= -0.5;

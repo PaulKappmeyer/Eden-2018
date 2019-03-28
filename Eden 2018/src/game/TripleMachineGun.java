@@ -41,9 +41,9 @@ public class TripleMachineGun extends Gun{
 			}
 			float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
 			float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
-			shells.add(new Shell(shellCenterX, shellCenterY, angle));
-			shells.add(new Shell(shellCenterX, shellCenterY, angle));
-			shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			Game.currentMap.shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			Game.currentMap.shells.add(new Shell(shellCenterX, shellCenterY, angle));
+			Game.currentMap.shells.add(new Shell(shellCenterX, shellCenterY, angle));
 			applyRecoil(angle);
 		}
 		canShot = false;

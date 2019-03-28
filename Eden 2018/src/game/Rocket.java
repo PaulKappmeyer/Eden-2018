@@ -55,7 +55,7 @@ public class Rocket extends Projectile{
 	 * 
 	 */
 	public void checkCollisionRocketToStone() {
-		for (Stone stone : Map.stones) {
+		for (Stone stone : Game.currentMap.stones) {
 			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, stone.x, stone.y, stone.width, stone.height)) {
 				this.maxExplosionRadius = 30;
 				this.disable();
@@ -74,7 +74,7 @@ public class Rocket extends Projectile{
 	public void searchEnemy(float tslf) {
 		float nearestDistance = Float.MAX_VALUE;
 		Enemy nearestEnemy = null;
-		for (Enemy enemy : Globals.enemies) {
+		for (Enemy enemy : Game.currentMap.enemies) {
 			if(!enemy.alive)continue;
 			float ecx = enemy.x + enemy.size/2;
 			float ecy = enemy.y + enemy.size/2;

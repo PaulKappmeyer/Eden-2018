@@ -197,11 +197,11 @@ public class Enemy extends Object{
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
-
+		
 		//Top side of stone
 		if(this.y < nextY) {
-			for (Stone stone : Map.stones) {
-				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {
+			for (Stone stone : Game.currentMap.stones) {
+				if(Collision.isCollidingTopSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y - size;
@@ -210,8 +210,8 @@ public class Enemy extends Object{
 		}
 		//Bottom side of stone
 		if(this.y > nextY) {
-			for (Stone stone : Map.stones) {
-				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
+			for (Stone stone : Game.currentMap.stones) {
+				if(Collision.isCollidingBottomSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y + stone.height;
@@ -220,22 +220,20 @@ public class Enemy extends Object{
 		}
 		//Left side of stone
 		if(this.x < nextX) {
-			for (Stone stone : Map.stones) {
-				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
+			for (Stone stone : Game.currentMap.stones) {
+				if(Collision.isCollidingLeftSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
-					knockbackVelocityY = 0;
 					this.x = stone.x - size;
 				}
 			}
 		}
 		//Right side of stone
 		if(this.x > nextX) {
-			for (Stone stone : Map.stones) {
-				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
+			for (Stone stone : Game.currentMap.stones) {
+				if(Collision.isCollidingRightSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
-					knockbackVelocityY = 0;
 					this.x = stone.x + stone.width;
 				}	
 			}

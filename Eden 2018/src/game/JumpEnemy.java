@@ -174,7 +174,7 @@ public class JumpEnemy extends Enemy{
 
 		//Top side of stone
 		if(this.y < nextY) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {  
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
@@ -185,7 +185,7 @@ public class JumpEnemy extends Enemy{
 		}
 		//Bottom side of stone
 		if(this.y > nextY) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
@@ -196,7 +196,7 @@ public class JumpEnemy extends Enemy{
 		}
 		//Left side of stone
 		if(this.x < nextX) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
@@ -207,7 +207,7 @@ public class JumpEnemy extends Enemy{
 		}
 		//Right side of stone
 		if(this.x > nextX) {
-			for (Stone stone : Map.stones) {
+			for (Stone stone : Game.currentMap.stones) {
 				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
