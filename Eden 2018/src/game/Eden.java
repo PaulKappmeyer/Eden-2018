@@ -223,7 +223,7 @@ public class Eden extends Object{
 		//Top side of stone
 		if(this.y < nextY) {
 			for (Stone stone : Map.stones) {
-				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {  
+				if(Collision.isCollidingTopSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y - size;
@@ -233,7 +233,7 @@ public class Eden extends Object{
 		//Bottom side of stone
 		if(this.y > nextY) {
 			for (Stone stone : Map.stones) {
-				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
+				if(Collision.isCollidingBottomSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
 					walkVelocityY = 0;
 					knockbackVelocityY = 0;
 					this.y = stone.y + stone.height;
@@ -243,7 +243,7 @@ public class Eden extends Object{
 		//Left side of stone
 		if(this.x < nextX) {
 			for (Stone stone : Map.stones) {
-				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
+				if(Collision.isCollidingLeftSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
 					stopKnockback();
@@ -254,38 +254,13 @@ public class Eden extends Object{
 		//Right side of stone
 		if(this.x > nextX) {
 			for (Stone stone : Map.stones) {
-				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
+				if(Collision.isCollidingRightSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
 					walkVelocityX = 0;
 					knockbackVelocityX = 0;
 					this.x = stone.x + stone.width;
 				}	
 			}
 		}
-	}
-	
-	public boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-			return true;
-		}
-		return false;
 	}
 
 	public void stopKnockback() {
