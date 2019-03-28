@@ -23,7 +23,7 @@ public class Rocket extends Projectile{
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
 		if(dieAnimation) {
-			g.setColor(Color.BLACK);
+			g.setColor(new Color(0, 0, 0, 200));
 			g.fillOval((int)(x + SIZE/2 - currentRadius/2 + Globals.insetX), (int)(y + SIZE/2 - currentRadius/2 + Globals.insetY), (int)currentRadius, (int)currentRadius);
 		}
 	}

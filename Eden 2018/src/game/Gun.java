@@ -7,14 +7,16 @@ import java.util.ArrayList;
 public abstract class Gun {
 	
 	int mode;
-	float recoil = 0.75f;
+	float recoilSpeed = 5.75f;
+	float recoilVelocityX;
+	float recoilVelocityY;
 	//Delay
 	float shottime = 0.125f;
 	//Time since last shot
 	float tsls = shottime;
 	//Can shot again?
 	boolean canShot;
-
+	
 	float damage;
 	Object owner;
 
@@ -104,7 +106,7 @@ public abstract class Gun {
 			for (Projectile projectile : projectiles) {
 				if(projectile.disabled) continue;
 				if(projectile.checkCollisionToObject(Globals.player)) {
-					Globals.player.startKnockback(projectile.angle, Globals.player.bulletImpact);
+					Globals.player.startKnockback(projectile.angle, Globals.player.bulletImpact, 0.2f);
 					Globals.player.gotHit = true;
 					projectile.maxExplosionRadius = 30;
 					projectile.disable();
@@ -123,8 +125,9 @@ public abstract class Gun {
 	 * @param angle The angle in which the player should get the recoil
 	 */
 	public void applyRecoil(float angle) {
-		owner.x -= (float) Math.sin(Math.toRadians(angle)) * recoil;
-		owner.y -= (float) Math.cos(Math.toRadians(angle)) * recoil;
+		Globals.player.startKnockback(angle - 180, 10f, 0.1f);
+		Globals.player.walkVelocityX -= (float) Math.sin(Math.toRadians(angle));
+		recoilVelocityY -= (float) Math.cos(Math.toRadians(angle));
 	}
 
 }

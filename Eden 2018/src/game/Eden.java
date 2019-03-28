@@ -44,7 +44,7 @@ public class Eden extends Object{
 	//Knockback
 	boolean gotKnockbacked;
 	float maxKnockback;
-	float maxKnockbackTime = 0.2f;
+	float maxKnockbackTime;
 	float knockbackVelocityX;
 	float knockbackVelocityY;
 	float currentKnockbackSpeed;
@@ -276,7 +276,7 @@ public class Eden extends Object{
 		return false;
 	}
 	public boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x - size < stone.x && nextX + size > stone.x) {
+		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
 			return true;
 		}
 		return false;
@@ -434,7 +434,7 @@ public class Eden extends Object{
 
 				if(distx == 0 && disty == 0) angle = 0;
 				
-				this.startKnockback(angle - 180, enemyImpact);
+				this.startKnockback(angle - 180, enemyImpact, 0.2f);
 				this.gotHit = true;
 				return;
 			}
@@ -446,11 +446,12 @@ public class Eden extends Object{
 	 * @param angle
 	 * @param ammount
 	 */
-	public void startKnockback(float angle, float ammount) {
+	public void startKnockback(float angle, float ammount, float time) {
 		if(gotKnockbacked) return;
 		gotKnockbacked = true;
 		calculateKnockbackVelocity(angle);
 		maxKnockback = ammount;
+		maxKnockbackTime = time;
 	}
 
 	/**

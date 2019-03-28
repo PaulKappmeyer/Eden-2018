@@ -27,10 +27,11 @@ public class Enemy extends Object{
 	boolean alive = true;
 	//Got-Hit animation
 	boolean isInHitAnimation = false;
-	float blink;
-	float blinktime = 0.05f;
-	float blinkfromStart;
-	float maxBlinkTime = 1f;
+	float timeBlinked;
+	float swapBlinkTime = 0.05f;
+	int blinksDone;
+	int maxBlinks = 15;
+	boolean showBlink;
 	//Die animation
 	boolean isInDieAnimation = false;
 	float radius = 0;
@@ -65,18 +66,17 @@ public class Enemy extends Object{
 	 * @param g The graphics object to draw
 	 */
 	public void draw(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+		if(!showBlink) {
+			g.setColor(Color.RED);
+			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			g.setColor(Color.BLACK);
+			g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+		}
 		if(isInHitAnimation) {
-			if(blink > blinktime) {
+			if(showBlink) {
 				g.setColor(Color.WHITE);
 				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-			}
-			if(blink > blinktime*2) {
-				blink -= blinktime*2;
 			}
 		}
 		if(isInDieAnimation) {
@@ -122,7 +122,7 @@ public class Enemy extends Object{
 					walkVelocityX = 0;
 					walkVelocityY = 0;
 				}
-				
+
 				if(speedUp) {
 					if(currentWalkSpeed < maxWalkspeed) {
 						timeSpeededUp += tslf;
@@ -166,10 +166,15 @@ public class Enemy extends Object{
 
 	public void updateGotHitAnimation(float tslf) {
 		if(isInHitAnimation) {
-			blink += tslf;
-			blinkfromStart += tslf;
-			if(blinkfromStart > maxBlinkTime) {
-				blinkfromStart = 0;
+			timeBlinked += tslf;
+			if(timeBlinked > swapBlinkTime) {
+				showBlink = !showBlink;
+				blinksDone ++;
+				timeBlinked -= swapBlinkTime;
+			}
+			if(blinksDone > maxBlinks) {
+				timeBlinked = 0;
+				blinksDone = 0;
 				isInHitAnimation = false;
 			}
 		}
@@ -192,7 +197,7 @@ public class Enemy extends Object{
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
-		
+
 		//Top side of stone
 		if(this.y < nextY) {
 			for (Stone stone : Map.stones) {

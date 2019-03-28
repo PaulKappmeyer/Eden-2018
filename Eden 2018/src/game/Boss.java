@@ -28,18 +28,17 @@ public class Boss extends Enemy{
 	public void draw(Graphics g) {
 		//Drawing of the boss
 		if(alive) {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
-			g.setColor(Color.BLACK);
-			g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			if(!showBlink) {
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+				g.setColor(Color.BLACK);
+				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			}
 			if(isInHitAnimation) {
-				if(blink > blinktime) {
+				if(showBlink) {
 					g.setColor(Color.WHITE);
 					g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 					g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-				}
-				if(blink > blinktime*2) {
-					blink -= blinktime*2;
 				}
 			}
 		}

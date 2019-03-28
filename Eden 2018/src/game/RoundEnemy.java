@@ -93,7 +93,7 @@ public class RoundEnemy extends Enemy{
 			//Hit the player?
 			if(!bullet.disabled) {
 				if(bullet.checkCollisionToObject(Globals.player)) {
-					Globals.player.startKnockback(bullet.angle, Globals.player.bulletImpact);
+					Globals.player.startKnockback(bullet.angle, Globals.player.bulletImpact, 1f);
 					Globals.player.gotHit = true;
 					bullet.maxExplosionRadius = 30;
 					bullet.disable();
@@ -135,13 +135,10 @@ public class RoundEnemy extends Enemy{
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 		if(isInHitAnimation) {
-			if(blink > blinktime) {
+			if(showBlink) {
 				g.setColor(Color.WHITE);
 				g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 				g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-			}
-			if(blink > blinktime*2) {
-				blink -= blinktime*2;
 			}
 		}
 		if(isInDieAnimation) {

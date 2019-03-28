@@ -31,27 +31,26 @@ public class JumpEnemy extends Enemy{
 	int ya;
 	@Override
 	public void draw(Graphics g) {
-		if(startCharge) {
-			xa = Globals.random.nextInt(5);
-			ya = Globals.random.nextInt(5);
-			g.translate(xa, ya);
-		}
-		g.setColor(Color.RED);
-		g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
-		g.setColor(Color.BLACK);
-		g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
-		if(startCharge) {
-			g.translate(-xa, -ya);
-		}
-		
-		if(isInHitAnimation) {
-			if(blink > blinktime) {
-				g.setColor(Color.WHITE);
-				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+		if(!showBlink) {
+			if(startCharge) {
+				xa = Globals.random.nextInt(5);
+				ya = Globals.random.nextInt(5);
+				g.translate(xa, ya);
 			}
-			if(blink > blinktime*2) {
-				blink -= blinktime*2;
+			g.setColor(Color.RED);
+			g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+			g.setColor(Color.BLACK);
+			g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+			if(startCharge) {
+				g.translate(-xa, -ya);
+			}
+		}
+
+		if(isInHitAnimation) {
+			if(showBlink) {
+				g.setColor(Color.WHITE);
+				g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+				g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
 			}
 		}
 		if(isInDieAnimation) {
@@ -94,7 +93,7 @@ public class JumpEnemy extends Enemy{
 					walkVelocityX = 0;
 					walkVelocityY = 0;
 				}
-				
+
 				//Speed Up
 				if(speedUp) {
 					if(currentWalkSpeed < maxWalkspeed) {
@@ -110,7 +109,7 @@ public class JumpEnemy extends Enemy{
 				//Search for player
 				if(!startCharge && !startJump && !isJumping && followplayer) {
 					float distanceToPlayer = distx * distx + disty * disty;
-					if(distanceToPlayer < distance * distance) {
+					if(distanceToPlayer < distance * distance && distanceToPlayer > Globals.player.size * Globals.player.size) {
 						startCharge = true;
 						currentWalkSpeed = 0;
 						speedUp = false;
@@ -120,8 +119,7 @@ public class JumpEnemy extends Enemy{
 				if(startCharge) {
 					timeCharged += tslf;
 					if(timeCharged >= chargeTime) {
-						timeCharged = 0;
-						startCharge = false;
+						stopCharge();
 						startJump = true;
 					}
 				}
@@ -150,17 +148,22 @@ public class JumpEnemy extends Enemy{
 						currentJumpSpeed = 0;
 					}
 				}
-				
+
 				//Collision with stone
 				checkCollisionToStones(tslf);
 			}
 		}
-		
+
 		//Got-Hit animation
 		updateGotHitAnimation(tslf);
-
+		
 		//Die animation
 		updateDieAnimation(tslf);
+	}
+
+	public void stopCharge() {
+		timeCharged = 0;
+		startCharge = false;
 	}
 	
 	@Override
@@ -213,7 +216,7 @@ public class JumpEnemy extends Enemy{
 				}	
 			}
 		}
-		
+
 		this.x = nextX;
 		this.y = nextY;
 	}
