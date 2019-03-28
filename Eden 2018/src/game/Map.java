@@ -12,15 +12,14 @@ public class Map {
 	Chest chest;
 	Sign sign;
 	
-	public Map(int playerX, int playerY, ArrayList<Stone> stones, ArrayList<Enemy> enemies) {
+	public Map(int playerX, int playerY, ArrayList<Stone> stones, ArrayList<Enemy> enemies, Chest chest, Sign sign) {
 		this.player.x = playerX;
 		this.player.y = playerY;
 		this.stones = stones;
 		this.enemies = enemies;
 		this.shells = new ArrayList<Shell>();
-		
-		chest = new Chest(100, 100);
-		sign = new Sign(150, 550);
+		this.chest = chest;
+		this.sign = sign;
 	}
 	
 	public void draw(Graphics g) {
@@ -45,8 +44,8 @@ public class Map {
 		for (Stone stone : Game.currentMap.stones) {
 			stone.draw(g);
 		}
-		if(chest != null)chest.draw(g);
-		if(chest != null) sign.draw(g);
+		if(chest != null) chest.draw(g);
+		if(sign != null) sign.draw(g);
 		
 		//Draw the player
 		Globals.player.draw(g);
@@ -73,8 +72,8 @@ public class Map {
 			}
 		}
 
-		chest.update(tslf);
-		sign.update(tslf);
+		if(chest != null) chest.update(tslf);
+		if(sign != null) sign.update(tslf);
 
 		//TODO: Y-Sort
 		ysort();
