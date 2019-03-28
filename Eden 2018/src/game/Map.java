@@ -1,36 +1,54 @@
 package game;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Map {
 
 	Eden player = Globals.player;
+	ArrayList<Enemy> enemies;
 	static ArrayList<Stone> stones;
 	static Chest chest;
 	static Sign sign;
 	static RoundStone stoneRound;
 	
-	public Map() {
-		stones = new ArrayList<>();
-		stones.add(new Stone(500, 400, 125, 125));
+	public Map(int playerX, int playerY, ArrayList<Stone> stones, ArrayList<Enemy> enemies) {
+		this.player.x = playerX;
+		this.player.y = player.y;
+		this.stones = stones;
+		this.enemies = enemies;
 		
-		stones.add(new Stone(175, 250, 25, 100));
-		stones.add(new Stone(200, 250, 25, 100));
-		stones.add(new Stone(225, 250, 25, 100));
-		
-		stones.add(new Stone(175, 100, 100, 25));
-		stones.add(new Stone(175, 125, 100, 25));
-		stones.add(new Stone(175, 150, 100, 25));
-		
-		stones.add(new Stone(300, 250, 25, 100));
-		stones.add(new Stone(300, 350, 125, 25));
-		stones.add(new Stone(400, 250, 25, 100));
-		stones.add(new Stone(300, 225, 75, 25));
 		stoneRound = new RoundStone(100, 230, 30);
 		chest = new Chest(100, 100);
 		sign = new Sign(150, 550);
 		Globals.enemies.add(new JumpEnemy(500, 100));
 		Globals.enemies.add(new Enemy(600, 100));
+	}
+	
+	public void draw(Graphics g) {
+		//Draw the players gun
+		if(Globals.player.gun != null)Globals.player.gun.draw(g);
+		//Draw the bosses gun
+		for (Enemy enemy : Globals.enemies) {
+			if(enemy instanceof Boss) {
+				Boss boss = (Boss) enemy;
+				boss.gun.draw(g);
+			}
+		}
+		//Draw the enemies
+		for (Enemy e : Globals.enemies) {
+			e.draw(g);
+		}
+		
+		if(stoneRound != null) stoneRound.draw(g);
+		for (Stone stone : Map.stones) {
+			stone.draw(g);
+		}
+		if(chest != null)chest.draw(g);
+		if(chest != null) sign.draw(g);
+		
+		//Draw the player
+		Globals.player.draw(g);
 	}
 
 	public void update(float tslf) {

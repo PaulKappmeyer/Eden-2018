@@ -15,11 +15,12 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
 	private BufferStrategy strat;
+	private Game game;
 	
 	/**
 	 * Constructor; initializes the JFrame and the BufferStrategy
 	 */
-	public Screen() {
+	public Screen(Game game) {
 		this.setTitle("Eden");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setUndecorated(false);
@@ -37,6 +38,8 @@ public class Screen extends JFrame{
 		this.setLocationRelativeTo(null);
 		
 		this.addKeyListener(new Controls());
+		
+		this.game = game;
 	}
 	
 	/**
@@ -67,29 +70,8 @@ public class Screen extends JFrame{
 			g.translate(screenshakeX, screenshakeY);
 		}
 		
-		//Draw the players gun
-		if(Globals.player.gun != null)Globals.player.gun.draw(g);
-		//Draw the bosses gun
-		for (Enemy enemy : Globals.enemies) {
-			if(enemy instanceof Boss) {
-				Boss boss = (Boss) enemy;
-				boss.gun.draw(g);
-			}
-		}
-		//Draw the enemies
-		for (Enemy e : Globals.enemies) {
-			e.draw(g);
-		}
-		
-		Map.stoneRound.draw(g);
-		for (Stone stone : Map.stones) {
-			stone.draw(g);
-		}
-		Map.chest.draw(g);
-		Map.sign.draw(g);
-		
-		//Draw the player
-		Globals.player.draw(g);
+		//Game
+		game.draw(g);
 		
 		//Draw the map transition
 		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT) {

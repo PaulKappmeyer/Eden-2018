@@ -1,17 +1,12 @@
 package game;
 
-import java.awt.event.KeyEvent;
+import java.awt.Graphics;
+import java.util.ArrayList;
 
-public class Game implements Runnable{
-	boolean running = true;
-	public static final int MAXFPS = 60;
-	public static final long MAXLOOPTIME = 1000/MAXFPS;
-	
-	public static long firstFrame;
-	public static int frames;
-	
-	Screen sc = new Screen();
-	Map map = new Map();
+public class Game {
+
+	Map map1;
+	Map currentMap;
 	
 	public static final int RUNNING = 1;
 	public static final int MAP_TRANSITION = 3;
@@ -19,56 +14,35 @@ public class Game implements Runnable{
 	public static final int MAP_TRANSITION_OUT = 4;
 	public static final int INTERACTING = 5;
 	public static int state = RUNNING;
-	
-	@Override
-	public void run() {
-		long timestamp;
-		long oldTimestamp;
+
+	public Game() {
+		ArrayList<Stone>stones = new ArrayList<>();
+		stones.add(new Stone(500, 400, 125, 125));
+		stones.add(new Stone(175, 250, 25, 100));
+		stones.add(new Stone(200, 250, 25, 100));
+		stones.add(new Stone(225, 250, 25, 100));
+		stones.add(new Stone(175, 100, 100, 25));
+		stones.add(new Stone(175, 125, 100, 25));
+		stones.add(new Stone(175, 150, 100, 25));
+		stones.add(new Stone(300, 250, 25, 100));
+		stones.add(new Stone(300, 350, 125, 25));
+		stones.add(new Stone(400, 250, 25, 100));
+		stones.add(new Stone(300, 225, 75, 25));
 		
-		long lastFrame = System.currentTimeMillis();
-		while(running){
-			long thisFrame = System.currentTimeMillis();
-			float tslf = (float)(thisFrame - lastFrame) / 1000f;
-			lastFrame = thisFrame;
-			
-			if(thisFrame > firstFrame + 1000){
-				firstFrame = thisFrame;
-				Globals.fps = frames;
-				frames = 0;
-			}
-			frames++;
-			
-			oldTimestamp = System.currentTimeMillis();
-			
-			//----------------------------------Updating
-			
-			//TODO:Update System
-			if(state == RUNNING || state == INTERACTING) map.update(tslf);
-			sc.update(tslf);
-			if(state == RESET) {
-				state = MAP_TRANSITION_OUT;
-				map.switchMap(); 
-			}
-			
-			if(Controls.isKeyDown(KeyEvent.VK_ESCAPE))System.exit(0);
-			
-			timestamp = System.currentTimeMillis();
-			if(timestamp - oldTimestamp > MAXLOOPTIME) {
-				System.out.println("Too late");
-				continue;
-			}
-			
-			//-----------------------------------Rendering
-			sc.repaintScreen();
-			
-			timestamp = System.currentTimeMillis();
-			if(timestamp - oldTimestamp <= MAXLOOPTIME) {
-				try {
-					Thread.sleep(MAXLOOPTIME - (timestamp - oldTimestamp));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+		map1 = new Map(100, 100, stones, Globals.enemies);
+		currentMap = map1;
+	}
+	
+	public void update(float tslf) {
+		//TODO:Update System
+		if(state == RUNNING || state == INTERACTING) currentMap.update(tslf);
+		if(state == RESET) {
+			state = MAP_TRANSITION_OUT;
+			currentMap.switchMap(); 
 		}
+	}
+	
+	public void draw(Graphics g) {
+		currentMap.draw(g);
 	}
 }

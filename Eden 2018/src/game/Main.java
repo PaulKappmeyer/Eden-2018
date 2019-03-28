@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Eden started");
 		
-		Game game = new Game();
+		GameLoop game = new GameLoop();
 		new Thread(game).start();
 	}
 }
