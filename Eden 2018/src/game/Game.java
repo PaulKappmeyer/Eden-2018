@@ -17,6 +17,8 @@ public class Game {
 	public static final int INTERACTING = 5;
 	public static int state = RUNNING;
 
+	ScreenTransition transition = new ScreenTransition();
+	
 	public Game() {
 		ArrayList<Stone>stones = new ArrayList<>();
 		stones.add(new Stone(500, 400, 125, 125));
@@ -39,7 +41,7 @@ public class Game {
 		enemies.add(new JumpEnemy(500, 100));
 		enemies.add(new Enemy(500, 200));
 		enemies.add(new Enemy(500, 300));
-		enemies.add(new Enemy(500, 350));
+		enemies.add(new SummonerEnemy(500, 350));
 		enemies.add(new RoundEnemy(600, 100));
 
 		Chest chest = new Chest(100, 100);
@@ -63,9 +65,7 @@ public class Game {
 		stones.add(new Stone(0, 0, 25, Globals.height));
 		maps[0][1] = new Map(400, 400, stones, enemies, null, null);
 		stones = new ArrayList<>();
-//		maps[1][1] = new Map(400, 400, stones, enemies, chest, sign);
-//		stones = new ArrayList<>();
-//		stones.add(new Stone(Globals.width - 25, 0, 25, Globals.height));
+		stones.add(new Stone(Globals.width - 25, 0, 25, Globals.height));
 		maps[2][1] = new Map(400, 400, stones, enemies, null, null);
 		stones = new ArrayList<>();
 		stones.add(new Stone(0, 0, 25, Globals.height));
@@ -82,16 +82,29 @@ public class Game {
 		currentMap = maps[mapX][mapY];
 	}
 
+	//TODO:Update System
 	public void update(float tslf) {
-		//TODO:Update System
+		//RUNNING
 		if(state == RUNNING) {
 			currentMap.update(tslf);
 			//Map transition
 			checkCollisionPlayerToWall();
-
+		
+		//INTERACTING
 		}else if(state == INTERACTING){
 			currentMap.update(tslf);
 		}
+		
+		//SCREEN TRANSITION
+		else if(Game.state == Game.MAP_TRANSITION) {
+			currentMap.update(tslf/2);
+			transition.update(tslf);
+		}
+		else if(Game.state == Game.MAP_TRANSITION_OUT) {
+			transition.update(tslf);
+		}
+		
+		//RESETING : SET NEW MAP
 		else if(state == RESET) {
 			state = MAP_TRANSITION_OUT;
 			switchMap(); 
@@ -100,6 +113,10 @@ public class Game {
 
 	public void draw(Graphics g) {
 		currentMap.draw(g);
+		
+		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT || Game.state == Game.RESET) {	
+			transition.draw(g);
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +147,7 @@ public class Game {
 	public void beginMapTransition(int direction) {
 		Game.state = Game.MAP_TRANSITION;
 		this.direction = direction;
-		Screen.startTransition(direction);
+		transition.startTransition(direction);
 	}
 
 	public void checkCollisionPlayerToWall() {

@@ -11,7 +11,7 @@ public class Map {
 	ArrayList<Shell> shells;
 	Chest chest;
 	Sign sign;
-	
+
 	public Map(int playerX, int playerY, ArrayList<Stone> stones, ArrayList<Enemy> enemies, Chest chest, Sign sign) {
 		this.player.x = playerX;
 		this.player.y = playerY;
@@ -21,7 +21,7 @@ public class Map {
 		this.chest = chest;
 		this.sign = sign;
 	}
-	
+
 	public void draw(Graphics g) {
 		//Draw the shells
 		for (Shell shell : shells) {
@@ -40,36 +40,37 @@ public class Map {
 		for (Enemy e : enemies) {
 			e.draw(g);
 		}
-		
+
 		for (Stone stone : Game.currentMap.stones) {
 			stone.draw(g);
 		}
 		if(chest != null) chest.draw(g);
 		if(sign != null) sign.draw(g);
-		
+
 		//Draw the player
 		Globals.player.draw(g);
 	}
-
+	
+	//TODO: UPDATE
 	public void update(float tslf) {
-		//TODO: Update System
-		if(Game.state == Game.RUNNING) {
-			//Updating the shells
-			for (Shell shell : shells) {
-				shell.update(tslf);
-			}
-			//Updating the player
-			Globals.player.update(tslf);
-			//Updating the enemies
-			for (Enemy e : enemies) {
-				e.update(tslf);
-			}
-			
-			//Removal of the enemies
-			for (int i = 0; i < enemies.size(); i++) {
-				Enemy e = enemies.get(i);
-				if(e.canBeRemoved())enemies.remove(e);
-			}
+		//Updating the shells
+		for (Shell shell : shells) {
+			shell.update(tslf);
+		}
+		
+		//Updating the player
+		Globals.player.update(tslf);
+		
+		//Updating the enemies
+		for (int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			e.update(tslf);
+		}
+
+		//Removal of the enemies
+		for (int i = 0; i < enemies.size(); i++) {
+			Enemy e = enemies.get(i);
+			if(e.canBeRemoved())enemies.remove(e);
 		}
 
 		if(chest != null) chest.update(tslf);

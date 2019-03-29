@@ -18,7 +18,7 @@ public class Eden extends Object{
 	/**
 	 * The walking speed in idle mode (in pixels per seconds)
 	 */
-	int idleWalkSpeed = 250;
+	int idleWalkSpeed = 350;
 	int shotWalkSpeed = 75;
 	float currentWalkSpeed;
 
@@ -77,7 +77,7 @@ public class Eden extends Object{
 		this.x = 400;
 		this.y = 400;
 		this.size = 16;
-		this.gun = new SinglefireGun(this);
+		this.gun = new TripleMachineGun(this);
 	}
 
 	/**
