@@ -1,4 +1,6 @@
-package game;
+package enemies;
+
+import game.Game;
 
 public class SummonerEnemy extends Enemy{
 

@@ -3,12 +3,16 @@ package game;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import enemies.Boss;
+import enemies.Enemy;
+import guns.Shell;
+
 public class Map {
 
 	Eden player = Globals.player;
-	ArrayList<Enemy> enemies;
-	ArrayList<Stone> stones;
-	ArrayList<Shell> shells;
+	public ArrayList<Enemy> enemies;
+	public ArrayList<Stone> stones;
+	public ArrayList<Shell> shells;
 	Chest chest;
 	Sign sign;
 

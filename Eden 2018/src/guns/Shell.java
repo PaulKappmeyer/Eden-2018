@@ -1,7 +1,12 @@
-package game;
+package guns;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import game.Direction;
+import game.Game;
+import game.Globals;
+import game.Stone;
 
 public class Shell {
 
@@ -13,7 +18,7 @@ public class Shell {
 	float speedVariation = 5;
 	float finalSpeed;
 	float speed;
-	static final int SIZE = 4;
+	public static final int SIZE = 4;
 	int direction;
 	int angleVariation = 30;
 	boolean disabled = false;

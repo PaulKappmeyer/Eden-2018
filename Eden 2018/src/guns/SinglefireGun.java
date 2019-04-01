@@ -1,4 +1,8 @@
-package game;
+package guns;
+
+import game.Game;
+import game.Globals;
+import game.Object;
 
 public class SinglefireGun extends Gun{
 
@@ -8,7 +12,7 @@ public class SinglefireGun extends Gun{
 	public SinglefireGun(Object owner) {
 		super(owner);
 		mode = SINGLEFIRE;
-		damage = 20;
+		damage = 50;
 	}
 
 	@Override

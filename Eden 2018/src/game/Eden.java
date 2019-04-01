@@ -5,6 +5,10 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import enemies.Enemy;
+import guns.Gun;
+import guns.SinglefireGun;
+
 /**
  * This is the class of the player named "Eden"
  * @author Paul Kappmeyer
@@ -22,7 +26,7 @@ public class Eden extends Object{
 	int shotWalkSpeed = 75;
 	float currentWalkSpeed;
 
-	double walkVelocityX;
+	public double walkVelocityX;
 	double walkVelocityY;
 
 	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
@@ -33,7 +37,7 @@ public class Eden extends Object{
 	public static final int SHOOTING = 2;
 	int state = 0; // the state the player is currently in
 
-	Gun gun;
+	public Gun gun;
 
 	Direction walkDirection;
 
@@ -46,10 +50,10 @@ public class Eden extends Object{
 	float currentKnockbackSpeed;
 	float timeKnockedBack;
 	final float enemyImpact = 500;
-	final float bulletImpact = 250;
+	public final float bulletImpact = 250;
 
 	//Got-Hit animation
-	boolean gotHit = false;
+	public boolean gotHit = false;
 	float blink;
 	float blinktime = 0.05f;
 	float blinkfromStart;
@@ -277,66 +281,54 @@ public class Eden extends Object{
 		}
 	}
 
-	public void stopKnockback() {
-		knockbackVelocityX = 0;
-		knockbackVelocityY = 0;
-		gotKnockbacked = false;
-		timeKnockedBack = 0;
-		currentKnockbackSpeed = 0;
-	}
-
 	/**
 	 * This function checks the input, either update the {@link #x} or {@link #y} position or start shooting
 	 * @param tslf
 	 */
 	public void updateInput(float tslf) {
 		//Up
-		if(isUpKeyDown() && !(isLeftKeyDown() || isRightKeyDown())) {
+		if(Input.isUpKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			walkDirection = Direction.UP;
 			walkVelocityX = 0;
 			walkVelocityY = -1;
 		}
-		if(isUpKeyDown() && isLeftKeyDown()) {
+		if(Input.isUpKeyDown() && Input.isLeftKeyDown()) {
 			if(state == IDLE) state = WALKING;
-			walkDirection = Direction.UP;
 			walkVelocityX = Math.sin(Math.PI * 5/4);
 			walkVelocityY = Math.cos(Math.PI * 5/4);
 		}
-		if(isUpKeyDown() && isRightKeyDown()) {
+		if(Input.isUpKeyDown() && Input.isRightKeyDown()) {
 			if(state == IDLE) state = WALKING;
-			walkDirection = Direction.UP;
 			walkVelocityX = Math.sin(Math.PI * 3/4);
 			walkVelocityY = Math.cos(Math.PI * 3/4);
 		}
 		//Down
-		if(isDownKeyDown() && !(isLeftKeyDown() || isRightKeyDown())){
+		if(Input.isDownKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())){
 			if(state == IDLE) state = WALKING;
 			walkDirection = Direction.DOWN;
 			walkVelocityX = 0;
 			walkVelocityY = 1;
 		}
-		if(isDownKeyDown() && isLeftKeyDown()){
+		if(Input.isDownKeyDown() && Input.isLeftKeyDown()){
 			if(state == IDLE) state = WALKING;
-			walkDirection = Direction.DOWN;
 			walkVelocityX = Math.sin(Math.PI * 7/4);
 			walkVelocityY = Math.cos(Math.PI * 7/4);
 		}
-		if(isDownKeyDown() && isRightKeyDown()){
+		if(Input.isDownKeyDown() && Input.isRightKeyDown()){
 			if(state == IDLE) state = WALKING;
-			walkDirection = Direction.DOWN;
 			walkVelocityX = Math.sin(Math.PI * 1/4);
 			walkVelocityY = Math.cos(Math.PI * 1/4);
 		}
 		//Left
-		if(isLeftKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
+		if(Input.isLeftKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			walkDirection = Direction.LEFT ;
 			walkVelocityX = -1;
 			walkVelocityY = 0;
 		}
 		//Right
-		if(isRightKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
+		if(Input.isRightKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
 			walkDirection = Direction.RIGHT;
 			walkVelocityX = 1;
@@ -344,7 +336,7 @@ public class Eden extends Object{
 		}
 
 		//Reset Walking
-		if(state == WALKING && !(isUpKeyDown() || isDownKeyDown() || isLeftKeyDown()|| isRightKeyDown())) {
+		if(state == WALKING && !(Input.isUpKeyDown() || Input.isDownKeyDown() || Input.isLeftKeyDown()|| Input.isRightKeyDown())) {
 			resetWalking();
 			state = IDLE;
 		}
@@ -436,13 +428,21 @@ public class Eden extends Object{
 	 * @param ammount
 	 */
 	public void startKnockback(float angle, float ammount, float time) {
-		if(gotKnockbacked) return;
+		if(gotKnockbacked) stopKnockback();;
 		gotKnockbacked = true;
 		calculateKnockbackVelocity(angle);
 		maxKnockback = ammount;
 		maxKnockbackTime = time;
 	}
 
+	public void stopKnockback() {
+		knockbackVelocityX = 0;
+		knockbackVelocityY = 0;
+		gotKnockbacked = false;
+		timeKnockedBack = 0;
+		currentKnockbackSpeed = 0;
+	}
+	
 	/**
 	 * This function applies knock-back to the player for example when he gets hit by an enemy
 	 * @param angle The angle in which the player gets knocked back
@@ -460,19 +460,5 @@ public class Eden extends Object{
 		walkVelocityY = 0;
 		currentWalkSpeed = 0;
 		timeSpeededUp = 0;
-	}
-
-	//Key inputs
-	public boolean isUpKeyDown() {
-		return Controls.isKeyDown(KeyEvent.VK_W) || Controls.isKeyDown(KeyEvent.VK_UP);
-	}
-	public boolean isDownKeyDown() {
-		return Controls.isKeyDown(KeyEvent.VK_S) || Controls.isKeyDown(KeyEvent.VK_DOWN);
-	}
-	public boolean isLeftKeyDown() {
-		return Controls.isKeyDown(KeyEvent.VK_A) || Controls.isKeyDown(KeyEvent.VK_LEFT);
-	}
-	public boolean isRightKeyDown() {
-		return Controls.isKeyDown(KeyEvent.VK_D) || Controls.isKeyDown(KeyEvent.VK_RIGHT);
 	}
 }

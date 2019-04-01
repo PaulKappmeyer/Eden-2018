@@ -3,12 +3,18 @@ package game;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import enemies.Boss;
+import enemies.Enemy;
+import enemies.JumpEnemy;
+import enemies.RoundEnemy;
+import enemies.SummonerEnemy;
+
 public class Game {
 
 	int mapX = 1;
 	int mapY = 1;
 	Map[][]maps;
-	static Map currentMap;
+	public static Map currentMap;
 
 	public static Gamestate state = Gamestate.RUNNING;
 

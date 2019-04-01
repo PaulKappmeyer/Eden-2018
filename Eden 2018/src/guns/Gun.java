@@ -1,26 +1,29 @@
-package game;
+package guns;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import enemies.Enemy;
+import game.Eden;
+import game.Game;
+import game.Globals;
+import game.Object;
+
 public abstract class Gun {
 	
 	int mode;
-	float recoilSpeed = 5.75f;
-	float recoilVelocityX;
-	float recoilVelocityY;
 	//Delay
-	float shottime = 0.125f;
+	public float shottime = 0.125f;
 	//Time since last shot
 	float tsls = shottime;
 	//Can shot again?
-	boolean canShot;
+	public boolean canShot;
 	
 	float damage;
 	Object owner;
 
-	ArrayList<Projectile> projectiles;
+	public ArrayList<Projectile> projectiles;
 
 	public Gun(Object owner) {
 		this.owner = owner;
@@ -115,9 +118,7 @@ public abstract class Gun {
 	 * @param angle The angle in which the player should get the recoil
 	 */
 	public void applyRecoil(float angle) {
-		Globals.player.startKnockback(angle - 180, 10f, 0.1f);
-		Globals.player.walkVelocityX -= (float) Math.sin(Math.toRadians(angle));
-		recoilVelocityY -= (float) Math.cos(Math.toRadians(angle));
+		Globals.player.startKnockback(angle - 180, 25f, 0.1f);
 	}
 
 }

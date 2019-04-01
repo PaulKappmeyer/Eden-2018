@@ -1,4 +1,8 @@
-package game;
+package guns;
+
+import game.Game;
+import game.Globals;
+import game.Object;
 
 public class RocketLuncher extends Gun{
 

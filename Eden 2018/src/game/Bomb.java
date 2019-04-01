@@ -3,6 +3,8 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import enemies.Enemy;
+
 public class Bomb {
 
 	float x;

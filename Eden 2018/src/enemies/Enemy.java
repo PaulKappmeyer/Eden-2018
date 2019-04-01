@@ -1,7 +1,14 @@
-package game;
+package enemies;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import game.Collision;
+import game.Game;
+import game.Globals;
+import game.Object;
+import game.Stone;
+import guns.Projectile;
 
 /**
  * 
@@ -25,7 +32,7 @@ public class Enemy extends Object{
 	boolean speedUp = true;
 	//Health
 	int health = 200;
-	boolean alive = true;
+	public boolean alive = true;
 	//Got-Hit animation
 	boolean isInHitAnimation = false;
 	float timeBlinked;
@@ -46,8 +53,8 @@ public class Enemy extends Object{
 	float knockbackVelocityY;
 	float currentKnockbackSpeed;
 	float timeKnockedBack;
-	float bulletImpact = 325;
-	float bulletImpactTime = 0.1f;
+	public float bulletImpact = 325;
+	public float bulletImpactTime = 0.1f;
 
 	/**
 	 * Constructor; initializes the enemy

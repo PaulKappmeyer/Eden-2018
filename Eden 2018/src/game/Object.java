@@ -10,19 +10,19 @@ public class Object {
 	/**
 	 * The X-coordinate of the object
 	 */
-	float x;
+	public float x;
 	/**
 	 * The Y-coordinate of the object
 	 */
-	float y;
+	public float y;
 	/**
 	 * The size of the object meaning it is an square
 	 */
-	int size;
+	public int size;
 	/**
 	 * The direction in which the object is potentially shooting
 	 */
-	Direction shotDirection;
+	public Direction shotDirection;
 	
 	//--------------------------------------------Constructors
 	/**

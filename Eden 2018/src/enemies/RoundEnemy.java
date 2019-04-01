@@ -1,8 +1,12 @@
-package game;
+package enemies;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import game.Globals;
+import guns.Bullet;
+import guns.Projectile;
 
 public class RoundEnemy extends Enemy{
 

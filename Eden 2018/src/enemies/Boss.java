@@ -1,7 +1,12 @@
-package game;
+package enemies;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import game.Globals;
+import guns.CirclefireGun;
+import guns.Gun;
+import guns.Projectile;
 
 /**
  * 
@@ -10,7 +15,7 @@ import java.awt.Graphics;
  */
 public class Boss extends Enemy{
 
-	Gun gun;
+	public Gun gun;
 
 	public Boss(float x, float y) {
 		super(x, y);

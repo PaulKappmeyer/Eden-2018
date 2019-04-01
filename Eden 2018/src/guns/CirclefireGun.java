@@ -1,4 +1,7 @@
-package game;
+package guns;
+
+import game.Game;
+import game.Object;
 
 public class CirclefireGun extends Gun{
 

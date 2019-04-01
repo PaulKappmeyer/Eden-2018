@@ -1,19 +1,21 @@
-package game;
+package guns;
 
 import java.awt.Graphics;
 
+import game.Object;
+
 public abstract class Projectile {
 
-	float x;
-	float y;
-	float velocityX;
-	float velocityY;
-	float speed;
-	float angle;
-	boolean disabled;
+	public float x;
+	public float y;
+	public float velocityX;
+	public float velocityY;
+	public float speed;
+	public float angle;
+	public boolean disabled;
 	//Die animation attributes
-	boolean dieAnimation;			//if is in die animation
-	float maxExplosionRadius;		//maximal radius
+	public boolean dieAnimation;			//if is in die animation
+	public float maxExplosionRadius;		//maximal radius
 	float explosionRadiusIncrease; 	//increase per second
 	float currentRadius; 			//current radius
 	

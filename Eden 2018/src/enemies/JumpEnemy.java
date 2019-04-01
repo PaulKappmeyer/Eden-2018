@@ -1,7 +1,11 @@
-package game;
+package enemies;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import game.Game;
+import game.Globals;
+import game.Stone;
 
 public class JumpEnemy extends Enemy{
 

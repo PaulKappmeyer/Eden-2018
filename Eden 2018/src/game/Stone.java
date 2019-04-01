@@ -5,10 +5,10 @@ import java.awt.Graphics;
 
 public class Stone {
 
-	int x;
-	int y;
-	int width;
-	int height;
+	public int x;
+	public int y;
+	public int width;
+	public int height;
 
 	public Stone(int x, int y, int width, int height) {
 		this.x = x;

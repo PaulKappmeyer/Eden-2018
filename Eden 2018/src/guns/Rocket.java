@@ -1,7 +1,14 @@
-package game;
+package guns;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import enemies.Enemy;
+import game.Game;
+import game.Globals;
+import game.Object;
+import game.Screen;
+import game.Stone;
 
 public class Rocket extends Projectile{
 	//TODO: Combine in one class with Bullet
