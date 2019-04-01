@@ -18,7 +18,7 @@ public class Chest {
 	public Chest(int x, int y) {
 		this.x = x;
 		this.y = y;
-		String[]text = new String[]{"Ohhh das ist eine Kiste! Zum interagieren q drücken", "Hier erhälst du deine erste Waffe!", "Mit Leertaste kannst du sie abfeuern", "Jetz erledige den Gegner!"};
+		String[]text = new String[]{"Ohhh das ist eine Kiste! Zum interagieren e drücken", "Hier erhälst du deine erste Waffe!", "Mit Leertaste kannst du sie abfeuern", "Jetz erledige den Gegner!"};
 		textbox = new Textbox(text);
 	}
 
@@ -33,21 +33,21 @@ public class Chest {
 
 	public void interact() {
 		if(textbox.state == Textbox.HIGHEST_POINT) {
-			if(Controls.isKeyDown(KeyEvent.VK_Q) && !pressed) {
+			if(Controls.isKeyDown(KeyEvent.VK_E) && !pressed) {
 				checkForPlayer = false;
-				Game.state = Game.INTERACTING;
+				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
 				if(textbox.index >= textbox.text.length) {
-					textbox.index = textbox.text.length - 1;
+					textbox.index = 0;
 					textbox.disappear();
 					if(Globals.player.gun == null) {
 						Globals.player.gun = new SinglefireGun(Globals.player);
 					}
-					Game.state = Game.RUNNING;
+					Game.state = Gamestate.RUNNING;
 				}
 				pressed = true;
 			}
-			if(!Controls.isKeyDown(KeyEvent.VK_Q) && pressed) {
+			if(!Controls.isKeyDown(KeyEvent.VK_E) && pressed) {
 				pressed = false;
 			}
 		}

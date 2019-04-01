@@ -81,19 +81,19 @@ public class Shell {
 	 * This function takes the direction at which was shot and calculates an angle at which the shell should fly and sets the velocity
 	 * @param direction The direction at which was shot
 	 */
-	public void setVelocity(int direction) {
+	public void setVelocity(Direction direction) {
 		int angle = 0; //in degrees;
 		switch (direction) {
-		case Eden.UP:
+		case UP:
 			angle = 0;
 			break;
-		case Eden.DOWN:
+		case DOWN:
 			angle = 180;
 			break;
-		case Eden.LEFT:
+		case LEFT:
 			angle = 90;
 			break;
-		case Eden.RIGHT:
+		case RIGHT:
 			angle = 270;
 			break;
 		default:

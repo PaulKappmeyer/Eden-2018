@@ -71,9 +71,14 @@ public class Screen extends JFrame{
 		game.draw(g);
 		
 		//Draw the alpha mask
-		if(Game.state == Game.INTERACTING) {
+		if(Game.state == Gamestate.INTERACTING) {
 			g.setColor(new Color(100, 100, 100, 50));
 			g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
+		}
+		
+		//Screenshake
+		if(screenshake) {
+			g.translate(-screenshakeX, -screenshakeY);
 		}
 		
 		//FPS

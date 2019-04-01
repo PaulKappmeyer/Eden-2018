@@ -35,11 +35,7 @@ public class Eden extends Object{
 
 	Gun gun;
 
-	public static final int UP = 0;
-	public static final int DOWN = 1;
-	public static final int LEFT = 2;
-	public static final int RIGHT = 3;
-	int direction;
+	Direction walkDirection;
 
 	//Knockback
 	boolean gotKnockbacked;
@@ -77,7 +73,10 @@ public class Eden extends Object{
 		this.x = 400;
 		this.y = 400;
 		this.size = 16;
-		this.gun = new TripleMachineGun(this);
+		this.gun = new SinglefireGun(this);
+		
+		walkDirection = Direction.UP;
+		shotDirection = Direction.UP;
 	}
 
 	/**
@@ -85,13 +84,33 @@ public class Eden extends Object{
 	 * @param g A Graphics Object to draw the player
 	 * @see Graphics
 	 */
+	int a = 5;
 	public void draw(Graphics g) {
 		//Drawing of the player
 		g.setColor(Color.BLUE);
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		
+		g.setColor(Color.RED);
+		switch (shotDirection) {
+		case UP:
+			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+			break;
+		case DOWN:
+			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+			break;
+		case RIGHT:
+			g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			break;
+		case LEFT:
+			g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			break;
 
+		default:
+			break;
+		}
+		
 		//Got-Hit-animation
 		if(gotHit) {
 			if(blink > blinktime) {
@@ -140,6 +159,7 @@ public class Eden extends Object{
 		if(state == SHOOTING) {
 			currentWalkSpeed = shotWalkSpeed;
 		}else if(state == WALKING) {
+			shotDirection = walkDirection;
 			if(timeSpeededUp >= timeForSpeedUp) {
 				currentWalkSpeed = idleWalkSpeed;
 			}else {
@@ -273,52 +293,52 @@ public class Eden extends Object{
 		//Up
 		if(isUpKeyDown() && !(isLeftKeyDown() || isRightKeyDown())) {
 			if(state == IDLE) state = WALKING;
-			direction = UP;
+			walkDirection = Direction.UP;
 			walkVelocityX = 0;
 			walkVelocityY = -1;
 		}
 		if(isUpKeyDown() && isLeftKeyDown()) {
 			if(state == IDLE) state = WALKING;
-			direction = UP;
+			walkDirection = Direction.UP;
 			walkVelocityX = Math.sin(Math.PI * 5/4);
 			walkVelocityY = Math.cos(Math.PI * 5/4);
 		}
 		if(isUpKeyDown() && isRightKeyDown()) {
 			if(state == IDLE) state = WALKING;
-			direction = UP;
+			walkDirection = Direction.UP;
 			walkVelocityX = Math.sin(Math.PI * 3/4);
 			walkVelocityY = Math.cos(Math.PI * 3/4);
 		}
 		//Down
 		if(isDownKeyDown() && !(isLeftKeyDown() || isRightKeyDown())){
 			if(state == IDLE) state = WALKING;
-			direction = DOWN;
+			walkDirection = Direction.DOWN;
 			walkVelocityX = 0;
 			walkVelocityY = 1;
 		}
 		if(isDownKeyDown() && isLeftKeyDown()){
 			if(state == IDLE) state = WALKING;
-			direction = DOWN;
+			walkDirection = Direction.DOWN;
 			walkVelocityX = Math.sin(Math.PI * 7/4);
 			walkVelocityY = Math.cos(Math.PI * 7/4);
 		}
 		if(isDownKeyDown() && isRightKeyDown()){
 			if(state == IDLE) state = WALKING;
-			direction = DOWN;
+			walkDirection = Direction.DOWN;
 			walkVelocityX = Math.sin(Math.PI * 1/4);
 			walkVelocityY = Math.cos(Math.PI * 1/4);
 		}
 		//Left
 		if(isLeftKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
-			direction = LEFT ;
+			walkDirection = Direction.LEFT ;
 			walkVelocityX = -1;
 			walkVelocityY = 0;
 		}
 		//Right
 		if(isRightKeyDown() && !(isUpKeyDown() || isDownKeyDown())) {
 			if(state == IDLE) state = WALKING;
-			direction = RIGHT;
+			walkDirection = Direction.RIGHT;
 			walkVelocityX = 1;
 			walkVelocityY = 0;
 		}
@@ -332,7 +352,7 @@ public class Eden extends Object{
 		//Shooting
 		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit && gun != null) {
 			if(gun.canShot) {
-				if(state == IDLE || state == WALKING) shotDirection = direction;
+				if(state == IDLE || state == WALKING) shotDirection = walkDirection;
 
 				state = SHOOTING;
 				gun.shot();

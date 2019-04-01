@@ -22,7 +22,7 @@ public class Object {
 	/**
 	 * The direction in which the object is potentially shooting
 	 */
-	int shotDirection;
+	Direction shotDirection;
 	
 	//--------------------------------------------Constructors
 	/**

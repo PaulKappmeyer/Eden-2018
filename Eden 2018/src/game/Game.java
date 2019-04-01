@@ -10,12 +10,7 @@ public class Game {
 	Map[][]maps;
 	static Map currentMap;
 
-	public static final int RUNNING = 1;
-	public static final int MAP_TRANSITION = 3;
-	public static final int RESET = 2;
-	public static final int MAP_TRANSITION_OUT = 4;
-	public static final int INTERACTING = 5;
-	public static int state = RUNNING;
+	public static Gamestate state = Gamestate.RUNNING;
 
 	ScreenTransition transition = new ScreenTransition();
 	
@@ -85,28 +80,28 @@ public class Game {
 	//TODO:Update System
 	public void update(float tslf) {
 		//RUNNING
-		if(state == RUNNING) {
+		if(state == Gamestate.RUNNING) {
 			currentMap.update(tslf);
 			//Map transition
 			checkCollisionPlayerToWall();
 		
 		//INTERACTING
-		}else if(state == INTERACTING){
-			currentMap.update(tslf);
+		}else if(state == Gamestate.INTERACTING){
+			currentMap.chest.update(tslf);
 		}
 		
 		//SCREEN TRANSITION
-		else if(Game.state == Game.MAP_TRANSITION) {
+		else if(Game.state == Gamestate.MAP_TRANSITION_IN) {
 			currentMap.update(tslf/2);
 			transition.update(tslf);
 		}
-		else if(Game.state == Game.MAP_TRANSITION_OUT) {
+		else if(Game.state == Gamestate.MAP_TRANSITION_OUT) {
 			transition.update(tslf);
 		}
 		
 		//RESETING : SET NEW MAP
-		else if(state == RESET) {
-			state = MAP_TRANSITION_OUT;
+		else if(state == Gamestate.RESET) {
+			state = Gamestate.MAP_TRANSITION_OUT;
 			switchMap(); 
 		}
 	}
@@ -114,28 +109,28 @@ public class Game {
 	public void draw(Graphics g) {
 		currentMap.draw(g);
 		
-		if(Game.state == Game.MAP_TRANSITION || Game.state == Game.MAP_TRANSITION_OUT || Game.state == Game.RESET) {	
+		if(Game.state == Gamestate.MAP_TRANSITION_IN || Game.state == Gamestate.MAP_TRANSITION_OUT || Game.state == Gamestate.RESET) {	
 			transition.draw(g);
 		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
-	int direction;
+	Direction direction;
 	public void switchMap() {
 		if(Globals.player.gun != null) {
 			Globals.player.gun.projectiles.removeAll(Globals.player.gun.projectiles);
 		}
 		switch (direction) {
-		case Eden.RIGHT:
+		case RIGHT:
 			Globals.player.x = 5;
 			break;
-		case Eden.LEFT:
+		case LEFT:
 			Globals.player.x = Globals.width - 5 - Globals.player.size;
 			break;
-		case Eden.DOWN:
+		case DOWN:
 			Globals.player.y = 5;
 			break;
-		case Eden.UP:
+		case UP:
 			Globals.player.y = Globals.height - 5 - Globals.player.size;
 			break;
 		default:
@@ -144,27 +139,27 @@ public class Game {
 		currentMap = maps[mapX][mapY];
 	}
 
-	public void beginMapTransition(int direction) {
-		Game.state = Game.MAP_TRANSITION;
+	public void beginMapTransition(Direction direction) {
+		Game.state = Gamestate.MAP_TRANSITION_IN;
 		this.direction = direction;
 		transition.startTransition(direction);
 	}
 
 	public void checkCollisionPlayerToWall() {
 		if(Globals.player.x <= 0 && mapX > 0) {
-			beginMapTransition(Eden.LEFT);
+			beginMapTransition(Direction.LEFT);
 			mapX --;
 		}
 		if(Globals.player.y <= 0 && mapY > 0) {
-			beginMapTransition(Eden.UP);
+			beginMapTransition(Direction.UP);
 			mapY --;
 		}
 		if(Globals.player.x + Globals.player.size >= Globals.width && mapX < maps.length-1) {
-			beginMapTransition(Eden.RIGHT);
+			beginMapTransition(Direction.RIGHT);
 			mapX ++;
 		}
 		if(Globals.player.y + Globals.player.size >= Globals.height && mapY < maps[mapX].length-1) {
-			beginMapTransition(Eden.DOWN);
+			beginMapTransition(Direction.DOWN);
 			mapY ++;
 		}
 	}

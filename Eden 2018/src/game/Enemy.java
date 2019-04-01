@@ -15,6 +15,7 @@ public class Enemy extends Object{
 	int triggerDistance = 300;
 	boolean followplayer;
 	//Movement
+	float walkAngle;
 	double walkVelocityX;
 	double walkVelocityY;
 	int maxWalkspeed = 80;
@@ -110,13 +111,13 @@ public class Enemy extends Object{
 			}
 			//Movement follow player
 			if(followplayer) {
-				float angle = (float) Math.atan(distx / disty);
-				angle = (float) Math.toDegrees(angle);
-				if(playercentery > enemycentery) angle =  -90 - (90-angle);
-				if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
+				walkAngle = (float) Math.atan(distx / disty);
+				walkAngle = (float) Math.toDegrees(walkAngle);
+				if(playercentery > enemycentery) walkAngle =  -90 - (90-walkAngle);
+				if(playercenterx < enemycenterx && playercentery < enemycentery) walkAngle = -270 - (90-walkAngle);
 
-				walkVelocityX = -Math.sin(Math.toRadians(angle));
-				walkVelocityY = -Math.cos(Math.toRadians(angle));
+				walkVelocityX = -Math.sin(Math.toRadians(walkAngle));
+				walkVelocityY = -Math.cos(Math.toRadians(walkAngle));
 
 				if(distx == 0 && disty == 0) {
 					walkVelocityX = 0;

@@ -35,12 +35,12 @@ public class Sign {
 		if(textbox.state == Textbox.HIGHEST_POINT) {
 			if(Controls.isKeyDown(KeyEvent.VK_Q) && !pressed) {
 				checkForPlayer = false;
-				Game.state = Game.INTERACTING;
+				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
 				if(textbox.index >= textbox.text.length) {
 					textbox.index = textbox.text.length - 1;
 					textbox.disappear();
-					Game.state = Game.RUNNING;
+					Game.state = Gamestate.RUNNING;
 
 				}
 				pressed = true;
