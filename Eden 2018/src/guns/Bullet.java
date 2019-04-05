@@ -19,11 +19,11 @@ public class Bullet extends Projectile{
 	 * @param y The y-position of the bullet
 	 * @param angle The angle at which the bullet is shot; the velocity is calculate on the angle
 	 */
-	public Bullet(float x, float y, float angle) {
+	public Bullet(float x, float y, float angle, float speed) {
 		this.x = x;
 		this.y = y;
 		this.angle = angle;
-		this.speed = 450;
+		this.speed = speed;
 		this.velocityX = (float) Math.sin(Math.toRadians(angle));
 		this.velocityY = (float) Math.cos(Math.toRadians(angle));
 	}

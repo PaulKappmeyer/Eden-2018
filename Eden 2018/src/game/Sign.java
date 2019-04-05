@@ -2,7 +2,8 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
+
+import input.Input;
 
 public class Sign {
 
@@ -33,7 +34,7 @@ public class Sign {
 
 	public void interact() {
 		if(textbox.state == Textbox.HIGHEST_POINT) {
-			if(Controls.isKeyDown(KeyEvent.VK_Q) && !pressed) {
+			if(Input.isInteractingKeyDown() && !pressed) {
 				checkForPlayer = false;
 				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
@@ -45,7 +46,7 @@ public class Sign {
 				}
 				pressed = true;
 			}
-			if(!Controls.isKeyDown(KeyEvent.VK_Q) && pressed) {
+			if(!Input.isInteractingKeyDown() && pressed) {
 				pressed = false;
 			}
 		}

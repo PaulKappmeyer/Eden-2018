@@ -20,6 +20,8 @@ public abstract class Gun {
 	//Can shot again?
 	public boolean canShot;
 	
+	float bulletSpeed = 500;
+	
 	float damage;
 	Object owner;
 
@@ -113,6 +115,8 @@ public abstract class Gun {
 	 */
 	public abstract void shot();
 
+	public abstract void shot(float angle);
+	
 	/**
 	 * This function applies recoil to the player
 	 * @param angle The angle in which the player should get the recoil

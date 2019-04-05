@@ -1,6 +1,6 @@
 package game;
 
-import java.awt.event.KeyEvent;
+import input.Input;
 
 public class GameLoop implements Runnable{
 	boolean running = true;
@@ -59,7 +59,7 @@ public class GameLoop implements Runnable{
 				}
 			}
 			
-			if(Controls.isKeyDown(KeyEvent.VK_ESCAPE))System.exit(0);
+			if(Input.isEscapeKeyDown())System.exit(0);
 		}
 	}
 }

@@ -2,9 +2,9 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
 import guns.SinglefireGun;
+import input.Input;
 
 public class Chest {
 
@@ -35,7 +35,7 @@ public class Chest {
 
 	public void interact() {
 		if(textbox.state == Textbox.HIGHEST_POINT) {
-			if(Controls.isKeyDown(KeyEvent.VK_E) && !pressed) {
+			if(Input.isInteractingKeyDown() && !pressed) {
 				checkForPlayer = false;
 				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
@@ -49,7 +49,7 @@ public class Chest {
 				}
 				pressed = true;
 			}
-			if(!Controls.isKeyDown(KeyEvent.VK_E) && pressed) {
+			if(!Input.isInteractingKeyDown() && pressed) {
 				pressed = false;
 			}
 		}

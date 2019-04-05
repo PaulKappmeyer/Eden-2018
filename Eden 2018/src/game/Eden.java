@@ -2,12 +2,13 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import enemies.Enemy;
 import guns.Gun;
 import guns.SinglefireGun;
+import input.Input;
+import input.MouseinputManager;
 
 /**
  * This is the class of the player named "Eden"
@@ -22,7 +23,7 @@ public class Eden extends Object{
 	/**
 	 * The walking speed in idle mode (in pixels per seconds)
 	 */
-	int idleWalkSpeed = 350;
+	int idleWalkSpeed = 250;
 	int shotWalkSpeed = 75;
 	float currentWalkSpeed;
 
@@ -141,7 +142,7 @@ public class Eden extends Object{
 	 * This function updates the player; gets called every frame; first checks for input; second updates the movement
 	 * @param tslf The time since the last frame in seconds; should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
 	 */
-	public void update(float tslf) {
+	public void update(float tslf) {	
 		//Update the gun
 		if(gun != null) gun.update(tslf);
 
@@ -342,21 +343,33 @@ public class Eden extends Object{
 		}
 
 		//Shooting
-		if(Controls.isKeyDown(KeyEvent.VK_SPACE) && !gotHit && gun != null) {
+		if(Input.isShootingKeyDown() && !gotHit && gun != null) {
 			if(gun.canShot) {
 				if(state == IDLE || state == WALKING) shotDirection = walkDirection;
 
 				state = SHOOTING;
-				gun.shot();
+				//TODO: Rework the angle system
+				float mcx = MouseinputManager.getMouseX();
+				float mcy = MouseinputManager.getMouseY();
+				float pcx = this.x + this.size/2;
+				float pcy = this.y + this.size/2;
+
+				float distx = pcx - mcx;
+				float disty = pcy - mcy;
+				float angle = (float) Math.atan(distx / disty);
+				angle = (float) Math.toDegrees(angle);
+				if(pcy > mcy) angle =  -90 - (90-angle);
+				if(pcx < mcx && pcy < mcy) angle = -270 - (90-angle); 
+				gun.shot(angle);
 				resetWalking();
 			}
 		}
-		if(state == SHOOTING && !Controls.isKeyDown(KeyEvent.VK_SPACE)) {
+		if(state == SHOOTING && !Input.isShootingKeyDown()) {
 			state = Eden.IDLE;
 		}
 
 		//Shockwave
-		if(Controls.isKeyDown(KeyEvent.VK_R) && shockwave == false) {
+		if(Input.isSpecialKey1Down() && shockwave == false) {
 			shockwave = true;
 			shockwaveX = this.x + size/2;
 			shockwaveY = this.y + size/2;
@@ -364,7 +377,7 @@ public class Eden extends Object{
 		}
 
 		//Bombs
-		if(Controls.isKeyDown(KeyEvent.VK_Q)) {
+		if(Input.isSpecialKey2Down()) {
 			if(gun.canShot) bombs.add(new Bomb(this.x, this.y));
 			gun.canShot = false;
 		}

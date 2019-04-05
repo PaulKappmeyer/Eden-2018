@@ -37,7 +37,7 @@ public class RoundEnemy extends Enemy{
 				if(distance <= radius * radius) {
 					if(!followplayer) followplayer = true;
 					//Add a new Bullet
-					Bullet b = new Bullet(projectile.x, projectile.y, projectile.angle - 180);
+					Bullet b = new Bullet(projectile.x, projectile.y, projectile.angle - 180, 600);
 					b.velocityX = 0;
 					b.velocityY = 0;
 					this.bullets.add(b);
@@ -122,7 +122,7 @@ public class RoundEnemy extends Enemy{
 	@Override
 	public void getHitByProjectile(Projectile p, float damage) {
 		//Add a new Bullet
-		Bullet b = new Bullet(p.x, p.y, p.angle - 180);
+		Bullet b = new Bullet(p.x, p.y, p.angle - 180, 600);
 		b.velocityX = 0;
 		b.velocityY = 0;
 		this.bullets.add(b);

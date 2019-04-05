@@ -45,5 +45,10 @@ public class RocketLuncher extends Gun{
 		}
 		canShot = false;
 	}
+
+	@Override
+	public void shot(float angle) {
+		shot();
+	}
 	
 }

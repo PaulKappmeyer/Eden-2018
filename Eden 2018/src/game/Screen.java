@@ -7,6 +7,9 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+import input.KeyboardinputManager;
+import input.MouseinputManager;
+
 /**
  * The screen as a JFrame filled with a BufferStrategy 
  * @author Paul Kappmeyer
@@ -37,7 +40,10 @@ public class Screen extends JFrame{
 		this.setSize(Globals.width + Globals.insetX + i.right, Globals.height + Globals.insetY + i.bottom);
 		this.setLocationRelativeTo(null);
 		
-		this.addKeyListener(new Controls());
+		this.addKeyListener(new KeyboardinputManager());
+		MouseinputManager m = new MouseinputManager();
+		this.addMouseListener(m);
+		this.addMouseMotionListener(m);
 		
 		this.game = game;
 	}
