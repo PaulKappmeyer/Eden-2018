@@ -4,10 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import game.Collision;
-import game.Game;
 import game.Globals;
 import game.Object;
-import game.Stone;
+import game.Obstacle;
 import guns.Projectile;
 
 /**
@@ -206,71 +205,36 @@ public class Enemy extends Object{
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
 		
-		//Top side of stone
-		if(this.y < nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingTopSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					this.y = stone.y - size;
-				}
-			}
+		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
+		
+		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
+		Obstacle obs = collisions[Collision.TOP_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			this.y = obs.y - size;	
 		}
-		//Bottom side of stone
-		if(this.y > nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingBottomSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					this.y = stone.y + stone.height;
-				}
-			}
+		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
+		obs = collisions[Collision.BOTTOM_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			this.y = obs.y + obs.height;
 		}
-		//Left side of stone
-		if(this.x < nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingLeftSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x - size;
-				}
-			}
+		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.LEFT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			this.x = obs.x - size;
 		}
-		//Right side of stone
-		if(this.x > nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingRightSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x + stone.width;
-				}	
-			}
+		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.RIGHT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			this.x = obs.x + obs.width;
 		}
-	}
-
-	public boolean isCollidingTopSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y < stone.y && nextY + size > stone.y) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingBottomSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextX + size > stone.x && nextX < stone.x + stone.width && this.y + size > stone.y + stone.height && nextY < stone.y + stone.height) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingLeftSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x < stone.x && nextX + size > stone.x) {
-			return true;
-		}
-		return false;
-	}
-	public boolean isCollidingRightSideOfStone(float nextX, float nextY, Stone stone) {
-		if(nextY + size > stone.y && nextY < stone.y + stone.height && this.x + size > stone.x + stone.width && nextX < stone.x + stone.width) {
-			return true;
-		}
-		return false;
 	}
 
 	/**

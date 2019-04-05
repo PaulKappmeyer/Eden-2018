@@ -5,29 +5,25 @@ import java.awt.Graphics;
 
 import input.Input;
 
-public class Sign {
+public class Sign extends Obstacle{
 
-	public int x;
-	public int y;
-	public int size = 16;
 	public static int triggerDistance = 75;
 	boolean pressed;
 	boolean checkForPlayer = true;
 
 	Textbox textbox;
 	
-	public Sign(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Sign(int x, int y, int width, int height) {
+		super(x, y, width, height);
 		String[]text = new String[]{"DAS IST EIN SCHILD!"};
 		textbox = new Textbox(text);
 	}
 
 	public void draw(Graphics g) {
 		g.setColor(Color.GREEN);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
 		
 		textbox.draw(g);
 	}
@@ -61,7 +57,7 @@ public class Sign {
 	}
 
 	public void checkForPlayer() {
-		float halfsize = this.size/2;
+		float halfsize = Globals.player.size/2;
 		float playercenterx = Globals.player.x + halfsize;
 		float playercentery = Globals.player.y + halfsize;
 		float enemycenterx = this.x + halfsize;

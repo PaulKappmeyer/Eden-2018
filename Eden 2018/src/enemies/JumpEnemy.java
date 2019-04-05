@@ -3,9 +3,9 @@ package enemies;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.Game;
+import game.Collision;
 import game.Globals;
-import game.Stone;
+import game.Obstacle;
 
 public class JumpEnemy extends Enemy{
 
@@ -176,49 +176,35 @@ public class JumpEnemy extends Enemy{
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed + jumpVeloctiyY * currentJumpSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
 
-		//Top side of stone
-		if(this.y < nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(isCollidingTopSideOfStone(this.x, nextY, stone)) {  
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					jumpVeloctiyY = 0;
-					nextY = stone.y - size;
-				}
-			}
+		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
+		
+		Obstacle obs = collisions[Collision.TOP_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			jumpVeloctiyY = 0;
+			nextY = obs.y - size;
 		}
-		//Bottom side of stone
-		if(this.y > nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(isCollidingBottomSideOfStone(this.x, nextY, stone)) {
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					jumpVeloctiyY = 0;
-					nextY = stone.y + stone.height;
-				}
-			}
+		obs = collisions[Collision.BOTTOM_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			jumpVeloctiyY = 0;
+			nextY = obs.y + obs.height;
 		}
-		//Left side of stone
-		if(this.x < nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(isCollidingLeftSideOfStone(nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					jumpVeloctiyX = 0;
-					nextX = stone.x - size;
-				}
-			}
+		obs = collisions[Collision.LEFT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			jumpVeloctiyX = 0;
+			nextX = obs.x - size;
 		}
-		//Right side of stone
-		if(this.x > nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(isCollidingRightSideOfStone(nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					jumpVeloctiyX = 0;
-					nextX = stone.x + stone.width;
-				}	
-			}
+		obs = collisions[Collision.RIGHT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			jumpVeloctiyX = 0;
+			nextX = obs.x + obs.width;
 		}
 
 		this.x = nextX;

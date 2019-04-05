@@ -19,20 +19,20 @@ public class Game {
 	public static Gamestate state = Gamestate.RUNNING;
 
 	ScreenTransition transition = new ScreenTransition();
-	
+
 	public Game() {
-		ArrayList<Stone>stones = new ArrayList<>();
-		stones.add(new Stone(500, 400, 125, 125));
-		stones.add(new Stone(175, 250, 25, 100));
-		stones.add(new Stone(200, 250, 25, 100));
-		stones.add(new Stone(225, 250, 25, 100));
-		stones.add(new Stone(175, 100, 100, 25));
-		stones.add(new Stone(175, 125, 100, 25));
-		stones.add(new Stone(175, 150, 100, 25));
-		stones.add(new Stone(300, 250, 25, 100));
-		stones.add(new Stone(300, 350, 125, 25));
-		stones.add(new Stone(400, 250, 25, 100));
-		stones.add(new Stone(300, 225, 75, 25));
+		ArrayList<Obstacle>obstacles = new ArrayList<>();
+		obstacles.add(new Stone(500, 400, 125, 125));
+		obstacles.add(new Stone(175, 250, 25, 100));
+		obstacles.add(new Stone(200, 250, 25, 100));
+		obstacles.add(new Stone(225, 250, 25, 100));
+		obstacles.add(new Stone(175, 100, 100, 25));
+		obstacles.add(new Stone(175, 125, 100, 25));
+		obstacles.add(new Stone(175, 150, 100, 25));
+		obstacles.add(new Stone(300, 250, 25, 100));
+		obstacles.add(new Stone(300, 350, 125, 25));
+		obstacles.add(new Stone(400, 250, 25, 100));
+		obstacles.add(new Stone(300, 225, 75, 25));
 
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		enemies.add(new JumpEnemy(500, 100));
@@ -45,41 +45,43 @@ public class Game {
 		enemies.add(new SummonerEnemy(500, 350));
 		enemies.add(new RoundEnemy(600, 100));
 
-		Chest chest = new Chest(100, 100);
-		Sign sign = new Sign(150, 550);
+		
+		obstacles.add(new Chest(100, 100, 16, 16));
+		obstacles.add(new Sign(150, 550, 16, 16));
+		obstacles.add(new House(500, 100, 64, 32));
 		maps = new Map[3][3];
-		maps[1][1] = new Map(100, 400, stones, enemies, chest, sign);
-		
+		maps[1][1] = new Map(100, 400, obstacles, enemies);
+
 		enemies = new ArrayList<>();
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, 0, Globals.width, 25));
-		stones.add(new Stone(0, 25, 25, Globals.height));
-		maps[0][0] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, 0, Globals.width, 25));
-		maps[1][0] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, 0, Globals.width, 25));
-		stones.add(new Stone(Globals.width - 25, 25, 25, Globals.height));
-		maps[2][0] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, 0, 25, Globals.height));
-		maps[0][1] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(Globals.width - 25, 0, 25, Globals.height));
-		maps[2][1] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, 0, 25, Globals.height));
-		stones.add(new Stone(25, Globals.height-25, Globals.width, 25));
-		maps[0][2] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(0, Globals.height-25, Globals.width, 25));
-		maps[1][2] = new Map(400, 400, stones, enemies, null, null);
-		stones = new ArrayList<>();
-		stones.add(new Stone(Globals.width-25, 0, 25, Globals.height));
-		stones.add(new Stone(0, Globals.height-25, Globals.width, 25));
-		maps[2][2] = new Map(400, 400, stones, enemies, null, null);
-		
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, 0, Globals.width, 25));
+		obstacles.add(new Stone(0, 25, 25, Globals.height));
+		maps[0][0] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, 0, Globals.width, 25));
+		maps[1][0] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, 0, Globals.width, 25));
+		obstacles.add(new Stone(Globals.width - 25, 25, 25, Globals.height));
+		maps[2][0] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, 0, 25, Globals.height));
+		maps[0][1] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(Globals.width - 25, 0, 25, Globals.height));
+		maps[2][1] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, 0, 25, Globals.height));
+		obstacles.add(new Stone(25, Globals.height-25, Globals.width, 25));
+		maps[0][2] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(0, Globals.height-25, Globals.width, 25));
+		maps[1][2] = new Map(400, 400, obstacles, enemies);
+		obstacles = new ArrayList<>();
+		obstacles.add(new Stone(Globals.width-25, 0, 25, Globals.height));
+		obstacles.add(new Stone(0, Globals.height-25, Globals.width, 25));
+		maps[2][2] = new Map(400, 400, obstacles, enemies);
+
 		currentMap = maps[mapX][mapY];
 	}
 
@@ -90,12 +92,14 @@ public class Game {
 			currentMap.update(tslf);
 			//Map transition
 			checkCollisionPlayerToWall();
-		
-		//INTERACTING
+
+			//INTERACTING
 		}else if(state == Gamestate.INTERACTING){
-			currentMap.chest.update(tslf);
+			for (Obstacle obs : currentMap.obstacles) {
+				obs.update(tslf);
+			}
 		}
-		
+
 		//SCREEN TRANSITION
 		else if(Game.state == Gamestate.MAP_TRANSITION_IN) {
 			currentMap.update(tslf/2);
@@ -104,7 +108,7 @@ public class Game {
 		else if(Game.state == Gamestate.MAP_TRANSITION_OUT) {
 			transition.update(tslf);
 		}
-		
+
 		//RESETING : SET NEW MAP
 		else if(state == Gamestate.RESET) {
 			state = Gamestate.MAP_TRANSITION_OUT;
@@ -114,7 +118,7 @@ public class Game {
 
 	public void draw(Graphics g) {
 		currentMap.draw(g);
-		
+
 		if(Game.state == Gamestate.MAP_TRANSITION_IN || Game.state == Gamestate.MAP_TRANSITION_OUT || Game.state == Gamestate.RESET) {	
 			transition.draw(g);
 		}

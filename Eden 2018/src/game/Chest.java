@@ -6,29 +6,26 @@ import java.awt.Graphics;
 import guns.SinglefireGun;
 import input.Input;
 
-public class Chest {
+public class Chest extends Obstacle{
 
-	public int x;
-	public int y;
-	public int size = 16;
 	public static int triggerDistance = 75;
 	boolean pressed;
 	boolean checkForPlayer = true;
 
 	Textbox textbox;
 
-	public Chest(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Chest(int x, int y, int width, int height) {
+		super(x, y, width, height);
 		String[]text = new String[]{"Ohhh das ist eine Kiste! Zum interagieren e drücken", "Hier erhälst du deine erste Waffe!", "Mit Leertaste kannst du sie abfeuern", "Jetz erledige den Gegner!"};
 		textbox = new Textbox(text);
 	}
-
+	
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.ORANGE);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
 
 		textbox.draw(g);
 	}
@@ -55,6 +52,7 @@ public class Chest {
 		}
 	}
 
+	@Override
 	public void update(float tslf) {
 		checkForPlayer();
 
@@ -64,7 +62,7 @@ public class Chest {
 	}
 
 	public void checkForPlayer() {
-		float halfsize = this.size/2;
+		float halfsize = Globals.player.size/2;
 		float playercenterx = Globals.player.x + halfsize;
 		float playercentery = Globals.player.y + halfsize;
 		float enemycenterx = this.x + halfsize;

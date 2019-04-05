@@ -3,28 +3,25 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Stone {
+public class Stone extends Obstacle{
 
-	public int x;
-	public int y;
-	public int width;
-	public int height;
-
+	public Color c;
+	
 	public Stone(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+		super(x, y, width, height);
+		this.c = Color.LIGHT_GRAY;
 	}
 
+	@Override
 	public void draw(Graphics g) {
-		g.setColor(Color.LIGHT_GRAY);
+		g.setColor(c);
 		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
 		g.setColor(Color.BLACK);
 		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
 	}
 
+	@Override
 	public void update(float tslf) {
-		//TODO: new Collision system
+		c = Color.LIGHT_GRAY;
 	}
 }

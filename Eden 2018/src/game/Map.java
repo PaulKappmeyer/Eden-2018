@@ -11,47 +11,42 @@ public class Map {
 
 	Eden player = Globals.player;
 	public ArrayList<Enemy> enemies;
-	public ArrayList<Stone> stones;
+	public ArrayList<Obstacle> obstacles;
 	public ArrayList<Shell> shells;
-	Chest chest;
-	Sign sign;
 
-	public Map(int playerX, int playerY, ArrayList<Stone> stones, ArrayList<Enemy> enemies, Chest chest, Sign sign) {
+	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies) {
 		this.player.x = playerX;
 		this.player.y = playerY;
-		this.stones = stones;
+		this.obstacles = obstacles;
 		this.enemies = enemies;
 		this.shells = new ArrayList<Shell>();
-		this.chest = chest;
-		this.sign = sign;
 	}
 
 	public void draw(Graphics g) {
-		//Draw the shells
+		//Drawing the shells
 		for (Shell shell : shells) {
 			shell.draw(g);
 		}
-		//Draw the players gun
+		//Drawing the players gun
 		if(Globals.player.gun != null)Globals.player.gun.draw(g);
-		//Draw the bosses gun
+		//Drawing the bosses gun
 		for (Enemy enemy : enemies) {
 			if(enemy instanceof Boss) {
 				Boss boss = (Boss) enemy;
 				boss.gun.draw(g);
 			}
 		}
-		//Draw the enemies
+		//Drawing the enemies
 		for (Enemy e : enemies) {
 			e.draw(g);
 		}
-
-		for (Stone stone : Game.currentMap.stones) {
-			stone.draw(g);
+		
+		//Drawing the obstacles
+		for (Obstacle obs : obstacles) {
+			obs.draw(g);
 		}
-		if(chest != null) chest.draw(g);
-		if(sign != null) sign.draw(g);
-
-		//Draw the player
+		
+		//Drawing the player
 		Globals.player.draw(g);
 	}
 	
@@ -60,6 +55,11 @@ public class Map {
 		//Updating the shells
 		for (Shell shell : shells) {
 			shell.update(tslf);
+		}
+		
+		//Updating the obstacles
+		for (Obstacle obs : obstacles) {
+			obs.update(tslf);
 		}
 		
 		//Updating the player
@@ -76,10 +76,7 @@ public class Map {
 			Enemy e = enemies.get(i);
 			if(e.canBeRemoved())enemies.remove(e);
 		}
-
-		if(chest != null) chest.update(tslf);
-		if(sign != null) sign.update(tslf);
-
+		
 		//TODO: Y-Sort
 		ysort();
 	}

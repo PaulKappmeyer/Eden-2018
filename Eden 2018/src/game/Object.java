@@ -5,7 +5,7 @@ package game;
  * @author Paul
  *
  */
-public class Object {
+public abstract class Object {
 
 	/**
 	 * The X-coordinate of the object
@@ -39,5 +39,4 @@ public class Object {
 		this.x = x;
 		this.y = y;
 	}
-	
 }

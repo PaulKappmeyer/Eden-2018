@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import game.Game;
 import game.Globals;
 import game.Object;
+import game.Obstacle;
 import game.Screen;
-import game.Stone;
 
 public class Bullet extends Projectile{
 
@@ -70,8 +70,8 @@ public class Bullet extends Projectile{
 	 * 
 	 */
 	public void checkCollisionBulletToStone() {
-		for (Stone stone : Game.currentMap.stones) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Bullet.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+		for (Obstacle obs : Game.currentMap.obstacles) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Bullet.SIZE, obs.x, obs.y, obs.width, obs.height)) {
 				this.maxExplosionRadius = 30;
 				this.disable();
 			}

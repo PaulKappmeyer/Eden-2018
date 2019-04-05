@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import game.Direction;
 import game.Game;
 import game.Globals;
-import game.Stone;
+import game.Obstacle;
 
 public class Shell {
 
@@ -64,8 +64,8 @@ public class Shell {
 	 */
 	public void checkCollisionToStone() {
 		if(this.collided) return;
-		for (Stone stone : Game.currentMap.stones) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+		for (Obstacle obs : Game.currentMap.obstacles) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, obs.x, obs.y, obs.width, obs.height)) {
 				this.velocityX *= -0.5;
 				this.velocityY *= -0.5;
 				this.collided = true;

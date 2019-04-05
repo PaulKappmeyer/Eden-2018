@@ -7,8 +7,8 @@ import enemies.Enemy;
 import game.Game;
 import game.Globals;
 import game.Object;
+import game.Obstacle;
 import game.Screen;
-import game.Stone;
 
 public class Rocket extends Projectile{
 	//TODO: Combine in one class with Bullet
@@ -62,8 +62,8 @@ public class Rocket extends Projectile{
 	 * 
 	 */
 	public void checkCollisionRocketToStone() {
-		for (Stone stone : Game.currentMap.stones) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, stone.x, stone.y, stone.width, stone.height)) {
+		for (Obstacle obs : Game.currentMap.obstacles) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, obs.x, obs.y, obs.width, obs.height)) {
 				this.maxExplosionRadius = 30;
 				this.disable();
 			}

@@ -79,7 +79,7 @@ public class Eden extends Object{
 		this.y = 400;
 		this.size = 16;
 		this.gun = new SinglefireGun(this);
-		
+
 		walkDirection = Direction.UP;
 		shotDirection = Direction.UP;
 	}
@@ -96,7 +96,7 @@ public class Eden extends Object{
 		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
-		
+
 		g.setColor(Color.RED);
 		switch (shotDirection) {
 		case UP:
@@ -115,7 +115,7 @@ public class Eden extends Object{
 		default:
 			break;
 		}
-		
+
 		//Got-Hit-animation
 		if(gotHit) {
 			if(blink > blinktime) {
@@ -223,7 +223,7 @@ public class Eden extends Object{
 				}
 			}
 		}
-		
+
 		//Bombs
 		for (Bomb bomb : bombs) {
 			bomb.update(tslf);
@@ -240,45 +240,35 @@ public class Eden extends Object{
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
 		
-		//Top side of stone
-		if(this.y < nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingTopSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					this.y = stone.y - size;
-				}
-			}
+		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
+		
+		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
+		Obstacle obs = collisions[Collision.TOP_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			this.y = obs.y - size;	
 		}
-		//Bottom side of stone
-		if(this.y > nextY) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingBottomSideOfStone(this.x, this.y, this.size, this.size, this.x, nextY, stone)) {
-					walkVelocityY = 0;
-					knockbackVelocityY = 0;
-					this.y = stone.y + stone.height;
-				}
-			}
+		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
+		obs = collisions[Collision.BOTTOM_SIDE];
+		if(obs != null) {
+			walkVelocityY = 0;
+			knockbackVelocityY = 0;
+			this.y = obs.y + obs.height;
 		}
-		//Left side of stone
-		if(this.x < nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingLeftSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x - size;
-				}
-			}
+		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.LEFT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			this.x = obs.x - size;
 		}
-		//Right side of stone
-		if(this.x > nextX) {
-			for (Stone stone : Game.currentMap.stones) {
-				if(Collision.isCollidingRightSideOfStone(this.x, this.y, this.size, this.size, nextX, this.y, stone)) {
-					walkVelocityX = 0;
-					knockbackVelocityX = 0;
-					this.x = stone.x + stone.width;
-				}	
-			}
+		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.RIGHT_SIDE];
+		if(obs != null) {
+			walkVelocityX = 0;
+			knockbackVelocityX = 0;
+			this.x = obs.x + obs.width;
 		}
 	}
 
@@ -360,6 +350,22 @@ public class Eden extends Object{
 				angle = (float) Math.toDegrees(angle);
 				if(pcy > mcy) angle =  -90 - (90-angle);
 				if(pcx < mcx && pcy < mcy) angle = -270 - (90-angle); 
+				float sin = (float) Math.sin(Math.toRadians(angle));
+				float cos = (float) Math.cos(Math.toRadians(angle));
+
+				if(cos >= -1 && cos <= -0.45) {
+					shotDirection = Direction.UP;
+				}
+				if(cos >= 0.45 && cos <= 1) {
+					shotDirection = Direction.DOWN;
+				}
+				if(sin >= -1 && sin <= -0.45) {
+					shotDirection = Direction.LEFT;
+				}
+				if(sin >= 0.45 && sin <= 1) {
+					shotDirection = Direction.RIGHT;
+				}
+
 				gun.shot(angle);
 				resetWalking();
 			}
@@ -427,7 +433,7 @@ public class Eden extends Object{
 				e.resetWalkspeed();
 
 				if(distx == 0 && disty == 0) angle = 0;
-				
+
 				this.startKnockback(angle - 180, enemyImpact, 0.2f);
 				this.gotHit = true;
 				return;
@@ -455,7 +461,7 @@ public class Eden extends Object{
 		timeKnockedBack = 0;
 		currentKnockbackSpeed = 0;
 	}
-	
+
 	/**
 	 * This function applies knock-back to the player for example when he gets hit by an enemy
 	 * @param angle The angle in which the player gets knocked back
