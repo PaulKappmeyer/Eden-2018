@@ -8,7 +8,7 @@ import game.Game;
 import game.Globals;
 import game.Object;
 import game.Obstacle;
-import game.Screen;
+import game.GameDrawer;
 
 public class Rocket extends Projectile{
 
@@ -88,7 +88,7 @@ public class Rocket extends Projectile{
 			checkCollisionRocketToWall();
 		}
 		if(dieAnimation) {
-			Screen.addScreenshake(3, 0.005f);
+			GameDrawer.addScreenshake(3, 0.005f);
 
 			currentRadius += explosionRadiusIncrease * tslf;
 			if(currentRadius >= maxExplosionRadius) {

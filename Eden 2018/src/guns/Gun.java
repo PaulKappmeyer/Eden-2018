@@ -19,7 +19,7 @@ public abstract class Gun {
 	//Can shot again?
 	public boolean canShot;
 
-	float bulletSpeed = 500;
+	float bulletSpeed = 600;
 
 	float damage;
 	Object owner;

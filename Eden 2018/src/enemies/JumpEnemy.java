@@ -153,8 +153,8 @@ public class JumpEnemy extends Enemy{
 					}
 				}
 
-				//Collision with stone
-				checkCollisionToStones(tslf);
+				//Collision with obstacles like: stones, houses etc
+				checkCollisionToObstacles(tslf);
 			}
 		}
 
@@ -171,7 +171,7 @@ public class JumpEnemy extends Enemy{
 	}
 	
 	@Override
-	public void checkCollisionToStones(float tslf) {
+	public void checkCollisionToObstacles(float tslf) {
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed + jumpVeloctiyX * currentJumpSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed + jumpVeloctiyY * currentJumpSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;

@@ -3,11 +3,12 @@ package guns;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.Game;
+import game.BulletBouncer;
+import game.Collision;
 import game.Globals;
 import game.Object;
 import game.Obstacle;
-import game.Screen;
+import game.GameDrawer;
 
 public class Bullet extends Projectile{
 
@@ -18,7 +19,7 @@ public class Bullet extends Projectile{
 	}
 
 	//---------------------------------Methods---------------------------------------------------------------
-	
+
 	/**
 	 *
 	 * @param x The x-position of the bullet
@@ -35,7 +36,7 @@ public class Bullet extends Projectile{
 		this.speed = speed;
 		this.velocityX = (float) Math.sin(Math.toRadians(angle));
 		this.velocityY = (float) Math.cos(Math.toRadians(angle));
-		
+
 		hitSomething = false;
 		dieAnimation = false;
 		maxExplosionRadius = 80;
@@ -47,7 +48,7 @@ public class Bullet extends Projectile{
 	public void deactivate() {
 		isActive = false;
 	}
-	
+
 	@Override
 	public void hitSomething() {
 		this.angle = 0;
@@ -87,16 +88,18 @@ public class Bullet extends Projectile{
 	@Override
 	public void update(float tslf) {
 		if(!isActive) return;
-		
+
 		if(!hitSomething) {
+			//Collision
+			checkCollisionToObstacles(tslf);
+			checkCollisionToWall();
+
+			//Movement
 			x += velocityX * speed * tslf;
 			y += velocityY * speed * tslf;
-
-			checkCollisionBulletToStone();
-			checkCollisionBulletToWall();
 		}
 		if(dieAnimation) {
-			Screen.addScreenshake(3, 0.005f);
+			GameDrawer.addScreenshake(3, 0.005f);
 
 			currentRadius += explosionRadiusIncrease * tslf;
 			if(currentRadius >= maxExplosionRadius) {
@@ -115,27 +118,68 @@ public class Bullet extends Projectile{
 	public boolean checkCollisionToObject(Object obj) {
 		return Globals.checkCollisionRectangleToCircle(this.x, this.y, SIZE, obj.x, obj.y, obj.size, obj.size);
 	}
-	
+
 	/**
 	 * 
 	 */
-	public void checkCollisionBulletToStone() {
-		for (Obstacle obs : Game.currentMap.obstacles) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Bullet.SIZE, obs.x, obs.y, obs.width, obs.height)) {
+	public void checkCollisionToObstacles(float tslf) {	
+		float nextX = (float) (this.x + (velocityX * speed) * tslf);
+		float nextY = (float) (this.y + (velocityY * speed) * tslf);
+		if(nextX == this.x && nextY == this.y) return;
+
+		Obstacle[] collisions = Collision.checkCollisionProjectileToObstacle(this, nextX, nextY);
+
+		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
+		Obstacle obs = collisions[Collision.TOP_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) { //IF IT HIT THE BULLET-BOUNCER LET IT BOUNCE OFF
+				velocityX *= -1;
+			}else { 							//IF IT HIT ANYTHING ELSE LIKE: HOUSE; STONE; etc. LET IT EXPLODE
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
+			this.maxExplosionRadius = 30;
+			this.hitSomething();
+			this.y = obs.y - Bullet.SIZE;	
 		}
-//		RoundStone rs = Game.currentMap.stoneRound;
-//		if(Globals.checkCollisionCircleToCircle(this.x, this.y, Bullet.SIZE, rs.x, rs.y, rs.size)) {
-//			this.maxExplosionRadius = 30;
-//			this.disable();
-//		}
+		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
+		obs = collisions[Collision.BOTTOM_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				velocityY *= -1;
+			}else {
+				this.maxExplosionRadius = 30;
+				this.hitSomething();
+			}
+			this.y = obs.y + obs.height;
+		}
+		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.LEFT_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				velocityX *= -1;
+			}else {
+				this.maxExplosionRadius = 30;
+				this.hitSomething();
+			}
+			this.x = obs.x - Bullet.SIZE;
+		}
+		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.RIGHT_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				velocityX *= -1;
+			}else {
+				this.maxExplosionRadius = 30;
+				this.hitSomething();
+			}
+			this.x = obs.x + obs.width;
+		}
 	}
 	/**
-	 * 
+	 * Checks if the bullet goes out of the screen
 	 */
-	public void checkCollisionBulletToWall() {
+	public void checkCollisionToWall() {
 		if(this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Globals.width || this.y + Bullet.SIZE > Globals.height) {
 			this.hitSomething();
 		}

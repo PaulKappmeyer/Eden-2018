@@ -7,7 +7,7 @@ import game.Object;
 public class SinglefireGun extends Gun{
 
 	public static final int SINGLEFIRE = 1;
-	int bulletspray = 3;
+	int bulletspray = 0;
 
 	public SinglefireGun(Object owner) {
 		super(owner);

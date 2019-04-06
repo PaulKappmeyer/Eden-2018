@@ -10,11 +10,11 @@ public class GameLoop implements Runnable{
 	public static long firstFrame;
 	public static int frames;
 	Game game;
-	Screen screen;
+	GameDrawer screen;
 	
 	public GameLoop() {
 		game = new Game();
-		screen = new Screen(game);
+		screen = new GameDrawer(game);
 	}
 	
 	@Override

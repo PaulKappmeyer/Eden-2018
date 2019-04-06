@@ -13,7 +13,7 @@ public class Map {
 	public ArrayList<Enemy> enemies;
 	public ArrayList<Obstacle> obstacles;
 	public ArrayList<Shell> shells;
-
+	
 	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies) {
 		this.player.x = playerX;
 		this.player.y = playerY;

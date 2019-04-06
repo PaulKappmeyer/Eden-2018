@@ -48,9 +48,12 @@ public class Game {
 		enemies.add(new SummonerEnemy(500, 170));
 		enemies.add(new RoundEnemy(600, 100));
 
+//		enemies = new ArrayList<Enemy>();
 		obstacles.add(new Chest(100, 100, 16, 16));
 		obstacles.add(new Sign(150, 550, 16, 16));
 		obstacles.add(new House(500, 100, 64, 32));
+		obstacles.add(new BulletBouncer(350, 400, 10, 100));
+		obstacles.add(new BulletBouncer(150, 400, 10, 100));
 		maps = new Map[3][3];
 		maps[1][1] = new Map(100, 400, obstacles, enemies);
 

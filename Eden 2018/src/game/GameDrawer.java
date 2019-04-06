@@ -2,10 +2,6 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.image.BufferStrategy;
-
-import javax.swing.JFrame;
 
 import input.KeyboardinputManager;
 import input.MouseinputManager;
@@ -16,54 +12,33 @@ import input.MouseinputManager;
  *
  */
 @SuppressWarnings("serial")
-public class Screen extends JFrame{
-	private BufferStrategy strat;
+public class GameDrawer extends Window{
+	
 	private Game game;
 	
 	/**
 	 * Constructor; initializes the JFrame and the BufferStrategy
 	 */
-	public Screen(Game game) {
-		this.setTitle("Eden");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setUndecorated(false);
-		this.setVisible(true);
-		this.setResizable(false);
-		
-		createBufferStrategy(2);
-		strat = getBufferStrategy();
-		
-		Insets i = getInsets();
-		Globals.insetX = i.left;
-		Globals.insetY = i.top;
-		
-		this.setSize(Globals.width + Globals.insetX + i.right, Globals.height + Globals.insetY + i.bottom);
-		this.setLocationRelativeTo(null);
+	public GameDrawer(Game game) {
+		super("Eden", Globals.width, Globals.height);
 		
 		this.addKeyListener(new KeyboardinputManager());
 		MouseinputManager m = new MouseinputManager();
 		this.addMouseListener(m);
 		this.addMouseMotionListener(m);
 		
+		Globals.insetX = this.insetX;
+		Globals.insetY = this.insetY;
+		
 		this.game = game;
-	}
-	
-	/**
-	 * This function gets called every frame to repaint the screen; calls the function show
-	 * {@link #show(Graphics g)}
-	 */
-	public void repaintScreen(){
-		Graphics g = strat.getDrawGraphics();
-		show(g);
-		g.dispose();
-		strat.show();
 	}
 	
 	/**
 	 * 
 	 * @param g A Graphics Object to draw
 	 */
-	public void show(Graphics g){
+	@Override
+	public void draw(Graphics g){
 		//Clear the screen
 		g.setColor(Color.WHITE);
 		g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());

@@ -173,17 +173,17 @@ public class Eden extends Object{
 			}
 		}
 
-		//Collision with stone
-		checkCollisionToStones(tslf);
+		//Collision with objects like: stones, house etc.
+		checkCollisionToObstacles(tslf);
+		//Collision with the screen
+		checkCollisionPlayerToWall();
+		//Collision to enemies
+		if(!gotHit)checkCollisionPlayerToEnemies();
+
 
 		//Movement
 		this.x += (float) ((walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		this.y += (float) ((walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-
-		//Collision
-		checkCollisionPlayerToWall();
-		//Collision to enemies
-		if(!gotHit)checkCollisionPlayerToEnemies();
 
 		//Got-Hit-animation
 		if(gotHit) {
@@ -233,42 +233,58 @@ public class Eden extends Object{
 			Bomb b = bombs.get(i);
 			if(!b.ticking && !b.explode) bombs.remove(b);
 		}
-	};
+	}
 
-	public void checkCollisionToStones(float tslf) {
+	public void checkCollisionToObstacles(float tslf) {
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 		if(nextX == this.x && nextY == this.y) return;
-		
+
 		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
-		
+
 		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
 		Obstacle obs = collisions[Collision.TOP_SIDE];
 		if(obs != null) {
-			walkVelocityY = 0;
-			knockbackVelocityY = 0;
-			this.y = obs.y - size;	
+			if(obs instanceof BulletBouncer) {
+				startKnockback(180, 100, 0.4f);
+			}else {
+				walkVelocityY = 0;
+				knockbackVelocityY = 0;
+				this.y = obs.y - size;	
+			}
 		}
 		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
 		obs = collisions[Collision.BOTTOM_SIDE];
 		if(obs != null) {
-			walkVelocityY = 0;
-			knockbackVelocityY = 0;
-			this.y = obs.y + obs.height;
+			if(obs instanceof BulletBouncer) {
+				startKnockback(0, 100, 0.4f);
+			}else {
+				walkVelocityY = 0;
+				knockbackVelocityY = 0;
+				this.y = obs.y + obs.height;
+			}
 		}
 		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.LEFT_SIDE];
 		if(obs != null) {
-			walkVelocityX = 0;
-			knockbackVelocityX = 0;
-			this.x = obs.x - size;
+			if(obs instanceof BulletBouncer) {
+				startKnockback(270, 100, 0.4f);
+			}else {
+				walkVelocityX = 0;
+				knockbackVelocityX = 0;
+				this.x = obs.x - size;
+			}
 		}
 		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.RIGHT_SIDE];
 		if(obs != null) {
-			walkVelocityX = 0;
-			knockbackVelocityX = 0;
-			this.x = obs.x + obs.width;
+			if(obs instanceof BulletBouncer) {
+				startKnockback(90, 100, 0.4f);
+			}else {
+				walkVelocityX = 0;
+				knockbackVelocityX = 0;
+				this.x = obs.x + obs.width;
+			}
 		}
 	}
 

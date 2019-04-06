@@ -20,6 +20,10 @@ public abstract class Obstacle {
 	 * The height of the obstacle
 	 */
 	public int height;
+	/**
+	 * 
+	 */
+	public boolean isObstacle = true;
 	
 	//--------------------------------------------Constructors
 	/**

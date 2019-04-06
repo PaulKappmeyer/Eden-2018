@@ -18,6 +18,8 @@ public class Chest extends Obstacle{
 		super(x, y, width, height);
 		String[]text = new String[]{"Ohhh das ist eine Kiste! Zum interagieren e drücken", "Hier erhälst du deine erste Waffe!", "Mit Leertaste kannst du sie abfeuern", "Jetz erledige den Gegner!"};
 		textbox = new Textbox(text);
+		
+		isObstacle = false;
 	}
 	
 	@Override

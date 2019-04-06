@@ -17,6 +17,8 @@ public class Sign extends Obstacle{
 		super(x, y, width, height);
 		String[]text = new String[]{"DAS IST EIN SCHILD!"};
 		textbox = new Textbox(text);
+		
+		isObstacle = false;
 	}
 
 	public void draw(Graphics g) {
