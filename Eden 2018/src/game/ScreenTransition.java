@@ -11,7 +11,7 @@ public class ScreenTransition {
 	float transitionWidth = 0;
 	float transitionHeight = 0;
 	int speed = 1400;
-	Direction direction;
+	Direction direction = Direction.UNDEFINED;
 
 	//DRAW
 	public void draw(Graphics g) {

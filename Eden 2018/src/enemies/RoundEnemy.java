@@ -30,6 +30,7 @@ public class RoundEnemy extends Enemy{
 			float enemyCenterX = this.x + size/2;
 			float enemyCenterY = this.y + size/2;
 			for (Projectile projectile : Globals.player.gun.projectiles) {
+				if(!projectile.isActive)continue;
 				float bulletCenterX = projectile.x + Bullet.SIZE / 2;
 				float bulletCenterY = projectile.y + Bullet.SIZE / 2;
 
@@ -37,14 +38,14 @@ public class RoundEnemy extends Enemy{
 				if(distance <= radius * radius) {
 					if(!followplayer) followplayer = true;
 					//Add a new Bullet
-					Bullet b = new Bullet(projectile.x, projectile.y, projectile.angle - 180, 600);
+					Bullet b = new Bullet();
 					b.velocityX = 0;
 					b.velocityY = 0;
+					b.activate(0, 0, 0, 500);
 					this.bullets.add(b);
 					this.angles.add(new Float(0));
 					//Remove old
-					projectile.disable();
-					projectile.dieAnimation = false;
+					projectile.deactivate();
 				}
 			}
 		}
@@ -56,7 +57,7 @@ public class RoundEnemy extends Enemy{
 				index++;
 				if(angle == -1f) continue;
 				Bullet bullet = bullets.get(index);
-				if(!bullet.disabled) {
+				if(!bullet.hitSomething) {
 					if(angle < 360 * 2) {
 						bullet.x = (float) (this.x + size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(bullet.angle + angle)) * radius);
 						bullet.y = (float) (this.y + size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(bullet.angle + angle)) * radius);
@@ -95,12 +96,12 @@ public class RoundEnemy extends Enemy{
 		for (Bullet bullet : bullets) {
 			bullet.update(tslf);
 			//Hit the player?
-			if(!bullet.disabled) {
+			if(!bullet.hitSomething) {
 				if(bullet.checkCollisionToObject(Globals.player)) {
 					Globals.player.startKnockback(bullet.angle, Globals.player.bulletImpact, 1f);
 					Globals.player.gotHit = true;
 					bullet.maxExplosionRadius = 30;
-					bullet.disable();
+					bullet.hitSomething();
 				}
 			}
 		}
@@ -108,7 +109,7 @@ public class RoundEnemy extends Enemy{
 		if(!bullets.isEmpty()) {
 			ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
 			for (Bullet bullet : bullets) {
-				if(bullet.canBeRemoved()) {
+				if(bullet.canBeDeactivated()) {
 					removableBullets.add(bullet);
 				}
 			}
@@ -122,14 +123,14 @@ public class RoundEnemy extends Enemy{
 	@Override
 	public void getHitByProjectile(Projectile p, float damage) {
 		//Add a new Bullet
-		Bullet b = new Bullet(p.x, p.y, p.angle - 180, 600);
+		Bullet b = new Bullet();
 		b.velocityX = 0;
 		b.velocityY = 0;
+		b.isActive = true;
 		this.bullets.add(b);
 		this.angles.add(new Float(0));
 		//Remove old
-		p.disable();
-		p.dieAnimation = false;
+		p.deactivate();
 	}
 
 	@Override

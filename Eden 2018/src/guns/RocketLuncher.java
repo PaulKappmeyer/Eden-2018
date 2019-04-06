@@ -13,6 +13,11 @@ public class RocketLuncher extends Gun{
 		super(owner);
 		mode = ROCKET_SINGLE_FIRE_MODE;
 		shottime = 0.5f;
+		
+		projectiles = new Rocket[100];
+		for (int i = 0; i < projectiles.length; i++) {
+			projectiles[i] = new Bullet();
+		}
 	}
 
 	@Override
@@ -40,7 +45,7 @@ public class RocketLuncher extends Gun{
 			Game.currentMap.shells.add(new Shell(shellCenterX, shellCenterY, angle));
 			float centerX = (float) (owner.x + owner.size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
 			float centerY = (float) (owner.y + owner.size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);
-			projectiles.add(new Rocket(centerX, centerY, angle));
+			fireRocket(centerX, centerY, angle, bulletSpeed);
 			applyRecoil(angle);
 		}
 		canShot = false;
@@ -51,4 +56,12 @@ public class RocketLuncher extends Gun{
 		shot();
 	}
 	
+	public void fireRocket(float x, float y, float angle, float speed) {
+		for (int i = 0; i < projectiles.length; i++) {
+			if(!projectiles[i].isActive) {
+				projectiles[i].activate(x, y, angle, speed);
+				break;
+			}
+		}
+	}
 }

@@ -11,18 +11,55 @@ import game.Obstacle;
 import game.Screen;
 
 public class Rocket extends Projectile{
-	//TODO: Combine in one class with Bullet
+
 	public static final int SIZE = 6;
 
-	public Rocket(float x, float y, float angle) {
+	public Rocket() {
+		isActive = false;
+	}
+
+	//---------------------------------Methods---------------------------------------------------------------
+
+	@Override
+	public void activate(float x, float y, float angle, float speed) {
+		isActive = true;
 		this.x = x;
 		this.y = y;
 		this.angle = angle;
-		this.speed = 100;
+		this.speed = speed;
 		this.velocityX = (float) Math.sin(Math.toRadians(angle));
 		this.velocityY = (float) Math.cos(Math.toRadians(angle));
+
+		hitSomething = false;
+		dieAnimation = false;
+		maxExplosionRadius = 80;
+		explosionRadiusIncrease = 1600;
+		currentRadius = 0;
 	}
 
+	@Override
+	public void deactivate() {
+		isActive = false;
+	}
+
+	@Override
+	public void hitSomething() {
+		this.angle = 0;
+		this.velocityX = 0;
+		this.velocityY = 0;
+		this.hitSomething = true;
+		this.dieAnimation = true;
+	}
+	
+	@Override
+	public boolean canBeDeactivated() {
+		if(this.dieAnimation == false && this.hitSomething == true) {
+			return true;
+		}
+		return false;
+	}
+	
+	//---------------------------------Drawing---------------------------------------------------------------
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.GRAY);
@@ -34,10 +71,12 @@ public class Rocket extends Projectile{
 			g.fillOval((int)(x + SIZE/2 - currentRadius/2 + Globals.insetX), (int)(y + SIZE/2 - currentRadius/2 + Globals.insetY), (int)currentRadius, (int)currentRadius);
 		}
 	}
-
+	//---------------------------------Updating---------------------------------------------------------------
 	@Override
 	public void update(float tslf) {
-		if(!disabled) {
+		if(!isActive) return;
+
+		if(!hitSomething) {
 			searchEnemy(tslf);
 
 			this.x += velocityX * speed * tslf;
@@ -57,27 +96,10 @@ public class Rocket extends Projectile{
 			}
 		}
 	}
-
 	/**
 	 * 
+	 * @param tslf
 	 */
-	public void checkCollisionRocketToStone() {
-		for (Obstacle obs : Game.currentMap.obstacles) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, obs.x, obs.y, obs.width, obs.height)) {
-				this.maxExplosionRadius = 30;
-				this.disable();
-			}
-		}
-	}
-	/**
-	 * 
-	 */
-	public void checkCollisionRocketToWall() {
-		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Globals.width || this.y + Rocket.SIZE > Globals.height) {
-			this.disable();
-		}
-	}
-
 	public void searchEnemy(float tslf) {
 		float nearestDistance = Float.MAX_VALUE;
 		Enemy nearestEnemy = null;
@@ -115,15 +137,7 @@ public class Rocket extends Projectile{
 			this.velocityY = (float) Math.cos(Math.toRadians(newAngle));	
 		}
 	}
-
-	@Override
-	public boolean canBeRemoved() {
-		if(this.dieAnimation == false && this.disabled == true) {
-			return true;
-		}
-		return false;
-	}
-
+	//---------------------------------Collision---------------------------------------------------------------
 	/**
 	 * 
 	 * @param obj The object to check with
@@ -132,5 +146,24 @@ public class Rocket extends Projectile{
 	@Override
 	public boolean checkCollisionToObject(Object obj) {
 		return Globals.checkCollisionRectangleToCircle(this.x, this.y, SIZE, obj.x, obj.y, obj.size, obj.size);
+	}
+	/**
+	 * 
+	 */
+	public void checkCollisionRocketToStone() {
+		for (Obstacle obs : Game.currentMap.obstacles) {
+			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, obs.x, obs.y, obs.width, obs.height)) {
+				this.maxExplosionRadius = 30;
+				this.hitSomething();
+			}
+		}
+	}
+	/**
+	 * 
+	 */
+	public void checkCollisionRocketToWall() {
+		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Globals.width || this.y + Rocket.SIZE > Globals.height) {
+			this.hitSomething();
+		}
 	}
 }

@@ -57,7 +57,7 @@ public class Boss extends Enemy{
 	public boolean canBeRemoved() {
 		if(super.canBeRemoved()) {
 			for (Projectile projectile : gun.projectiles) {
-				if(!projectile.canBeRemoved()) return false;
+				if(!projectile.canBeDeactivated()) return false;
 			}
 			return true;
 		}

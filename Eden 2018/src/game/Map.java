@@ -65,15 +65,11 @@ public class Map {
 		//Updating the player
 		Globals.player.update(tslf);
 		
-		//Updating the enemies
-		for (int i = 0; i < enemies.size(); i++) {
+		//Updating the enemies && Removal of the enemies; note: this loop runs backwards because we may delete objects
+		int size = enemies.size() - 1;
+		for (int i = size; i >= 0; i--) {
 			Enemy e = enemies.get(i);
 			e.update(tslf);
-		}
-
-		//Removal of the enemies
-		for (int i = 0; i < enemies.size(); i++) {
-			Enemy e = enemies.get(i);
 			if(e.canBeRemoved())enemies.remove(e);
 		}
 		

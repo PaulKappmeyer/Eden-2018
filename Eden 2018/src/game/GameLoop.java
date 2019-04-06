@@ -4,7 +4,7 @@ import input.Input;
 
 public class GameLoop implements Runnable{
 	boolean running = true;
-	public static final int MAXFPS = 160;
+	public static final int MAXFPS = 120;
 	public static final long MAXLOOPTIME = 1000/MAXFPS;
 	
 	public static long firstFrame;

@@ -13,6 +13,11 @@ public class SinglefireGun extends Gun{
 		super(owner);
 		mode = SINGLEFIRE;
 		damage = 50;
+		
+		projectiles = new Bullet[100];
+		for (int i = 0; i < projectiles.length; i++) {
+			projectiles[i] = new Bullet();
+		}
 	}
 
 	@Override
@@ -22,19 +27,19 @@ public class SinglefireGun extends Gun{
 			switch(owner.shotDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				projectiles.add(new Bullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y - Bullet.SIZE, angle, bulletSpeed));
+				fireBullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y - Bullet.SIZE, angle, bulletSpeed);
 				break;
 			case DOWN:
 				angle = 0 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				projectiles.add(new Bullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y + owner.size, angle, bulletSpeed));
+				fireBullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y + owner.size, angle, bulletSpeed);
 				break;
 			case LEFT:
 				angle = 270 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				projectiles.add(new Bullet(owner.x - Bullet.SIZE, owner.y + owner.size/2 - Bullet.SIZE/2, angle, bulletSpeed));
+				fireBullet(owner.x - Bullet.SIZE, owner.y + owner.size/2 - Bullet.SIZE/2, angle, bulletSpeed);
 				break;
 			case RIGHT:
 				angle = 90 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
-				projectiles.add(new Bullet(owner.x + owner.size, owner.y + owner.size/2 - Bullet.SIZE/2, angle, bulletSpeed));
+				fireBullet(owner.x + owner.size, owner.y + owner.size/2 - Bullet.SIZE/2, angle, bulletSpeed);
 				break;
 			default:
 				break;
@@ -53,12 +58,21 @@ public class SinglefireGun extends Gun{
 		
 		float centerX = (float) (owner.x + owner.size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
 		float centerY = (float) (owner.y + owner.size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);
-		projectiles.add(new Bullet(centerX, centerY, angle, bulletSpeed));
+		fireBullet(centerX, centerY, angle, bulletSpeed);
 		float shellCenterX = (float) (owner.x + owner.size/2 - Shell.SIZE/2 - Math.sin(Math.toRadians(angle)) * owner.size/2);
 		float shellCenterY = (float) (owner.y + owner.size/2 - Shell.SIZE/2 - Math.cos(Math.toRadians(angle)) * owner.size/2);
 		Game.currentMap.shells.add(new Shell(shellCenterX, shellCenterY, angle));
 		applyRecoil(angle);
 	
 		canShot = false;
+	}
+	
+	public void fireBullet(float x, float y, float angle, float speed) {
+		for (int i = 0; i < projectiles.length; i++) {
+			if(!projectiles[i].isActive) {
+				projectiles[i].activate(x, y, angle, speed);
+				break;
+			}
+		}
 	}
 }

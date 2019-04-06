@@ -11,14 +11,14 @@ import enemies.SummonerEnemy;
 
 public class Game {
 
-	int mapX = 1;
-	int mapY = 1;
+	static int mapX = 1;
+	static int mapY = 1;
 	Map[][]maps;
 	public static Map currentMap;
 
 	public static Gamestate state = Gamestate.RUNNING;
 
-	ScreenTransition transition = new ScreenTransition();
+	static ScreenTransition transition = new ScreenTransition();
 
 	public Game() {
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
@@ -43,9 +43,11 @@ public class Game {
 		enemies.add(new Enemy(500, 200));
 		enemies.add(new Enemy(500, 300));
 		enemies.add(new SummonerEnemy(500, 350));
+		enemies.add(new SummonerEnemy(500, 250));
+		enemies.add(new SummonerEnemy(500, 150));
+		enemies.add(new SummonerEnemy(500, 170));
 		enemies.add(new RoundEnemy(600, 100));
 
-		
 		obstacles.add(new Chest(100, 100, 16, 16));
 		obstacles.add(new Sign(150, 550, 16, 16));
 		obstacles.add(new House(500, 100, 64, 32));
@@ -125,10 +127,12 @@ public class Game {
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
-	Direction direction;
+	static Direction direction;
 	public void switchMap() {
 		if(Globals.player.gun != null) {
-			Globals.player.gun.projectiles.removeAll(Globals.player.gun.projectiles);
+			for (int i = 0; i < Globals.player.gun.projectiles.length; i++) {
+				Globals.player.gun.projectiles[i].deactivate();
+			}
 		}
 		switch (direction) {
 		case RIGHT:
@@ -149,9 +153,9 @@ public class Game {
 		currentMap = maps[mapX][mapY];
 	}
 
-	public void beginMapTransition(Direction direction) {
+	public static void beginMapTransition(Direction direction) {
 		Game.state = Gamestate.MAP_TRANSITION_IN;
-		this.direction = direction;
+		Game.direction = direction;
 		transition.startTransition(direction);
 	}
 
@@ -170,6 +174,7 @@ public class Game {
 		}
 		if(Globals.player.y + Globals.player.size >= Globals.height && mapY < maps[mapX].length-1) {
 			beginMapTransition(Direction.DOWN);
+			System.out.println("yes1");
 			mapY ++;
 		}
 	}

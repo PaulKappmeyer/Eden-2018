@@ -2,7 +2,6 @@ package guns;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import enemies.Enemy;
 import game.Eden;
@@ -11,7 +10,7 @@ import game.Globals;
 import game.Object;
 
 public abstract class Gun {
-	
+
 	int mode;
 	//Delay
 	public float shottime = 0.125f;
@@ -19,20 +18,20 @@ public abstract class Gun {
 	float tsls = shottime;
 	//Can shot again?
 	public boolean canShot;
-	
+
 	float bulletSpeed = 500;
-	
+
 	float damage;
 	Object owner;
 
-	public ArrayList<Projectile> projectiles;
+	public Projectile[] projectiles;
 
 	public Gun(Object owner) {
 		this.owner = owner;
 		this.canShot = false;
 		this.damage = 50;
-		
-		projectiles = new ArrayList<>();
+
+		projectiles = new Projectile[100];
 	}
 
 	/**
@@ -44,6 +43,7 @@ public abstract class Gun {
 		if(owner instanceof Eden) c = Color.YELLOW;
 		if(owner instanceof Enemy) c = Color.RED;
 		for (Projectile projectile : projectiles) {
+			if(!projectile.isActive) continue;
 			g.setColor(c);
 			projectile.draw(g);
 		}
@@ -61,25 +61,23 @@ public abstract class Gun {
 		}else {
 			tsls += tslf;	
 		}
-		
-		//Updating the projectiles
-		if(!projectiles.isEmpty()) {
-			for (Projectile projectile : projectiles) {
-				projectile.update(tslf);
-			}
 
-			checkCollisionProjectilesToObjects();
-
-			//Removal of the bullets
-			for (int i = 0; i < projectiles.size(); i++) {
-				Projectile projectile = projectiles.get(i);
-				if(projectile.canBeRemoved()) {
-					projectiles.remove(projectile);
-				}
-			}
+		//Updating the projectiles && Removal of the bullets
+		int size = projectiles.length;
+		for (int i = 0; i < size; i++) {
+			Projectile projectile = projectiles[i];
+			
+			projectile.update(tslf);
+			
+			if(projectile.canBeDeactivated()) {
+				projectile.deactivate();
+			}	
 		}
-	}
 
+		//Collision
+		checkCollisionProjectilesToObjects();
+	}
+	
 	/**
 	 * 
 	 */
@@ -88,23 +86,23 @@ public abstract class Gun {
 			for (Enemy e : Game.currentMap.enemies) {
 				if(!e.alive) continue;
 				for (Projectile projectile : projectiles) {
-					if(projectile.disabled) continue;
+					if(projectile.hitSomething || !projectile.isActive) continue;
 					if(projectile.checkCollisionToObject(e)) {
 						e.getHitByProjectile(projectile, damage);      
 						projectile.maxExplosionRadius = 30;
-						projectile.disable();
+						projectile.hitSomething();
 					}
 				}
 			}
 
 		}else if(owner instanceof Enemy) {
 			for (Projectile projectile : projectiles) {
-				if(projectile.disabled) continue;
+				if(projectile.hitSomething || !projectile.isActive) continue;
 				if(projectile.checkCollisionToObject(Globals.player)) {
 					Globals.player.startKnockback(projectile.angle, Globals.player.bulletImpact, 0.2f);
 					Globals.player.gotHit = true;
 					projectile.maxExplosionRadius = 30;
-					projectile.disable();
+					projectile.hitSomething();
 				}
 			}
 		}
@@ -116,7 +114,7 @@ public abstract class Gun {
 	public abstract void shot();
 
 	public abstract void shot(float angle);
-	
+
 	/**
 	 * This function applies recoil to the player
 	 * @param angle The angle in which the player should get the recoil
