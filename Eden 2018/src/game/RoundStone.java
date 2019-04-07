@@ -3,7 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import enemies.ZombieEnemy;
+import enemies.Enemy;
 
 public class RoundStone {
 
@@ -64,7 +64,7 @@ public class RoundStone {
 		}
 
 		//Collision with Enemies 
-		for (ZombieEnemy e : Game.currentMap.enemies) {
+		for (Enemy e : Game.currentMap.enemies) {
 			if(Globals.checkCollisionRectangleToRectangle(e.x, e.y, e.size, e.size, this.x, this.y, width, height)) {
 				float pcx = e.x + e.size/2;
 				float pcy = e.y + e.size/2;

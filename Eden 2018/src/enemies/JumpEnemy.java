@@ -18,7 +18,7 @@ public class JumpEnemy extends ZombieEnemy{
 	boolean isJumping = false;
 	float jumpVeloctiyX;
 	float jumpVeloctiyY;
-	float jumpSpeed = 1000;
+	float jumpSpeed = 100;
 	float currentJumpSpeed = 0;
 	float timeJumped = 0;
 	float jumpTime = 0.2f;
@@ -26,7 +26,10 @@ public class JumpEnemy extends ZombieEnemy{
 	public JumpEnemy(float x, float y) {
 		super(x, y);
 		size = 18;
-		health = 500;
+		
+		this.MAX_HEALTH = 500;
+		this.health = MAX_HEALTH;
+		
 		bulletImpact = 150;
 	}
 
@@ -66,6 +69,8 @@ public class JumpEnemy extends ZombieEnemy{
 			if(startCharge) {
 				g.translate(-xa, -ya);
 			}
+			
+			healthbar.draw(g);
 		}
 
 		if(isInHitAnimation) {

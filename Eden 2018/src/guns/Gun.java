@@ -3,7 +3,7 @@ package guns;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import enemies.ZombieEnemy;
+import enemies.Enemy;
 import game.Eden;
 import game.Game;
 import game.Globals;
@@ -41,7 +41,7 @@ public abstract class Gun {
 	public void draw(Graphics g) {
 		Color c = Color.BLACK;
 		if(owner instanceof Eden) c = Color.YELLOW;
-		if(owner instanceof ZombieEnemy) c = Color.RED;
+		if(owner instanceof Enemy) c = Color.RED;
 		for (Projectile projectile : projectiles) {
 			if(!projectile.isActive) continue;
 			g.setColor(c);
@@ -83,7 +83,7 @@ public abstract class Gun {
 	 */
 	public void checkCollisionProjectilesToObjects() {
 		if(owner == Globals.player) {
-			for (ZombieEnemy e : Game.currentMap.enemies) {
+			for (Enemy e : Game.currentMap.enemies) {
 				if(!e.alive) continue;
 				for (Projectile projectile : projectiles) {
 					if(projectile.hitSomething || !projectile.isActive) continue;
@@ -95,7 +95,7 @@ public abstract class Gun {
 				}
 			}
 
-		}else if(owner instanceof ZombieEnemy) {
+		}else if(owner instanceof Enemy) {
 			for (Projectile projectile : projectiles) {
 				if(projectile.hitSomething || !projectile.isActive) continue;
 				if(projectile.checkCollisionToObject(Globals.player)) {

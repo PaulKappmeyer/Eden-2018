@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import enemies.Boss;
+import enemies.Enemy;
 import enemies.ZombieEnemy;
 import enemies.JumpEnemy;
 import enemies.RoundEnemy;
@@ -34,10 +35,10 @@ public class Game {
 		obstacles.add(new Stone(400, 250, 25, 100));
 		obstacles.add(new Stone(300, 225, 75, 25));
 
-		ArrayList<ZombieEnemy> enemies = new ArrayList<ZombieEnemy>();
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		enemies.add(new JumpEnemy(500, 100));
 		enemies.add(new ZombieEnemy(600, 100));
-		enemies = new ArrayList<ZombieEnemy>();
+		enemies = new ArrayList<Enemy>();
 		enemies.add(new Boss(650, 250));
 		enemies.add(new JumpEnemy(500, 100));
 		enemies.add(new ZombieEnemy(500, 200));

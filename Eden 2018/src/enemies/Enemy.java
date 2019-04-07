@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import game.Direction;
 import game.Globals;
+import game.Healthbar;
 import game.MovingObject;
 import guns.Projectile;
 
@@ -23,15 +24,18 @@ public abstract class Enemy extends MovingObject {
 	float timeKnockedBack;
 	
 	//HEALTH
-	int health = 200;
+	public float MAX_HEALTH;
+	public float health;
 	public boolean alive = true;
+	Healthbar healthbar = new Healthbar(this);
+	
 	
 	//Get hit by bullet 
 	public float bulletImpact = 325;
 	public float bulletImpactTime = 0.1f;
 	
 	//Got-Hit animation
-	boolean isInHitAnimation = false;
+	public boolean isInHitAnimation = false;
 	float timeBlinked;
 	float swapBlinkTime = 0.05f;
 	int blinksDone;
@@ -98,6 +102,8 @@ public abstract class Enemy extends MovingObject {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
+		
+		healthbar.draw(g);
 	}
 	
 	//------------------------UPDATING

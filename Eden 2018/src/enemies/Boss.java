@@ -19,9 +19,12 @@ public class Boss extends ZombieEnemy{
 
 	public Boss(float x, float y) {
 		super(x, y);
-		size = 32;
-		MAX_WALK_SPEED = 12;
-		health = 1000;
+		this.size = 32;
+		this.MAX_WALK_SPEED = 12;
+		
+		this.MAX_HEALTH = 1000;
+		this.health = MAX_HEALTH;
+		
 		bulletImpact = 50;
 		//Gun
 		gun = new CirclefireGun(this, CirclefireGun.CIRCLESHOT);
@@ -69,6 +72,8 @@ public class Boss extends ZombieEnemy{
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
+		
+		healthbar.draw(g);
 	}
 
 	@Override

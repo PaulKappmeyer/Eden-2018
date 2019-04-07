@@ -29,6 +29,9 @@ public class ZombieEnemy extends Enemy{
 		this.y = y;
 		this.size = 16;
 		this.MAX_WALK_SPEED += -10 + Globals.random.nextInt(20); //Randomize walk speed
+		
+		this.MAX_HEALTH = 100;
+		this.health = MAX_HEALTH;
 	}
 
 	/**

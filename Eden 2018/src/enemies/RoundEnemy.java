@@ -20,6 +20,9 @@ public class RoundEnemy extends ZombieEnemy{
 		size = 20;
 		radius = size + 1;
 		this.MAX_WALK_SPEED = 20;
+		
+		this.MAX_HEALTH = 100;
+		this.health = MAX_HEALTH;
 	}
 
 	@Override

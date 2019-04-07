@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import enemies.ZombieEnemy;
+import enemies.Enemy;
 import guns.Gun;
 import guns.SinglefireGun;
 import input.Input;
@@ -25,7 +25,6 @@ public class Eden extends MovingObject{
 	 */
 	int idleWalkSpeed = 250;
 	int shotWalkSpeed = 75;
-	float currentWalkSpeed;
 
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
@@ -34,7 +33,6 @@ public class Eden extends MovingObject{
 
 	public Gun gun;
 
-	Direction walkDirection;
 	Direction shotDirection;
 	
 	//Knockback
@@ -198,7 +196,7 @@ public class Eden extends MovingObject{
 				currentStunRange = 0;
 			}
 
-			for (ZombieEnemy e : Game.currentMap.enemies) {
+			for (Enemy e : Game.currentMap.enemies) {
 				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
 					float ecx = e.x + e.size/2;
 					float ecy = e.y + e.size/2;
@@ -423,7 +421,7 @@ public class Eden extends MovingObject{
 	 * if there is a collision calls {@link #applyKnockback(float)}, and sets {@link #gotHit} true
 	 */
 	public void checkCollisionPlayerToEnemies() {
-		for (ZombieEnemy e : Game.currentMap.enemies) {
+		for (Enemy e : Game.currentMap.enemies) {
 			if(!e.alive) continue;
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
 				float ecx = e.x + e.size/2;

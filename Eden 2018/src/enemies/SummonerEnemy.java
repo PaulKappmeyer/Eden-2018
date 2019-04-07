@@ -11,6 +11,9 @@ public class SummonerEnemy extends ZombieEnemy{
 		super(x, y);
 		MAX_WALK_SPEED = 25;
 		size = 20;
+		
+		this.MAX_HEALTH = 200;
+		this.health = MAX_HEALTH;
 	}
 
 	@Override

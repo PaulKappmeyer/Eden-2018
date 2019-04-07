@@ -4,17 +4,17 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import enemies.Boss;
-import enemies.ZombieEnemy;
+import enemies.Enemy;
 import guns.Shell;
 
 public class Map {
 
 	Eden player = Globals.player;
-	public ArrayList<ZombieEnemy> enemies;
+	public ArrayList<Enemy> enemies;
 	public ArrayList<Obstacle> obstacles;
 	public ArrayList<Shell> shells;
 	
-	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<ZombieEnemy> enemies) {
+	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies) {
 		this.player.x = playerX;
 		this.player.y = playerY;
 		this.obstacles = obstacles;
@@ -30,14 +30,14 @@ public class Map {
 		//Drawing the players gun
 		if(Globals.player.gun != null)Globals.player.gun.draw(g);
 		//Drawing the bosses gun
-		for (ZombieEnemy enemy : enemies) {
+		for (Enemy enemy : enemies) {
 			if(enemy instanceof Boss) {
 				Boss boss = (Boss) enemy;
 				boss.gun.draw(g);
 			}
 		}
 		//Drawing the enemies
-		for (ZombieEnemy e : enemies) {
+		for (Enemy e : enemies) {
 			e.draw(g);
 		}
 		
@@ -68,7 +68,7 @@ public class Map {
 		//Updating the enemies && Removal of the enemies; note: this loop runs backwards because we may delete objects
 		int size = enemies.size() - 1;
 		for (int i = size; i >= 0; i--) {
-			ZombieEnemy e = enemies.get(i);
+			Enemy e = enemies.get(i);
 			e.update(tslf);
 			if(e.canBeRemoved())enemies.remove(e);
 		}
@@ -83,10 +83,10 @@ public class Map {
 	 */
 	public void ysort() {
 		//TODO: using Collections . sort();
-		ArrayList<ZombieEnemy> newEnemies = enemies;
+		ArrayList<Enemy> newEnemies = enemies;
 		for (int i = 0; i < newEnemies.size() - 1; i++) {
-			ZombieEnemy e = enemies.get(i);
-			ZombieEnemy e1 = enemies.get(i + 1);
+			Enemy e = enemies.get(i);
+			Enemy e1 = enemies.get(i + 1);
 
 			if(e.y > e1.y) {
 				newEnemies.set(i, e1);
