@@ -3,11 +3,11 @@ package guns;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import enemies.Enemy;
+import enemies.ZombieEnemy;
 import game.Eden;
 import game.Game;
 import game.Globals;
-import game.Object;
+import game.MovingObject;
 
 public abstract class Gun {
 
@@ -22,11 +22,11 @@ public abstract class Gun {
 	float bulletSpeed = 600;
 
 	float damage;
-	Object owner;
+	MovingObject owner;
 
 	public Projectile[] projectiles;
 
-	public Gun(Object owner) {
+	public Gun(MovingObject owner) {
 		this.owner = owner;
 		this.canShot = false;
 		this.damage = 50;
@@ -41,7 +41,7 @@ public abstract class Gun {
 	public void draw(Graphics g) {
 		Color c = Color.BLACK;
 		if(owner instanceof Eden) c = Color.YELLOW;
-		if(owner instanceof Enemy) c = Color.RED;
+		if(owner instanceof ZombieEnemy) c = Color.RED;
 		for (Projectile projectile : projectiles) {
 			if(!projectile.isActive) continue;
 			g.setColor(c);
@@ -83,7 +83,7 @@ public abstract class Gun {
 	 */
 	public void checkCollisionProjectilesToObjects() {
 		if(owner == Globals.player) {
-			for (Enemy e : Game.currentMap.enemies) {
+			for (ZombieEnemy e : Game.currentMap.enemies) {
 				if(!e.alive) continue;
 				for (Projectile projectile : projectiles) {
 					if(projectile.hitSomething || !projectile.isActive) continue;
@@ -95,7 +95,7 @@ public abstract class Gun {
 				}
 			}
 
-		}else if(owner instanceof Enemy) {
+		}else if(owner instanceof ZombieEnemy) {
 			for (Projectile projectile : projectiles) {
 				if(projectile.hitSomething || !projectile.isActive) continue;
 				if(projectile.checkCollisionToObject(Globals.player)) {

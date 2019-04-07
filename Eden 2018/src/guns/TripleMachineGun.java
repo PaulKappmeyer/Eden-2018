@@ -2,7 +2,7 @@ package guns;
 
 import game.Game;
 import game.Globals;
-import game.Object;
+import game.MovingObject;
 
 public class TripleMachineGun extends Gun{
 
@@ -10,7 +10,7 @@ public class TripleMachineGun extends Gun{
 	float tripleMachineGunRadius = 10;
 	int bulletspray = 3;
 	
-	public TripleMachineGun(Object owner) {
+	public TripleMachineGun(MovingObject owner) {
 		super(owner);
 		mode = TRIPLEMACHINEGUN;
 		
@@ -24,7 +24,7 @@ public class TripleMachineGun extends Gun{
 	public void shot() {
 		float angle = 0;
 		if(mode == TRIPLEMACHINEGUN) {
-			switch (owner.shotDirection) {
+			switch (owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
 				fireBullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y - Bullet.SIZE, angle - tripleMachineGunRadius, bulletSpeed);

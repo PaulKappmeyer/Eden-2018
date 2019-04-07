@@ -17,7 +17,7 @@ public class Collision {
 	 * @param nextY
 	 * @return
 	 */
-	public static Obstacle[] checkCollisionMovingobjToObstacle(Object move, float nextX, float nextY) {
+	public static Obstacle[] checkCollisionMovingobjToObstacle(MovingObject move, float nextX, float nextY) {
 		Obstacle[] sides = new Obstacle[4];
 
 		//TOP SIDE OF OBSTACLE

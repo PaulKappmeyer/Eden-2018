@@ -2,14 +2,14 @@ package guns;
 
 import game.Game;
 import game.Globals;
-import game.Object;
+import game.MovingObject;
 
 public class SinglefireGun extends Gun{
 
 	public static final int SINGLEFIRE = 1;
 	int bulletspray = 0;
 
-	public SinglefireGun(Object owner) {
+	public SinglefireGun(MovingObject owner) {
 		super(owner);
 		mode = SINGLEFIRE;
 		damage = 50;
@@ -24,7 +24,7 @@ public class SinglefireGun extends Gun{
 	public void shot() {
 		float angle = 0;
 		if(mode == SINGLEFIRE) {
-			switch(owner.shotDirection) {
+			switch(owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
 				fireBullet(owner.x + owner.size/2 - Bullet.SIZE/2, owner.y - Bullet.SIZE, angle, bulletSpeed);

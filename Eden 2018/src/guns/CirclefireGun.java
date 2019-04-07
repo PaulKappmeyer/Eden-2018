@@ -1,7 +1,7 @@
 package guns;
 
 import game.Game;
-import game.Object;
+import game.MovingObject;
 
 public class CirclefireGun extends Gun{
 
@@ -10,7 +10,7 @@ public class CirclefireGun extends Gun{
 	int numBulletsPerShot = 36;
 	int a = 0;
 	
-	public CirclefireGun(Object owner) {
+	public CirclefireGun(MovingObject owner) {
 		super(owner);
 		this.mode = CIRCLESHOT;
 		
@@ -19,7 +19,7 @@ public class CirclefireGun extends Gun{
 			projectiles[i] = new Bullet();
 		}
 	}
-	public CirclefireGun(Object owner, int mode) {
+	public CirclefireGun(MovingObject owner, int mode) {
 		super(owner);
 		this.mode = mode;
 		

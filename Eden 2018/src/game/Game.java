@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import enemies.Boss;
-import enemies.Enemy;
+import enemies.ZombieEnemy;
 import enemies.JumpEnemy;
 import enemies.RoundEnemy;
 import enemies.SummonerEnemy;
@@ -34,21 +34,21 @@ public class Game {
 		obstacles.add(new Stone(400, 250, 25, 100));
 		obstacles.add(new Stone(300, 225, 75, 25));
 
-		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		ArrayList<ZombieEnemy> enemies = new ArrayList<ZombieEnemy>();
 		enemies.add(new JumpEnemy(500, 100));
-		enemies.add(new Enemy(600, 100));
-		enemies = new ArrayList<Enemy>();
+		enemies.add(new ZombieEnemy(600, 100));
+		enemies = new ArrayList<ZombieEnemy>();
 		enemies.add(new Boss(650, 250));
 		enemies.add(new JumpEnemy(500, 100));
-		enemies.add(new Enemy(500, 200));
-		enemies.add(new Enemy(500, 300));
+		enemies.add(new ZombieEnemy(500, 200));
+		enemies.add(new ZombieEnemy(500, 300));
 		enemies.add(new SummonerEnemy(500, 350));
 		enemies.add(new SummonerEnemy(500, 250));
 		enemies.add(new SummonerEnemy(500, 150));
 		enemies.add(new SummonerEnemy(500, 170));
 		enemies.add(new RoundEnemy(600, 100));
 
-//		enemies = new ArrayList<Enemy>();
+		//enemies = new ArrayList<ZombieEnemy>();
 		obstacles.add(new Chest(100, 100, 16, 16));
 		obstacles.add(new Sign(150, 550, 16, 16));
 		obstacles.add(new House(500, 100, 64, 32));
@@ -117,7 +117,7 @@ public class Game {
 		//RESETING : SET NEW MAP
 		else if(state == Gamestate.RESET) {
 			state = Gamestate.MAP_TRANSITION_OUT;
-			switchMap(); 
+			switchMap(newPlayerX, newPlayerY, newMap); 
 		}
 	}
 
@@ -131,54 +131,50 @@ public class Game {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	static Direction direction;
-	public void switchMap() {
+	static float newPlayerX;
+	static float newPlayerY;
+	static Map newMap;
+	public void switchMap(float newPlayerX, float newPlayerY, Map newMap) {
 		if(Globals.player.gun != null) {
 			for (int i = 0; i < Globals.player.gun.projectiles.length; i++) {
 				Globals.player.gun.projectiles[i].deactivate();
 			}
 		}
-		switch (direction) {
-		case RIGHT:
-			Globals.player.x = 5;
-			break;
-		case LEFT:
-			Globals.player.x = Globals.width - 5 - Globals.player.size;
-			break;
-		case DOWN:
-			Globals.player.y = 5;
-			break;
-		case UP:
-			Globals.player.y = Globals.height - 5 - Globals.player.size;
-			break;
-		default:
-			break;
-		}
-		currentMap = maps[mapX][mapY];
+
+		Globals.player.x = newPlayerX;
+		Globals.player.y = newPlayerY;
+		
+		currentMap = newMap;
 	}
 
-	public static void beginMapTransition(Direction direction) {
+	public static void beginMapTransition(Direction direction, Map newMap, float newPlayerX, float newPlayerY) {
+		if(Game.state == Gamestate.MAP_TRANSITION_IN) return;
 		Game.state = Gamestate.MAP_TRANSITION_IN;
 		Game.direction = direction;
+		Game.newPlayerX = newPlayerX;
+		Game.newPlayerY = newPlayerY;
+		Game.newMap = newMap;
 		transition.startTransition(direction);
 	}
 
+	//Transition
 	public void checkCollisionPlayerToWall() {
+		if(Game.state == Gamestate.MAP_TRANSITION_IN) return;
 		if(Globals.player.x <= 0 && mapX > 0) {
-			beginMapTransition(Direction.LEFT);
 			mapX --;
+			beginMapTransition(Direction.LEFT, maps[mapX][mapY], Globals.width - 5 - Globals.player.size, Globals.player.y);
 		}
 		if(Globals.player.y <= 0 && mapY > 0) {
-			beginMapTransition(Direction.UP);
 			mapY --;
+			beginMapTransition(Direction.UP, maps[mapX][mapY], Globals.player.x, Globals.height - 5 - Globals.player.size);
 		}
 		if(Globals.player.x + Globals.player.size >= Globals.width && mapX < maps.length-1) {
-			beginMapTransition(Direction.RIGHT);
 			mapX ++;
+			beginMapTransition(Direction.RIGHT, maps[mapX][mapY], 5, Globals.player.y);
 		}
 		if(Globals.player.y + Globals.player.size >= Globals.height && mapY < maps[mapX].length-1) {
-			beginMapTransition(Direction.DOWN);
-			System.out.println("yes1");
 			mapY ++;
+			beginMapTransition(Direction.DOWN, maps[mapX][mapY], Globals.player.x, 5);
 		}
 	}
 }

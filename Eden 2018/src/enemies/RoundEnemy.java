@@ -8,7 +8,7 @@ import game.Globals;
 import guns.Bullet;
 import guns.Projectile;
 
-public class RoundEnemy extends Enemy{
+public class RoundEnemy extends ZombieEnemy{
 
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	ArrayList<Float> angles = new ArrayList<>();
@@ -19,7 +19,7 @@ public class RoundEnemy extends Enemy{
 		super(x, y);
 		size = 20;
 		radius = size + 1;
-		this.maxWalkspeed = 20;
+		this.MAX_WALK_SPEED = 20;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class RoundEnemy extends Enemy{
 							bullet.velocityX = (float) Math.sin(Math.toRadians(bullet.angle + angle));
 							bullet.velocityY = (float) Math.cos(Math.toRadians(bullet.angle + angle));
 						}
-						resetWalkspeed();
+						resetSpeedUp();
 						angle = -1f;
 						angles.set(index, angle);
 					}
@@ -139,6 +139,25 @@ public class RoundEnemy extends Enemy{
 		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+		
+		g.setColor(Color.BLUE);
+		switch (lookDirection) {
+		case UP:
+			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+			break;
+		case DOWN:
+			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+			break;
+		case RIGHT:
+			g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			break;
+		case LEFT:
+			g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			break;
+		default:
+			break;
+		}
+		
 		if(isInHitAnimation) {
 			if(showBlink) {
 				g.setColor(Color.WHITE);

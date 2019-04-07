@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import game.BulletBouncer;
 import game.Collision;
 import game.Globals;
-import game.Object;
+import game.Gameobject;
 import game.Obstacle;
 import game.GameDrawer;
 
@@ -115,7 +115,7 @@ public class Bullet extends Projectile{
 	 * @return true if the collide; false if not
 	 */
 	@Override
-	public boolean checkCollisionToObject(Object obj) {
+	public boolean checkCollisionToObject(Gameobject obj) {
 		return Globals.checkCollisionRectangleToCircle(this.x, this.y, SIZE, obj.x, obj.y, obj.size, obj.size);
 	}
 

@@ -13,14 +13,14 @@ import guns.Projectile;
  * @author Paul Kappmeyer
  *
  */
-public class Boss extends Enemy{
+public class Boss extends ZombieEnemy{
 
 	public Gun gun;
 
 	public Boss(float x, float y) {
 		super(x, y);
 		size = 32;
-		maxWalkspeed = 12;
+		MAX_WALK_SPEED = 12;
 		health = 1000;
 		bulletImpact = 50;
 		//Gun
@@ -38,6 +38,24 @@ public class Boss extends Enemy{
 				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
 				g.setColor(Color.BLACK);
 				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				
+				g.setColor(Color.BLUE);
+				switch (lookDirection) {
+				case UP:
+					g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+					break;
+				case DOWN:
+					g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+					break;
+				case RIGHT:
+					g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+					break;
+				case LEFT:
+					g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+					break;
+				default:
+					break;
+				}
 			}
 			if(isInHitAnimation) {
 				if(showBlink) {
@@ -71,7 +89,7 @@ public class Boss extends Enemy{
 			if(followplayer) {
 				if(gun.canShot) {
 					gun.shot();
-					resetWalkspeed();
+					resetSpeedUp();
 				}
 			}
 		}

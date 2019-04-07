@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import enemies.Enemy;
+import enemies.ZombieEnemy;
 import guns.Gun;
 import guns.SinglefireGun;
 import input.Input;
@@ -17,7 +17,7 @@ import input.MouseinputManager;
  * {@link #y} The y-position of the player <br>
  * {@link #walkSpeed} This is the number of the pixels the player can run per second <br>
  */
-public class Eden extends Object{
+public class Eden extends MovingObject{
 
 	//TODO: revise the variable mess
 	/**
@@ -27,12 +27,6 @@ public class Eden extends Object{
 	int shotWalkSpeed = 75;
 	float currentWalkSpeed;
 
-	public double walkVelocityX;
-	double walkVelocityY;
-
-	final float timeForSpeedUp = 0.125f; // time for full idleWalkSpeed in seconds
-	float timeSpeededUp;
-
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
 	public static final int SHOOTING = 2;
@@ -41,7 +35,8 @@ public class Eden extends Object{
 	public Gun gun;
 
 	Direction walkDirection;
-
+	Direction shotDirection;
+	
 	//Knockback
 	boolean gotKnockbacked;
 	float maxKnockback;
@@ -111,7 +106,6 @@ public class Eden extends Object{
 		case LEFT:
 			g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
 			break;
-
 		default:
 			break;
 		}
@@ -165,11 +159,11 @@ public class Eden extends Object{
 			currentWalkSpeed = shotWalkSpeed;
 		}else if(state == WALKING) {
 			shotDirection = walkDirection;
-			if(timeSpeededUp >= timeForSpeedUp) {
+			if(timeSpeededUp >= TIME_FOR_MAX_SPEED) {
 				currentWalkSpeed = idleWalkSpeed;
 			}else {
 				timeSpeededUp += tslf;
-				currentWalkSpeed = idleWalkSpeed * (timeSpeededUp / timeForSpeedUp);
+				currentWalkSpeed = idleWalkSpeed * (timeSpeededUp / TIME_FOR_MAX_SPEED);
 			}
 		}
 
@@ -204,7 +198,7 @@ public class Eden extends Object{
 				currentStunRange = 0;
 			}
 
-			for (Enemy e : Game.currentMap.enemies) {
+			for (ZombieEnemy e : Game.currentMap.enemies) {
 				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
 					float ecx = e.x + e.size/2;
 					float ecy = e.y + e.size/2;
@@ -429,7 +423,7 @@ public class Eden extends Object{
 	 * if there is a collision calls {@link #applyKnockback(float)}, and sets {@link #gotHit} true
 	 */
 	public void checkCollisionPlayerToEnemies() {
-		for (Enemy e : Game.currentMap.enemies) {
+		for (ZombieEnemy e : Game.currentMap.enemies) {
 			if(!e.alive) continue;
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
 				float ecx = e.x + e.size/2;
@@ -446,7 +440,7 @@ public class Eden extends Object{
 				if(pcy > ecy) angle =  -90 - (90-angle);
 				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
 
-				e.resetWalkspeed();
+				e.resetSpeedUp();
 
 				if(distx == 0 && disty == 0) angle = 0;
 
@@ -463,7 +457,7 @@ public class Eden extends Object{
 	 * @param ammount
 	 */
 	public void startKnockback(float angle, float ammount, float time) {
-		if(gotKnockbacked) stopKnockback();;
+		//if(gotKnockbacked) stopKnockback();
 		gotKnockbacked = true;
 		calculateKnockbackVelocity(angle);
 		maxKnockback = ammount;

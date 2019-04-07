@@ -3,10 +3,10 @@ package guns;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import enemies.Enemy;
+import enemies.ZombieEnemy;
 import game.Game;
 import game.Globals;
-import game.Object;
+import game.Gameobject;
 import game.Obstacle;
 import game.GameDrawer;
 
@@ -102,8 +102,8 @@ public class Rocket extends Projectile{
 	 */
 	public void searchEnemy(float tslf) {
 		float nearestDistance = Float.MAX_VALUE;
-		Enemy nearestEnemy = null;
-		for (Enemy enemy : Game.currentMap.enemies) {
+		ZombieEnemy nearestEnemy = null;
+		for (ZombieEnemy enemy : Game.currentMap.enemies) {
 			if(!enemy.alive)continue;
 			float ecx = enemy.x + enemy.size/2;
 			float ecy = enemy.y + enemy.size/2;
@@ -144,7 +144,7 @@ public class Rocket extends Projectile{
 	 * @return true if the collide; false if not
 	 */
 	@Override
-	public boolean checkCollisionToObject(Object obj) {
+	public boolean checkCollisionToObject(Gameobject obj) {
 		return Globals.checkCollisionRectangleToCircle(this.x, this.y, SIZE, obj.x, obj.y, obj.size, obj.size);
 	}
 	/**

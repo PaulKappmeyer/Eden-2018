@@ -13,13 +13,14 @@ public class House extends Obstacle{
 	float openTime = 0.25f;
 	float opened = 0;
 	Map indoor;
+	Map oldMap;
 
 	public House(int x, int y, int width, int height) {
 		super(x, y, width, height);
 
 		this.doorX = this.x + this.width / 2 - doorWidth-2;
 		this.doorY = this.y + this.height - doorHeight;
-		
+
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, Globals.width, 25));
 		obstacles.add(new Stone(0, 25, 25, Globals.height));
@@ -41,7 +42,7 @@ public class House extends Obstacle{
 		g.drawRect(doorX + Globals.insetX, doorY + Globals.insetY, doorWidth, doorHeight);
 
 	}
-	
+
 	@Override
 	public void update(float tslf) {
 		Eden player = Globals.player;
@@ -49,26 +50,26 @@ public class House extends Obstacle{
 			if(player.x > doorX - 5 && player.x < doorX + 5 && player.y == this.y + this.height) {
 				opened += tslf;
 				if(opened >= openTime) {
-					Game.currentMap = indoor;
-					player.x = Globals.width/2 - player.size/2;
-					player.y = Globals.height - 25 - player.size;
+					if(Game.state == Gamestate.RUNNING) {
+						oldMap = Game.currentMap;
+						Game.mapY--;
+						Game.beginMapTransition(Direction.UP, indoor, Globals.width/2 - player.size/2, Globals.height - 25 - player.size);
+					}
 				}
 			}
 		}else {
 			opened = 0;
 		}
 		
-		if(Game.currentMap == indoor) {
-			if(player.y + player.size > Globals.height - 25) {
+		if(Game.currentMap.equals(indoor)) {
+			System.out.println("yes13");
+			if(Globals.player.y + Globals.player.size >= Globals.height) {
 				System.out.println("yes");
-				Game.beginMapTransition(Direction.DOWN);
-				player.x = doorX;
-				player.y = doorY + doorHeight;
-				Game.mapY --;
+				Game.beginMapTransition(Direction.DOWN, oldMap, doorX, doorY + doorHeight + 5);
 			}
 		}
 	}
-	
+
 	class Teleporter{
 		int x;
 		int y;

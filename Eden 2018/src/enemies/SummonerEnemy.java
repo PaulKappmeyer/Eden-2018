@@ -2,14 +2,14 @@ package enemies;
 
 import game.Game;
 
-public class SummonerEnemy extends Enemy{
+public class SummonerEnemy extends ZombieEnemy{
 
 	float spawnTime = 3f;
 	float tsls;
 	
 	public SummonerEnemy(float x, float y) {
 		super(x, y);
-		maxWalkspeed = 25;
+		MAX_WALK_SPEED = 25;
 		size = 20;
 	}
 
@@ -19,15 +19,15 @@ public class SummonerEnemy extends Enemy{
 		
 		tsls += tslf;
 		if(tsls >= spawnTime) {
-			resetWalkspeed();
+			resetSpeedUp();
 			
-			Enemy e = new Enemy(this.x, this.y);
+			ZombieEnemy e = new ZombieEnemy(this.x, this.y);
 			e.followplayer = true;
 			e.startKnockback(walkAngle + 135, 100, 1);
-			Enemy e1 = new Enemy(this.x, this.y);
+			ZombieEnemy e1 = new ZombieEnemy(this.x, this.y);
 			e1.followplayer = true;
 			e1.startKnockback(walkAngle - 135, 100, 1);
-			Enemy e2 = new Enemy(this.x, this.y);
+			ZombieEnemy e2 = new ZombieEnemy(this.x, this.y);
 			e2.followplayer = true;
 			e2.startKnockback(walkAngle - 180, 100, 1);
 			Game.currentMap.enemies.add(e);

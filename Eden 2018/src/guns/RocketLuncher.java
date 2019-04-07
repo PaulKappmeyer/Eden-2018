@@ -2,14 +2,14 @@ package guns;
 
 import game.Game;
 import game.Globals;
-import game.Object;
+import game.MovingObject;
 
 public class RocketLuncher extends Gun{
 
 	public static final int ROCKET_SINGLE_FIRE_MODE = 4;
 	int bulletspray = 3;
 	
-	public RocketLuncher(Object owner) {
+	public RocketLuncher(MovingObject owner) {
 		super(owner);
 		mode = ROCKET_SINGLE_FIRE_MODE;
 		shottime = 0.5f;
@@ -24,7 +24,7 @@ public class RocketLuncher extends Gun{
 	public void shot() {
 		float angle = 0;
 		if(mode == ROCKET_SINGLE_FIRE_MODE) {
-			switch (owner.shotDirection) {
+			switch (owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
 				break;

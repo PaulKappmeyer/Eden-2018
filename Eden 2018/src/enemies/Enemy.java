@@ -3,36 +3,33 @@ package enemies;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.BulletBouncer;
-import game.Collision;
+import game.Direction;
 import game.Globals;
-import game.Object;
-import game.Obstacle;
+import game.MovingObject;
 import guns.Projectile;
 
-/**
- * 
- * @author Paul Kappmeyer
- *
- */
-public class Enemy extends Object{
-
-	//TODO: Revise the variable mess
-	//Follow player distance
-	int triggerDistance = 300;
-	boolean followplayer;
-	//Movement
-	float walkAngle;
-	double walkVelocityX;
-	double walkVelocityY;
-	int maxWalkspeed = 80;
-	float currentWalkSpeed = 0;
-	float timeForSpeedUp = 0.65f;
-	float timeSpeededUp;
-	boolean speedUp = true;
-	//Health
+public abstract class Enemy extends MovingObject {
+	//POSITION
+	Direction lookDirection = Direction.DOWN;
+	
+	//KNOCKBACK
+	boolean gotKnockbacked;
+	double knockbackVelocityX;
+	double knockbackVelocityY;
+	float MAX_KNOCKBACK_SPEED;
+	float currentKnockbackSpeed;
+	//KNOCKBACK TIMEING
+	float MAX_KNOCKBACK_TIME = 1f;
+	float timeKnockedBack;
+	
+	//HEALTH
 	int health = 200;
 	public boolean alive = true;
+	
+	//Get hit by bullet 
+	public float bulletImpact = 325;
+	public float bulletImpactTime = 0.1f;
+	
 	//Got-Hit animation
 	boolean isInHitAnimation = false;
 	float timeBlinked;
@@ -45,40 +42,50 @@ public class Enemy extends Object{
 	float radius = 0;
 	float radiusIncrease = 1600;
 	float maxRadius = 50;
-	//Knockback
-	boolean gotKnockbacked;
-	float maxKnockback;
-	float maxKnockbackTime;
-	float knockbackVelocityX;
-	float knockbackVelocityY;
-	float currentKnockbackSpeed;
-	float timeKnockedBack;
-	public float bulletImpact = 325;
-	public float bulletImpactTime = 0.1f;
-
-	/**
-	 * Constructor; initializes the enemy
-	 * @param x The x-position
-	 * @param y The y-position
-	 */
-	public Enemy(float x, float y) {
-		this.x = x;
-		this.y = y;
-		this.size = 16;
-		this.maxWalkspeed = maxWalkspeed + -10 + Globals.random.nextInt(20);
+	
+	//-----------------------------------------------------------CONSTRUCTORS------------------------------------------
+	public Enemy() {
 	}
-
-
+	
+	public Enemy(float x, float y) {
+		super(x, y);
+	}
+	
+	public Enemy(float x, float y, int size) {
+		super(x, y, size);
+	}
+	
+	//-----------------------------------------------------------METHODS------------------------------------------
+	//------------------------DRAWING
 	/**
-	 * This function draws the enemy as a red rectangle to the screen
-	 * @param g The graphics object to draw
+	 * This function draws the enemy to the screen
+	 * @param g
 	 */
+	int a = 5;
 	public void draw(Graphics g) {
 		if(!showBlink) {
 			g.setColor(Color.RED);
 			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
 			g.setColor(Color.BLACK);
 			g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			
+			g.setColor(Color.BLUE);
+			switch (lookDirection) {
+			case UP:
+				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+				break;
+			case DOWN:
+				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+				break;
+			case RIGHT:
+				g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				break;
+			case LEFT:
+				g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				break;
+			default:
+				break;
+			}
 		}
 		if(isInHitAnimation) {
 			if(showBlink) {
@@ -92,78 +99,39 @@ public class Enemy extends Object{
 			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
 		}
 	}
-
+	
+	//------------------------UPDATING
 	/**
-	 * This function updates the enemy; if player is in range follow him
-	 * @param tslf
+	 * This function does all the updating of the enemy like: updating the knockback, updating the animations, set new position, check for collision etc.
+	 * @param tslf Time-since-last-frame or delta time
 	 */
 	public void update(float tslf) {
-		if(alive) {
-			//Knockback
-			updateKnockback(tslf);
-
-			//Check for range to start follow player
-			float halfsize = this.size/2;
-			float playercenterx = Globals.player.x + halfsize;
-			float playercentery = Globals.player.y + halfsize;
-			float enemycenterx = this.x + halfsize;
-			float enemycentery = this.y + halfsize;
-			float distx = enemycenterx - playercenterx;
-			float disty = enemycentery - playercentery;
-			if(!followplayer) {
-				float distanceToPlayer = distx * distx + disty * disty;
-				if(distanceToPlayer < triggerDistance * triggerDistance) {
-					followplayer = true;
-				}
-			}
-			//Movement follow player
-			if(followplayer) {
-				walkAngle = (float) Math.atan(distx / disty);
-				walkAngle = (float) Math.toDegrees(walkAngle);
-				if(playercentery > enemycentery) walkAngle =  -90 - (90-walkAngle);
-				if(playercenterx < enemycenterx && playercentery < enemycentery) walkAngle = -270 - (90-walkAngle);
-
-				walkVelocityX = -Math.sin(Math.toRadians(walkAngle));
-				walkVelocityY = -Math.cos(Math.toRadians(walkAngle));
-
-				if(distx == 0 && disty == 0) {
-					walkVelocityX = 0;
-					walkVelocityY = 0;
-				}
-
-				if(speedUp) {
-					if(currentWalkSpeed < maxWalkspeed) {
-						timeSpeededUp += tslf;
-						currentWalkSpeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
-					}else {
-						timeSpeededUp = 0;
-						currentWalkSpeed = maxWalkspeed;
-						speedUp = false;
-					}
-				}
-
-				//Collision with obstacles
-				checkCollisionToObstacles(tslf);
-
-				//Movement
-				this.x += (float) ((walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-				this.y += (float) ((walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-			}
-		}
-
+		super.update(tslf);
+		
+		//Knockback
+		updateKnockback(tslf);
+		
+		//Speed up
+		updateSpeedUp(tslf);
+		
 		//Got-Hit animation
 		updateGotHitAnimation(tslf);
 
 		//Die animation
 		updateDieAnimation(tslf);
 	}
-
+	
+	//------------------------KNOCKBACK UPDATING
+	/**
+	 * This function updates the knockback: calculating the current knockback speed and reset the speed up
+	 * @param tslf
+	 */
 	public void updateKnockback(float tslf) {
 		if(gotKnockbacked) {
-			if(timeKnockedBack <= maxKnockbackTime) {
+			if(timeKnockedBack <= MAX_KNOCKBACK_TIME) {
 				timeKnockedBack += tslf;
-				resetWalkspeed();
-				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
+				resetSpeedUp();
+				currentKnockbackSpeed = MAX_KNOCKBACK_SPEED * ((MAX_KNOCKBACK_TIME - timeKnockedBack) / MAX_KNOCKBACK_TIME);
 			}else {
 				gotKnockbacked = false;
 				timeKnockedBack = 0;
@@ -172,6 +140,11 @@ public class Enemy extends Object{
 		}
 	}
 
+	//------------------------Animations
+	/**
+	 * This function updates the got hit animation
+	 * @param tslf
+	 */
 	public void updateGotHitAnimation(float tslf) {
 		if(isInHitAnimation) {
 			timeBlinked += tslf;
@@ -187,7 +160,10 @@ public class Enemy extends Object{
 			}
 		}
 	}
-
+	/**
+	 * This function updates the death animation
+	 * @param tslf
+	 */
 	public void updateDieAnimation(float tslf) {
 		if(isInDieAnimation) {
 			radius += radiusIncrease * tslf;
@@ -196,73 +172,42 @@ public class Enemy extends Object{
 			}
 		}
 	}
-
+	
+	//------------------------KNOCKBACK METHODS
 	/**
-	 * 
-	 * @param tslf
+	 * This function starts gives the enemy a knockback with a given amount and a given time
+	 * @param angle
+	 * @param ammount
 	 */
-	public void checkCollisionToObstacles(float tslf) {
-		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-		if(nextX == this.x && nextY == this.y) return;
-		
-		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
-		
-		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
-		Obstacle obs = collisions[Collision.TOP_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(180, 100, 0.4f);
-			}else {
-				walkVelocityY = 0;
-				knockbackVelocityY = 0;
-				this.y = obs.y - size;	
-			}
-		}
-		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
-		obs = collisions[Collision.BOTTOM_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(0, 100, 0.4f);
-			}else {
-				walkVelocityY = 0;
-				knockbackVelocityY = 0;
-				this.y = obs.y + obs.height;
-			}
-		}
-		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
-		obs = collisions[Collision.LEFT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(270, 100, 0.4f);
-			}else {
-				walkVelocityX = 0;
-				knockbackVelocityX = 0;
-				this.x = obs.x - size;
-			}
-		}
-		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
-		obs = collisions[Collision.RIGHT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(90, 100, 0.4f);
-			}else {
-				walkVelocityX = 0;
-				knockbackVelocityX = 0;
-				this.x = obs.x + obs.width;
-			}
-		}
+	public void startKnockback(float angle, float amount, float time) {
+		gotKnockbacked = true;
+		calculateKnockbackVelocity(angle);
+		MAX_KNOCKBACK_SPEED = amount;
+		MAX_KNOCKBACK_TIME = time;
 	}
-
 	/**
-	 * 
+	 * This function takes an angle and calculates the velocities;
+	 * @param angle The angle
+	 */
+	private void calculateKnockbackVelocity(float angle) {
+		knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
+		knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
+	}
+	
+	//------------------------GET DAMEGED METHODS
+	/**
+	 * This function gets called when the enemy got hit by a bullet
 	 * @param b The bullet which hit the enemy
 	 * {@link #applyKnockback(float angle)}
 	 */
 	public void getHitByProjectile(Projectile p, float damage) {
-		startKnockback(p.angle, this.bulletImpact, this.bulletImpactTime);
+		startKnockback(p.angle, bulletImpact, bulletImpactTime);
 		getDamaged(damage);
 	}
+	/**
+	 * This function applies damage to the enemy
+	 * @param damage
+	 */
 	public void getDamaged(float damage) {
 		isInHitAnimation = true;
 		health -= damage;
@@ -270,41 +215,17 @@ public class Enemy extends Object{
 			isInDieAnimation = true;
 			alive = false;
 		}
-		resetWalkspeed();
-		if(!followplayer) followplayer = true;
+		resetSpeedUp();
 	}
-
-	public void resetWalkspeed() {
-		currentWalkSpeed = 0;
-		timeSpeededUp = 0;
-		speedUp = true;
-	}
-
+	
+	//------------------------Removing
 	/**
-	 * 
+	 * This function checks if the enemy can be removed: for example when dead and death animation is finished
 	 * @return
 	 */
 	public boolean canBeRemoved() {
 		if(alive) return false;
 		if(isInDieAnimation) return false;
-
 		return true;
-	}
-
-	/**
-	 * 
-	 * @param angle
-	 * @param ammount
-	 */
-	public void startKnockback(float angle, float ammount, float time) {
-		if(gotKnockbacked) return;
-		gotKnockbacked = true;
-		calculateKnockbackVelocity(angle);
-		maxKnockback = ammount;
-		maxKnockbackTime = time;
-	}
-	private void calculateKnockbackVelocity(float angle) {
-		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
-		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}
 }

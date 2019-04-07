@@ -7,12 +7,11 @@ import game.Collision;
 import game.Globals;
 import game.Obstacle;
 
-public class JumpEnemy extends Enemy{
+public class JumpEnemy extends ZombieEnemy{
 
 	float chargeTime = 1.1f;
 	float timeCharged = 0;
 	boolean startCharge;
-	int a = 50;
 	float distance = 120;
 	//Jump
 	boolean startJump = false;
@@ -45,6 +44,25 @@ public class JumpEnemy extends Enemy{
 			g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
 			g.setColor(Color.BLACK);
 			g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+			
+			g.setColor(Color.BLUE);
+			switch (lookDirection) {
+			case UP:
+				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+				break;
+			case DOWN:
+				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+				break;
+			case RIGHT:
+				g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				break;
+			case LEFT:
+				g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				break;
+			default:
+				break;
+			}
+			
 			if(startCharge) {
 				g.translate(-xa, -ya);
 			}
@@ -70,11 +88,10 @@ public class JumpEnemy extends Enemy{
 			updateKnockback(tslf);
 
 			//Check for range to start follow player
-			float halfsize = this.size/2;
-			float playercenterx = Globals.player.x + halfsize;
-			float playercentery = Globals.player.y + halfsize;
-			float enemycenterx = this.x + halfsize;
-			float enemycentery = this.y + halfsize;
+			float playercenterx = Globals.player.x + Globals.player.size/2;
+			float playercentery = Globals.player.y + Globals.player.size/2;
+			float enemycenterx = this.x + size/2;
+			float enemycentery = this.y + size/2;
 			float distx = enemycenterx - playercenterx;
 			float disty = enemycentery - playercentery;
 			if(!followplayer) {
@@ -97,18 +114,12 @@ public class JumpEnemy extends Enemy{
 					walkVelocityX = 0;
 					walkVelocityY = 0;
 				}
+				
+				walkDirection = getDirection(walkVelocityX, walkVelocityY);
+				lookDirection = walkDirection;
 
 				//Speed Up
-				if(speedUp) {
-					if(currentWalkSpeed < maxWalkspeed) {
-						timeSpeededUp += tslf;
-						currentWalkSpeed = maxWalkspeed * (timeSpeededUp / timeForSpeedUp);
-					}else {
-						timeSpeededUp = 0;
-						currentWalkSpeed = maxWalkspeed;
-						speedUp = false;
-					}
-				}
+				updateSpeedUp(tslf);
 
 				//Search for player
 				if(!startCharge && !startJump && !isJumping && followplayer) {
@@ -116,7 +127,7 @@ public class JumpEnemy extends Enemy{
 					if(distanceToPlayer < distance * distance && distanceToPlayer > Globals.player.size * Globals.player.size) {
 						startCharge = true;
 						currentWalkSpeed = 0;
-						speedUp = false;
+						isSpeedingUP = false;
 					}
 				}
 				//Charge
@@ -147,7 +158,7 @@ public class JumpEnemy extends Enemy{
 						currentJumpSpeed = jumpSpeed * ((jumpTime - timeJumped) / jumpTime);
 					}else {
 						isJumping = false;
-						resetWalkspeed();
+						resetSpeedUp();
 						timeJumped = 0;
 						currentJumpSpeed = 0;
 					}

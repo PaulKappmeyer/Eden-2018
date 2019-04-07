@@ -2,7 +2,7 @@ package guns;
 
 import java.awt.Graphics;
 
-import game.Object;
+import game.Gameobject;
 
 public abstract class Projectile {
 
@@ -62,5 +62,5 @@ public abstract class Projectile {
 	 * @param obj
 	 * @return
 	 */
-	public abstract boolean checkCollisionToObject(Object obj);
+	public abstract boolean checkCollisionToObject(Gameobject obj);
 }
