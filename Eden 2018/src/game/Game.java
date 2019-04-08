@@ -20,12 +20,17 @@ public class Game {
 	public static Gamestate state = Gamestate.RUNNING;
 
 	static ScreenTransition transition = new ScreenTransition();
-
-	LaserBarrier l = new LaserBarrier(700, 700, 15, 100);
-
-	NPC npc = new NPC(100, 100);
 	
 	public Game() {
+		int xWidth = Globals.width/16;
+		int yHeight = Globals.height/16;
+		Tile[][]tiles = new Tile[xWidth][yHeight];
+		for (int x = 0; x < xWidth; x++) {
+			for (int y = 0; y < yHeight; y++) {
+				tiles[x][y] = new Tile(x * 16, y * 16);
+			}
+		}
+		
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
 		obstacles.add(new Stone(500, 400, 125, 125));
 		obstacles.add(new Stone(175, 250, 25, 100));
@@ -56,41 +61,41 @@ public class Game {
 		//enemies = new ArrayList<ZombieEnemy>();
 		obstacles.add(new Chest(900, 100, 16, 16));
 		obstacles.add(new Sign(150, 550, 16, 16));
-		obstacles.add(new House(500, 100, 64, 32));
+		//obstacles.add(new House(500, 100, 64, 32));
 		obstacles.add(new BulletBouncer(350, 400, 10, 100));
 		obstacles.add(new BulletBouncer(150, 400, 10, 100));
 		maps = new Map[3][3];
-		maps[1][1] = new Map(100, 400, obstacles, enemies);
+		maps[1][1] = new Map(100, 400, obstacles, enemies, tiles);
 
 		enemies = new ArrayList<>();
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, Globals.width, 25));
 		obstacles.add(new Stone(0, 25, 25, Globals.height));
-		maps[0][0] = new Map(400, 400, obstacles, enemies);
+		maps[0][0] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, Globals.width, 25));
-		maps[1][0] = new Map(400, 400, obstacles, enemies);
+		maps[1][0] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, Globals.width, 25));
 		obstacles.add(new Stone(Globals.width - 25, 25, 25, Globals.height));
-		maps[2][0] = new Map(400, 400, obstacles, enemies);
+		maps[2][0] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, 25, Globals.height));
-		maps[0][1] = new Map(400, 400, obstacles, enemies);
+		maps[0][1] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(Globals.width - 25, 0, 25, Globals.height));
-		maps[2][1] = new Map(400, 400, obstacles, enemies);
+		maps[2][1] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, 0, 25, Globals.height));
 		obstacles.add(new Stone(25, Globals.height-25, Globals.width, 25));
-		maps[0][2] = new Map(400, 400, obstacles, enemies);
+		maps[0][2] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(0, Globals.height-25, Globals.width, 25));
-		maps[1][2] = new Map(400, 400, obstacles, enemies);
+		maps[1][2] = new Map(400, 400, obstacles, enemies, tiles);
 		obstacles = new ArrayList<>();
 		obstacles.add(new Stone(Globals.width-25, 0, 25, Globals.height));
 		obstacles.add(new Stone(0, Globals.height-25, Globals.width, 25));
-		maps[2][2] = new Map(400, 400, obstacles, enemies);
+		maps[2][2] = new Map(400, 400, obstacles, enemies, tiles);
 
 		currentMap = maps[mapX][mapY];
 	}
@@ -100,7 +105,6 @@ public class Game {
 		//RUNNING
 		if(state == Gamestate.RUNNING) {
 			currentMap.update(tslf);
-			npc.update(tslf);
 			
 			//Map transition
 			checkCollisionPlayerToWall();
@@ -129,8 +133,6 @@ public class Game {
 	//--------------------------------------------DRAWING------------------------------------------------------------------------------------
 	public void draw(Graphics g) {
 		currentMap.draw(g);
-		l.draw(g);
-		npc.draw(g);
 		
 		if(Game.state == Gamestate.MAP_TRANSITION_IN || Game.state == Gamestate.MAP_TRANSITION_OUT || Game.state == Gamestate.RESET) {	
 			transition.draw(g);

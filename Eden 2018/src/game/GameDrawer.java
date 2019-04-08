@@ -43,11 +43,6 @@ public class GameDrawer extends Window{
 		g.setColor(Color.WHITE);
 		g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
 		
-		//Screenshake
-		if(screenshake) {
-			g.translate(screenshakeX, screenshakeY);
-		}
-		
 		//Game
 		game.draw(g);
 		
@@ -57,11 +52,6 @@ public class GameDrawer extends Window{
 			g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
 		}
 		
-		//Screenshake
-		if(screenshake) {
-			g.translate(-screenshakeX, -screenshakeY);
-		}
-		
 		//FPS
 		g.setColor(Color.BLACK);
 		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
@@ -69,8 +59,8 @@ public class GameDrawer extends Window{
 	
 	//Screenshake
 	public static boolean screenshake;
-	public int screenshakeX;
-	public int screenshakeY;
+	public static int screenshakeX;
+	public static int screenshakeY;
 	public static int screenshakeStrength = 0;
 	public static float screenshakeDuration = 0;
 	public float tslsc;

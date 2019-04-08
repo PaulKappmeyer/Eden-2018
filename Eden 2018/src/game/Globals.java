@@ -12,7 +12,7 @@ import java.util.Random;
  *
  */
 public class Globals {
-	public static int width = 1200;
+	public static int width = 1280;
 	public static int height = 800;
 	public static int insetX;
 	public static int insetY;

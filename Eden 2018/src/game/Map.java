@@ -13,20 +13,34 @@ public class Map {
 	public ArrayList<Enemy> enemies;
 	public ArrayList<Obstacle> obstacles;
 	public ArrayList<Shell> shells;
+	public Tile[][] tiles;
+	int tilesWidth;
+	int tilesHeight;
 	
-	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies) {
+	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies, Tile [][] tiles) {
 		this.player.x = playerX;
 		this.player.y = playerY;
 		this.obstacles = obstacles;
 		this.enemies = enemies;
 		this.shells = new ArrayList<Shell>();
+		this.tiles = tiles;
+		this.tilesWidth = tiles.length;
+		this.tilesHeight = tiles[0].length;
 	}
 
 	public void draw(Graphics g) {
+		//Drawing the tiles
+		for (int i = 0; i < tilesWidth; i++) {
+			for (int j = 0; j < tilesHeight; j++) {
+				tiles[i][j].draw(g);
+			}
+		}
+		
 		//Drawing the shells
 		for (Shell shell : shells) {
 			shell.draw(g);
 		}
+		
 		//Drawing the players gun
 		if(Globals.player.gun != null)Globals.player.gun.draw(g);
 		//Drawing the bosses gun
@@ -41,9 +55,19 @@ public class Map {
 			e.draw(g);
 		}
 		
+		//Screenshake
+		if(GameDrawer.screenshake) {
+			g.translate(GameDrawer.screenshakeX, GameDrawer.screenshakeY);
+		}
+		
 		//Drawing the obstacles
 		for (Obstacle obs : obstacles) {
 			obs.draw(g);
+		}
+		
+		//Screenshake
+		if(GameDrawer.screenshake) {
+			g.translate(-GameDrawer.screenshakeX, -GameDrawer.screenshakeY);
 		}
 		
 		//Drawing the player

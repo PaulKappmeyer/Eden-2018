@@ -27,7 +27,7 @@ public class House extends Obstacle{
 		obstacles.add(new Stone(Globals.width-25, 25, 25, Globals.height));
 		obstacles.add(new Stone(25, Globals.height-25, Globals.width/2 - 25*2, 25));
 		obstacles.add(new Stone(Globals.width/2 + 25/2, Globals.height-25, Globals.width/2 - 25 - 25/2, 25));
-		indoor = new Map(100, 100, obstacles, new ArrayList<>());
+		indoor = new Map(100, 100, obstacles, new ArrayList<>(), Game.currentMap.tiles);
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class Boss extends ZombieEnemy{
 	public boolean canBeRemoved() {
 		if(super.canBeRemoved()) {
 			for (Projectile projectile : gun.projectiles) {
-				if(!projectile.canBeDeactivated()) return false;
+				if(projectile.isActive) return false;
 			}
 			return true;
 		}
