@@ -7,7 +7,7 @@ import input.Input;
 
 public class Sign extends Obstacle{
 
-	public static int triggerDistance = 75;
+	public static int triggerDistance = 16;
 	boolean pressed;
 	boolean checkForPlayer = true;
 
@@ -15,9 +15,13 @@ public class Sign extends Obstacle{
 	
 	public Sign(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		String[]text = new String[]{"DAS IST EIN SCHILD!"};
+		String[]text = new String[]{"KEIN TEXT HINTERLEGT! ENTWICKLER FRAGEN!"};
 		textbox = new Textbox(text);
-		
+		isObstacle = false;
+	}
+	public Sign(int x, int y, int width, int height, String[]text) {
+		super(x, y, width, height);
+		textbox = new Textbox(text);
 		isObstacle = false;
 	}
 
