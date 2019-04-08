@@ -14,10 +14,10 @@ public class Stone extends Obstacle{
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(c);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
-		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
+//		g.setColor(c);
+//		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
+//		g.setColor(Color.BLACK);
+//		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
 	}
 
 	@Override

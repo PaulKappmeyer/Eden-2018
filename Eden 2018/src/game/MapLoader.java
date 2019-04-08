@@ -12,7 +12,7 @@ public class MapLoader {
 	public static Map loadMap(File path) throws Exception {
 		if(!path.exists()) throw new FileNotFoundException("This file could not be found");
 		if(!path.isFile()) throw new Exception("The given path is not a file");
-		System.out.println("Start load File: " + path.getAbsolutePath());
+		System.out.println("Start loading Map: " + path.getAbsolutePath());
 		
 		Scanner scanner = new Scanner(path);
 		

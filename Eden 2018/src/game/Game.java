@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Game {
@@ -15,16 +16,33 @@ public class Game {
 	static ScreenTransition transition = new ScreenTransition();
 
 	public Game() {
-		maps = new Map[1][1];
+		//Image
+		try {
+			BufferedImage tileset = ImageLoader.loadImage(new File(".\\src\\gfx\\Dungeon_tileset.png"));
+			Tile.image_8 = tileset.getSubimage(0, 16, 16, 16);
+			Tile.image_9 = tileset.getSubimage(16, 16, 16, 16);
+			Tile.image_10 = tileset.getSubimage(32, 16, 16, 16);
+			Tile.image_12 = tileset.getSubimage(64, 16, 16, 16);
+			Tile.image_14 = tileset.getSubimage(96, 16, 16, 16);
+			Tile.image_15 = tileset.getSubimage(0, 32, 16, 16);
+			Tile.image_16 = tileset.getSubimage(16, 32, 16, 16);
+			Tile.image_21 = tileset.getSubimage(96, 32, 16, 16);
+			Tile.image_31 = tileset.getSubimage(32, 64, 16, 16);
+			Tile.image_36 = tileset.getSubimage(0, 80, 16, 16);
+			Tile.image_37 = tileset.getSubimage(16, 80, 16, 16);
+			Tile.image_42 = tileset.getSubimage(96, 80, 16, 16);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+		//Maps
+		maps = new Map[1][1];
 		File path = new File(".\\src\\maps\\Eden_Testmap_1.txt");
-
 		try {
 			maps[0][0] = MapLoader.loadMap(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		currentMap = maps[mapX][mapY];
 	}
 

@@ -53,8 +53,8 @@ public class GameDrawer extends Window{
 		}
 		
 		//FPS
-		g.setColor(Color.BLACK);
-		g.drawString(Globals.fps + " fps", 10 + Globals.insetX, 10 + g.getFont().getSize() + Globals.insetY);
+		g.setColor(Color.RED);
+		g.drawString(Globals.fps + " fps", 5 + Globals.insetX, g.getFont().getSize() + Globals.insetY);
 	}
 	
 	//Screenshake
