@@ -79,7 +79,7 @@ public class Bomb {
 						if(this.x + size/2 < ecx && this.y + size/2 < ecy) newAngle = -270 - (90-newAngle);
 
 						e.getDamaged(200);
-						e.startKnockback(newAngle, maxRadius * 2, 0.35f);
+						e.startKnockback(-e.walkVelocityX, -e.walkVelocityY, maxRadius * 2, 0.35f);
 					}
 				}
 			}

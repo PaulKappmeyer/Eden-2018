@@ -42,9 +42,9 @@ public class RoundEnemy extends ZombieEnemy{
 					if(!followplayer) followplayer = true;
 					//Add a new Bullet
 					Bullet b = new Bullet();
+					b.activate(0, 0, 0, 500);
 					b.velocityX = 0;
 					b.velocityY = 0;
-					b.activate(0, 0, 0, 500);
 					this.bullets.add(b);
 					this.angles.add(new Float(0));
 					//Remove old
@@ -64,6 +64,8 @@ public class RoundEnemy extends ZombieEnemy{
 					if(angle < 360 * 2) {
 						bullet.x = (float) (this.x + size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(bullet.angle + angle)) * radius);
 						bullet.y = (float) (this.y + size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(bullet.angle + angle)) * radius);
+						bullet.velocityX = (float) Math.sin(Math.toRadians(bullet.angle + angle));
+						bullet.velocityY = (float) Math.cos(Math.toRadians(bullet.angle + angle));
 						angle += bullet.speed * tslf;
 						angles.set(index, angle);
 					}else {
@@ -101,7 +103,7 @@ public class RoundEnemy extends ZombieEnemy{
 			//Hit the player?
 			if(!bullet.hitSomething) {
 				if(bullet.checkCollisionToObject(Globals.player)) {
-					Globals.player.startKnockback(bullet.angle, Globals.player.bulletImpact, 1f);
+					Globals.player.startKnockback(bullet.velocityX, bullet.velocityY, Globals.player.bulletImpact, Globals.player.bulletImpactTime);
 					Globals.player.gotHit = true;
 					bullet.maxExplosionRadius = 30;
 					bullet.hitSomething();
@@ -127,9 +129,9 @@ public class RoundEnemy extends ZombieEnemy{
 	public void getHitByProjectile(Projectile p, float damage) {
 		//Add a new Bullet
 		Bullet b = new Bullet();
+		b.activate(0, 0, 0, 500);
 		b.velocityX = 0;
 		b.velocityY = 0;
-		b.isActive = true;
 		this.bullets.add(b);
 		this.angles.add(new Float(0));
 		//Remove old

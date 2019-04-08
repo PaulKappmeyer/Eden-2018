@@ -91,6 +91,7 @@ public class Textbox {
 	}
 
 	public void appear() {
+		if(state == HIGHEST_POINT) return;
 		if (Globals.player.y < Globals.height/2) {
 			direction = FROM_BOTTOM;
 			if(state == HIDE) {

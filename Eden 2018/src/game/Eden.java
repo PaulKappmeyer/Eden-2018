@@ -24,7 +24,7 @@ public class Eden extends MovingObject{
 	 * The walking speed in idle mode (in pixels per seconds)
 	 */
 	int idleWalkSpeed = 250;
-	int shotWalkSpeed = 75;
+	int shotWalkSpeed = 200;
 
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
@@ -35,16 +35,22 @@ public class Eden extends MovingObject{
 
 	Direction shotDirection;
 	
+	int MAX_HEALTH;
+	float health;
+	
 	//Knockback
 	boolean gotKnockbacked;
 	float maxKnockback;
 	float maxKnockbackTime;
-	float knockbackVelocityX;
-	float knockbackVelocityY;
+	double knockbackVelocityX;
+	double knockbackVelocityY;
 	float currentKnockbackSpeed;
 	float timeKnockedBack;
-	final float enemyImpact = 500;
+	
+	//got hit
+	float enemyImpact = 500;
 	public final float bulletImpact = 250;
+	public final float bulletImpactTime = 0.25f;
 
 	//Got-Hit animation
 	public boolean gotHit = false;
@@ -75,8 +81,12 @@ public class Eden extends MovingObject{
 
 		walkDirection = Direction.UP;
 		shotDirection = Direction.UP;
+		
+		this.MAX_HEALTH = 5000;
+		this.health = MAX_HEALTH;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------DRAWING
 	/**
 	 * This Function show the player on the screen; gets called every frame
 	 * @param g A Graphics Object to draw the player
@@ -129,10 +139,12 @@ public class Eden extends MovingObject{
 			bomb.draw(g);
 		}
 	}
-
+	
+	//-----------------------------------------------------------------------------------------------------------------UPDATIN
 	/**
 	 * This function updates the player; gets called every frame; first checks for input; second updates the movement
-	 * @param tslf The time since the last frame in seconds; should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
+	 * @param tslf The time since the last frame in seconds; 
+	 * 	should be multiplied whenever the position of something is changed to get a fluently movement independent from the frames per second
 	 */
 	public void update(float tslf) {	
 		//Update the gun
@@ -143,7 +155,6 @@ public class Eden extends MovingObject{
 			if(timeKnockedBack <= maxKnockbackTime) {
 				timeKnockedBack += tslf;
 				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-				resetWalking();
 			}else {
 				stopKnockback();
 			}
@@ -154,7 +165,12 @@ public class Eden extends MovingObject{
 
 		//Calculate the walk speed
 		if(state == SHOOTING) {
-			currentWalkSpeed = shotWalkSpeed;
+			if(timeSpeededUp >= TIME_FOR_MAX_SPEED) {
+				currentWalkSpeed = shotWalkSpeed;
+			}else {
+				timeSpeededUp += tslf;
+				currentWalkSpeed = shotWalkSpeed * (timeSpeededUp / TIME_FOR_MAX_SPEED);
+			}
 		}else if(state == WALKING) {
 			shotDirection = walkDirection;
 			if(timeSpeededUp >= TIME_FOR_MAX_SPEED) {
@@ -211,7 +227,7 @@ public class Eden extends MovingObject{
 					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
 
 					//e.getDamaged(50);
-					e.startKnockback(newAngle, e.bulletImpact, e.bulletImpactTime);
+					e.startKnockback(-e.walkVelocityX, -e.walkVelocityY, e.bulletImpact, e.bulletImpactTime);
 				}
 			}
 		}
@@ -227,59 +243,7 @@ public class Eden extends MovingObject{
 		}
 	}
 
-	public void checkCollisionToObstacles(float tslf) {
-		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
-		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-		if(nextX == this.x && nextY == this.y) return;
-
-		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
-
-		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
-		Obstacle obs = collisions[Collision.TOP_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(180, 100, 0.4f);
-			}else {
-				walkVelocityY = 0;
-				knockbackVelocityY = 0;
-				this.y = obs.y - size;	
-			}
-		}
-		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
-		obs = collisions[Collision.BOTTOM_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(0, 100, 0.4f);
-			}else {
-				walkVelocityY = 0;
-				knockbackVelocityY = 0;
-				this.y = obs.y + obs.height;
-			}
-		}
-		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
-		obs = collisions[Collision.LEFT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(270, 100, 0.4f);
-			}else {
-				walkVelocityX = 0;
-				knockbackVelocityX = 0;
-				this.x = obs.x - size;
-			}
-		}
-		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
-		obs = collisions[Collision.RIGHT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
-				startKnockback(90, 100, 0.4f);
-			}else {
-				walkVelocityX = 0;
-				knockbackVelocityX = 0;
-				this.x = obs.x + obs.width;
-			}
-		}
-	}
-
+	//-----------------------------------------------------------------------------------------------------------------INPUT
 	/**
 	 * This function checks the input, either update the {@link #x} or {@link #y} position or start shooting
 	 * @param tslf
@@ -335,8 +299,8 @@ public class Eden extends MovingObject{
 		}
 
 		//Reset Walking
-		if(state == WALKING && !(Input.isUpKeyDown() || Input.isDownKeyDown() || Input.isLeftKeyDown()|| Input.isRightKeyDown())) {
-			resetWalking();
+		if(state != IDLE && !(Input.isUpKeyDown() || Input.isDownKeyDown() || Input.isLeftKeyDown()|| Input.isRightKeyDown())) {
+			resetSpeedUp();
 			state = IDLE;
 		}
 
@@ -375,7 +339,7 @@ public class Eden extends MovingObject{
 				}
 
 				gun.shot(angle);
-				resetWalking();
+//				resetWalking();
 			}
 		}
 		if(state == SHOOTING && !Input.isShootingKeyDown()) {
@@ -395,9 +359,74 @@ public class Eden extends MovingObject{
 			if(gun.canShot) bombs.add(new Bomb(this.x, this.y));
 			gun.canShot = false;
 		}
-	};
+	}
 
+	//-----------------------------------------------------------------------------------------------------------------COLLISION
+	public void checkCollisionToObstacles(float tslf) {
+		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
+		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
+		if(nextX == this.x && nextY == this.y) return;
 
+		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
+
+		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
+		Obstacle obs = collisions[Collision.TOP_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				BulletBouncer b = ((BulletBouncer) obs);
+				startKnockback(0, -1, b.power, b.time);
+				this.resetSpeedUp();
+				this.y = obs.y - size;	
+			}else {
+				walkVelocityY = 0;
+				knockbackVelocityY = 0;
+				this.y = obs.y - size;	
+			}
+		}
+		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
+		obs = collisions[Collision.BOTTOM_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				BulletBouncer b = ((BulletBouncer) obs);
+				startKnockback(0, 1, b.power, b.time);
+				this.resetSpeedUp();
+				this.y = obs.y + obs.height;
+			}else {
+				walkVelocityY = 0;
+				knockbackVelocityY = 0;
+				this.y = obs.y + obs.height;
+			}
+		}
+		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.LEFT_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				BulletBouncer b = ((BulletBouncer) obs);
+				startKnockback(-1, 0, b.power, b.time);
+				this.resetSpeedUp();
+				this.x = obs.x - size;
+			}else {
+				walkVelocityX = 0;
+				knockbackVelocityX = 0;
+				this.x = obs.x - size;
+			}
+		}
+		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
+		obs = collisions[Collision.RIGHT_SIDE];
+		if(obs != null) {
+			if(obs instanceof BulletBouncer) {
+				BulletBouncer b = ((BulletBouncer) obs);
+				startKnockback(1, 0, b.power, b.time);
+				this.resetSpeedUp();
+				this.x = obs.x + obs.width;
+			}else {
+				walkVelocityX = 0;
+				knockbackVelocityX = 0;
+				this.x = obs.x + obs.width;
+			}
+		}
+	}
+	
 	/**
 	 * This function checks the {@link #x} and {@link #y} position of the player and looks for collision with the bounding of the map
 	 */
@@ -424,40 +453,23 @@ public class Eden extends MovingObject{
 		for (Enemy e : Game.currentMap.enemies) {
 			if(!e.alive) continue;
 			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
-				float ecx = e.x + e.size/2;
-				float ecy = e.y + e.size/2;
-				float pcx = this.x + this.size/2;
-				float pcy = this.y + this.size/2;
-
-				float distx = pcx - ecx;
-				float disty = pcy - ecy;
-
-				//TODO: Rework the angle system
-				float angle = (float) Math.atan(distx / disty);
-				angle = (float) Math.toDegrees(angle);
-				if(pcy > ecy) angle =  -90 - (90-angle);
-				if(pcx < ecx && pcy < ecy) angle = -270 - (90-angle); 
-
 				e.resetSpeedUp();
-
-				if(distx == 0 && disty == 0) angle = 0;
-
-				this.startKnockback(angle - 180, enemyImpact, 0.2f);
+				this.startKnockback(e.walkVelocityX, e.walkVelocityY, enemyImpact, 0.2f);
+				this.resetSpeedUp();
 				this.gotHit = true;
 				return;
 			}
 		}
 	}
-
-	/**
-	 * 
-	 * @param angle
-	 * @param ammount
-	 */
-	public void startKnockback(float angle, float ammount, float time) {
-		//if(gotKnockbacked) stopKnockback();
+	
+	//-----------------------------------------------------------------------------------------------------------------KNOCKBACK
+	public void startKnockback(double knockbackVelocityX, double knockbackVelocityY, float ammount, float time) {
+		double length = (knockbackVelocityX * knockbackVelocityX + knockbackVelocityY * knockbackVelocityY);
+		if(Math.round(length) != 1) System.err.println("Eden.startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
+		
 		gotKnockbacked = true;
-		calculateKnockbackVelocity(angle);
+		this.knockbackVelocityX = knockbackVelocityX;
+		this.knockbackVelocityY = knockbackVelocityY;
 		maxKnockback = ammount;
 		maxKnockbackTime = time;
 	}
@@ -468,24 +480,5 @@ public class Eden extends MovingObject{
 		gotKnockbacked = false;
 		timeKnockedBack = 0;
 		currentKnockbackSpeed = 0;
-	}
-
-	/**
-	 * This function applies knock-back to the player for example when he gets hit by an enemy
-	 * @param angle The angle in which the player gets knocked back
-	 */
-	private void calculateKnockbackVelocity(float angle) {
-		this.knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
-		this.knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
-	}
-
-	/**
-	 * 
-	 */
-	public void resetWalking() {
-		walkVelocityX = 0;
-		walkVelocityY = 0;
-		currentWalkSpeed = 0;
-		timeSpeededUp = 0;
 	}
 }

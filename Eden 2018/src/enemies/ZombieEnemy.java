@@ -106,7 +106,8 @@ public class ZombieEnemy extends Enemy{
 		Obstacle obs = collisions[Collision.TOP_SIDE];
 		if(obs != null) {
 			if(obs instanceof BulletBouncer) {
-				startKnockback(180, 100, 0.4f);
+				startKnockback(0, -1, 100, 0.4f);
+				this.y = obs.y - size;	
 			}else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
@@ -117,7 +118,8 @@ public class ZombieEnemy extends Enemy{
 		obs = collisions[Collision.BOTTOM_SIDE];
 		if(obs != null) {
 			if(obs instanceof BulletBouncer) {
-				startKnockback(0, 100, 0.4f);
+				startKnockback(0, 1, 100, 0.4f);
+				this.y = obs.y + obs.height;
 			}else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
@@ -128,7 +130,8 @@ public class ZombieEnemy extends Enemy{
 		obs = collisions[Collision.LEFT_SIDE];
 		if(obs != null) {
 			if(obs instanceof BulletBouncer) {
-				startKnockback(270, 100, 0.4f);
+				startKnockback(-1, 0, 100, 0.4f);
+				this.x = obs.x - size;
 			}else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;
@@ -139,7 +142,8 @@ public class ZombieEnemy extends Enemy{
 		obs = collisions[Collision.RIGHT_SIDE];
 		if(obs != null) {
 			if(obs instanceof BulletBouncer) {
-				startKnockback(90, 100, 0.4f);
+				startKnockback(1, 0, 100, 0.4f);
+				this.x = obs.x + obs.width;
 			}else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;

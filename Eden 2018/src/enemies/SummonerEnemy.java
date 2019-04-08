@@ -6,6 +6,8 @@ public class SummonerEnemy extends ZombieEnemy{
 
 	float spawnTime = 3f;
 	float tsls;
+	float power = 200;
+	float time = 1;
 	
 	public SummonerEnemy(float x, float y) {
 		super(x, y);
@@ -26,17 +28,17 @@ public class SummonerEnemy extends ZombieEnemy{
 			
 			ZombieEnemy e = new ZombieEnemy(this.x, this.y);
 			e.followplayer = true;
-			e.startKnockback(walkAngle + 135, 100, 1);
+			e.startKnockback(Math.sin(Math.toRadians(walkAngle + 135)), Math.cos(Math.toRadians(walkAngle + 135)), power, time);
 			ZombieEnemy e1 = new ZombieEnemy(this.x, this.y);
 			e1.followplayer = true;
-			e1.startKnockback(walkAngle - 135, 100, 1);
+			e1.startKnockback(Math.sin(Math.toRadians(walkAngle - 135)), Math.cos(Math.toRadians(walkAngle - 135)), power, time);
 			ZombieEnemy e2 = new ZombieEnemy(this.x, this.y);
 			e2.followplayer = true;
-			e2.startKnockback(walkAngle - 180, 100, 1);
+			e2.startKnockback(this.walkVelocityX, this.walkVelocityY, power, time);
 			Game.currentMap.enemies.add(e);
 			Game.currentMap.enemies.add(e1);
 			Game.currentMap.enemies.add(e2);
-			
+			 
 			tsls = 0;
 		}
 	}

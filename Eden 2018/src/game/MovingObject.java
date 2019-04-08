@@ -3,7 +3,7 @@ package game;
 public abstract class MovingObject extends Gameobject{
 
 	//MOVEMENT
-	public Direction walkDirection;
+	public Direction walkDirection = Direction.UNDEFINED;
 	public double walkVelocityX;
 	public double walkVelocityY;
 	//SPEEDING UP WHEN STARTING WALK

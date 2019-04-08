@@ -26,6 +26,7 @@ public abstract class Gun {
 
 	public Projectile[] projectiles;
 
+	//-----------------------------------------------------------CONSTRUCTORS------------------------------------------
 	public Gun(MovingObject owner) {
 		this.owner = owner;
 		this.canShot = false;
@@ -34,6 +35,8 @@ public abstract class Gun {
 		projectiles = new Projectile[100];
 	}
 
+	//-----------------------------------------------------------METHODS------------------------------------------
+	//------------------------DRAWING
 	/**
 	 * This function draws the projectiles and the shells
 	 * @param g
@@ -49,6 +52,7 @@ public abstract class Gun {
 		}
 	}
 
+	//------------------------UPDATING
 	/**
 	 * 
 	 * @param tslf
@@ -78,8 +82,45 @@ public abstract class Gun {
 		checkCollisionProjectilesToObjects();
 	}
 	
+	//------------------------SHOOTING
 	/**
-	 * 
+	 * This functions searches for a deactivated projectile in the object-pool and activates it; If the object-pool has got no free projectile it does nothing
+	 * This function is like adding a projectile to a list, but instead uses the object-pool
+	 * @param x The x-position of the new projectile
+	 * @param y The y-position of the new projectile
+	 * @param angle
+	 * @param speed The speed of the new projectile
+	 */
+	public void fireProjectile(float x, float y, float angle, float speed) {
+		for (int i = 0; i < projectiles.length; i++) {
+			if(!projectiles[i].isActive) {
+				Projectile p = projectiles[i];
+				p.activate(x, y, angle, speed);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * This function creates a shot based on the {@link #mode}, adds projectiles to the {@link #projectiles}-array, and calls the function {@link #applyRecoil(float)}
+	 */
+	public abstract void shot();
+
+	public abstract void shot(float angle);
+	
+	//------------------------SHOOTING - RECOIL
+	/**
+	 * This function applies knockback to the player
+	 * @param velocityX
+	 * @param velocityY
+	 */
+	public void applyRecoil(double velocityX, double velocityY) {
+		Globals.player.startKnockback(velocityX, velocityY, 25f, 0.1f);
+	}
+	
+	//------------------------COLLISION
+	/**
+	 * This function checks for collision with either the player or the enemies depending on who shot
 	 */
 	public void checkCollisionProjectilesToObjects() {
 		if(owner == Globals.player) {
@@ -94,12 +135,12 @@ public abstract class Gun {
 					}
 				}
 			}
-
 		}else if(owner instanceof Enemy) {
 			for (Projectile projectile : projectiles) {
 				if(projectile.hitSomething || !projectile.isActive) continue;
 				if(projectile.checkCollisionToObject(Globals.player)) {
-					Globals.player.startKnockback(projectile.angle, Globals.player.bulletImpact, 0.2f);
+					Globals.player.startKnockback(projectile.velocityX, projectile.velocityY, Globals.player.bulletImpact, Globals.player.bulletImpactTime);
+					Globals.player.resetSpeedUp();
 					Globals.player.gotHit = true;
 					projectile.maxExplosionRadius = 30;
 					projectile.hitSomething();
@@ -107,20 +148,4 @@ public abstract class Gun {
 			}
 		}
 	}
-
-	/**
-	 * This function creates a shot based on the {@link #mode}, adds projectiles to the {@link #projectiles}-array, and calls the function {@link #applyRecoil(float)}
-	 */
-	public abstract void shot();
-
-	public abstract void shot(float angle);
-
-	/**
-	 * This function applies recoil to the player
-	 * @param angle The angle in which the player should get the recoil
-	 */
-	public void applyRecoil(float angle) {
-		Globals.player.startKnockback(angle - 180, 25f, 0.1f);
-	}
-
 }

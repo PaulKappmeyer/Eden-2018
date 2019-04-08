@@ -5,6 +5,9 @@ import java.awt.Graphics;
 
 public class BulletBouncer extends Obstacle{
 	
+	float power = 400;
+	float time = 0.2f;
+	
 	public BulletBouncer(int x, int y, int width, int height) {
 		super(x, y, width, height);
 	}

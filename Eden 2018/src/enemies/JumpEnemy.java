@@ -18,7 +18,7 @@ public class JumpEnemy extends ZombieEnemy{
 	boolean isJumping = false;
 	float jumpVeloctiyX;
 	float jumpVeloctiyY;
-	float jumpSpeed = 100;
+	float jumpSpeed = 1000;
 	float currentJumpSpeed = 0;
 	float timeJumped = 0;
 	float jumpTime = 0.2f;
@@ -190,6 +190,7 @@ public class JumpEnemy extends ZombieEnemy{
 	public void checkCollisionToObstacles(float tslf) {
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed + jumpVeloctiyX * currentJumpSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed + jumpVeloctiyY * currentJumpSpeed) * tslf);
+
 		if(nextX == this.x && nextY == this.y) return;
 
 		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);

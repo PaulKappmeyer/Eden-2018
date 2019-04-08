@@ -21,6 +21,10 @@ public class Game {
 
 	static ScreenTransition transition = new ScreenTransition();
 
+	LaserBarrier l = new LaserBarrier(700, 700, 15, 100);
+
+	NPC npc = new NPC(100, 100);
+	
 	public Game() {
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
 		obstacles.add(new Stone(500, 400, 125, 125));
@@ -40,7 +44,7 @@ public class Game {
 		enemies.add(new ZombieEnemy(600, 100));
 		enemies = new ArrayList<Enemy>();
 		enemies.add(new Boss(650, 250));
-		enemies.add(new JumpEnemy(500, 100));
+		enemies.add(new JumpEnemy(500, 150));
 		enemies.add(new ZombieEnemy(500, 200));
 		enemies.add(new ZombieEnemy(500, 300));
 		enemies.add(new SummonerEnemy(500, 350));
@@ -50,7 +54,7 @@ public class Game {
 		enemies.add(new RoundEnemy(600, 100));
 
 		//enemies = new ArrayList<ZombieEnemy>();
-		obstacles.add(new Chest(100, 100, 16, 16));
+		obstacles.add(new Chest(900, 100, 16, 16));
 		obstacles.add(new Sign(150, 550, 16, 16));
 		obstacles.add(new House(500, 100, 64, 32));
 		obstacles.add(new BulletBouncer(350, 400, 10, 100));
@@ -96,16 +100,17 @@ public class Game {
 		//RUNNING
 		if(state == Gamestate.RUNNING) {
 			currentMap.update(tslf);
+			npc.update(tslf);
+			
 			//Map transition
 			checkCollisionPlayerToWall();
-
-			//INTERACTING
-		}else if(state == Gamestate.INTERACTING){
+		}
+		//INTERACTING
+		else if(state == Gamestate.INTERACTING){
 			for (Obstacle obs : currentMap.obstacles) {
 				obs.update(tslf);
 			}
 		}
-
 		//SCREEN TRANSITION
 		else if(Game.state == Gamestate.MAP_TRANSITION_IN) {
 			currentMap.update(tslf/2);
@@ -114,7 +119,6 @@ public class Game {
 		else if(Game.state == Gamestate.MAP_TRANSITION_OUT) {
 			transition.update(tslf);
 		}
-
 		//RESETING : SET NEW MAP
 		else if(state == Gamestate.RESET) {
 			state = Gamestate.MAP_TRANSITION_OUT;
@@ -122,9 +126,12 @@ public class Game {
 		}
 	}
 
+	//--------------------------------------------DRAWING------------------------------------------------------------------------------------
 	public void draw(Graphics g) {
 		currentMap.draw(g);
-
+		l.draw(g);
+		npc.draw(g);
+		
 		if(Game.state == Gamestate.MAP_TRANSITION_IN || Game.state == Gamestate.MAP_TRANSITION_OUT || Game.state == Gamestate.RESET) {	
 			transition.draw(g);
 		}

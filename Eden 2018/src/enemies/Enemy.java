@@ -181,23 +181,21 @@ public abstract class Enemy extends MovingObject {
 	
 	//------------------------KNOCKBACK METHODS
 	/**
-	 * This function starts gives the enemy a knockback with a given amount and a given time
-	 * @param angle
-	 * @param ammount
+	 * 
+	 * @param knockbackVelocityX
+	 * @param knockbackVelocityY
+	 * @param amount
+	 * @param time
 	 */
-	public void startKnockback(float angle, float amount, float time) {
+	public void startKnockback(double knockbackVelocityX, double knockbackVelocityY, float amount, float time) {
+		double length = (knockbackVelocityX * knockbackVelocityX + knockbackVelocityY * knockbackVelocityY);
+		if(Math.round(length) != 1) System.err.println(this.toString() + ".startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
+		
 		gotKnockbacked = true;
-		calculateKnockbackVelocity(angle);
+		this.knockbackVelocityX = knockbackVelocityX;
+		this.knockbackVelocityY = knockbackVelocityY;
 		MAX_KNOCKBACK_SPEED = amount;
 		MAX_KNOCKBACK_TIME = time;
-	}
-	/**
-	 * This function takes an angle and calculates the velocities;
-	 * @param angle The angle
-	 */
-	private void calculateKnockbackVelocity(float angle) {
-		knockbackVelocityX = (float) Math.sin(Math.toRadians(angle));
-		knockbackVelocityY = (float) Math.cos(Math.toRadians(angle));
 	}
 	
 	//------------------------GET DAMEGED METHODS
@@ -207,7 +205,7 @@ public abstract class Enemy extends MovingObject {
 	 * {@link #applyKnockback(float angle)}
 	 */
 	public void getHitByProjectile(Projectile p, float damage) {
-		startKnockback(p.angle, bulletImpact, bulletImpactTime);
+		startKnockback(p.velocityX, p.velocityY, bulletImpact, bulletImpactTime);
 		getDamaged(damage);
 	}
 	/**
