@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ public class MapLoader {
 		if(!path.exists()) throw new FileNotFoundException("This file could not be found");
 		if(!path.isFile()) throw new Exception("The given path is not a file");
 		System.out.println("Start loading Map: " + path.getAbsolutePath());
-		
+
 		Scanner scanner = new Scanner(path);
-		
-		//Metadata
+
+		//-------------------------------------------------------------Metadata
 		scanner.nextLine();
 		int mapWidth = Integer.parseInt(scanner.nextLine().substring(6));  //The width of the map in number of tiles
 		int mapHeight = Integer.parseInt(scanner.nextLine().substring(7)); //The height of the map in number of tiles
@@ -26,32 +27,61 @@ public class MapLoader {
 		scanner.nextLine();
 		scanner.nextLine();
 		scanner.nextLine();
+		
+		//-------------------------------------------------------------Tileset
+		String tileset_path = scanner.nextLine();
+		tileset_path = tileset_path.substring(10);
+		while (!tileset_path.endsWith(".png")) {
+			tileset_path = tileset_path.substring(0, tileset_path.length()-1);
+		}
+		for (int i = tileset_path.length() - 1; i >= 0; i--) {
+			if(tileset_path.charAt(i) == '/') {
+				tileset_path = tileset_path.substring(i + 1, tileset_path.length());
+				break;
+			}
+		}
+		tileset_path = ".\\src\\gfx\\" + tileset_path;
 		scanner.nextLine();
-		scanner.nextLine();
+		
+		BufferedImage tileset = ImageLoader.loadImage(new File(tileset_path));
+		int tileset_height = tileset.getHeight() / tileHeight;
+		int tileset_width = tileset.getWidth() / tileWidth;
+		BufferedImage[]tileset_tiles = new BufferedImage[tileset_width * tileset_height];
+		try {
+			for (int y = 0; y < tileset_height; y++) {
+				for (int x = 0; x < tileset_width; x++) {
+					int index = y*tileset_width + x;
+					tileset_tiles[index] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		//Tiles
+		//-------------------------------------------------------------Tiles
 		Tile[][]tiles = new Tile[mapWidth][mapHeight];
 		scanner.nextLine();
 		scanner.nextLine();
 		scanner.nextLine();
-		
+
 		String tileIds = scanner.nextLine();
 		while(tileIds.endsWith(",")) {
 			tileIds += scanner.nextLine();
 		}
 		String[] ids = tileIds.split(",");
-		
-		for (int i = 0; i < mapHeight; i++) {
-			for (int j = 0; j < mapWidth; j++) {
-				tiles[j][i] = new Tile(j * tileWidth, i * tileHeight, tileWidth, tileHeight, Integer.parseInt(ids[i*mapWidth + j]));
+		for (int y = 0; y < mapHeight; y++) {
+			for (int x = 0; x < mapWidth; x++) {
+				int index = y*mapWidth + x;
+				int id = Integer.parseInt(ids[index]);
+				tiles[x][y] = new Tile(x * tileWidth, y * tileHeight, tileWidth, tileHeight, id, tileset_tiles[id-1]);
 			}
 		}
-		
-		//Objects
+
+		//-------------------------------------------------------------Objects
 		int playerX = 0, playerY = 0;
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-		
+
 		scanner.nextLine();
 		while (scanner.nextLine().equals("[Objekte]")) {
 			String type = scanner.nextLine();
@@ -93,13 +123,13 @@ public class MapLoader {
 				obstacles.add(new Sign(x, y, w, h, text));
 				scanner.nextLine();
 			}
-			
+
 			if(!scanner.hasNextLine()) break;
 		}
-		
+
 		scanner.close();
 		Map map = new Map(playerX, playerY, obstacles, enemies, tiles);
 		return map;
 	}
-	
+
 }
