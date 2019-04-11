@@ -1,9 +1,12 @@
-package game;
+package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import enemies.Enemy;
+import game.Game;
+import game.Globals;
+import player.Eden;
 
 public class RoundStone {
 

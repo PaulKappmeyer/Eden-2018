@@ -1,8 +1,16 @@
-package game;
+package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+
+import game.Direction;
+import game.Game;
+import game.Gamestate;
+import game.Globals;
+import game.Map;
+import game.Obstacle;
+import player.Eden;
 
 public class House extends Obstacle{
 
@@ -22,12 +30,12 @@ public class House extends Obstacle{
 		this.doorY = this.y + this.height - doorHeight;
 
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
-		obstacles.add(new Stone(0, 0, Globals.width, 25));
-		obstacles.add(new Stone(0, 25, 25, Globals.height));
-		obstacles.add(new Stone(Globals.width-25, 25, 25, Globals.height));
-		obstacles.add(new Stone(25, Globals.height-25, Globals.width/2 - 25*2, 25));
-		obstacles.add(new Stone(Globals.width/2 + 25/2, Globals.height-25, Globals.width/2 - 25 - 25/2, 25));
-		indoor = new Map(100, 100, obstacles, new ArrayList<>(), Game.currentMap.tiles);
+		obstacles.add(new Stone(0, 0, Globals.screenWidth, 25));
+		obstacles.add(new Stone(0, 25, 25, Globals.screenHeight));
+		obstacles.add(new Stone(Globals.screenWidth-25, 25, 25, Globals.screenHeight));
+		obstacles.add(new Stone(25, Globals.screenHeight-25, Globals.screenWidth/2 - 25*2, 25));
+		obstacles.add(new Stone(Globals.screenWidth/2 + 25/2, Globals.screenHeight-25, Globals.screenWidth/2 - 25 - 25/2, 25));
+		indoor = new Map(Game.currentMap.mapWidth, Game.currentMap.mapHeight, 100, 100, obstacles, new ArrayList<>(), Game.currentMap.tiles);
 	}
 
 	@Override
@@ -53,7 +61,7 @@ public class House extends Obstacle{
 					if(Game.state == Gamestate.RUNNING) {
 						oldMap = Game.currentMap;
 						Game.mapY--;
-						Game.beginMapTransition(Direction.UP, indoor, Globals.width/2 - player.size/2, Globals.height - 25 - player.size);
+						Game.beginMapTransition(Direction.UP, indoor, Globals.screenWidth/2 - player.size/2, Globals.screenHeight - 25 - player.size);
 					}
 				}
 			}
@@ -63,7 +71,7 @@ public class House extends Obstacle{
 		
 		if(Game.currentMap.equals(indoor)) {
 			System.out.println("yes13");
-			if(Globals.player.y + Globals.player.size >= Globals.height) {
+			if(Globals.player.y + Globals.player.size >= Globals.screenHeight) {
 				System.out.println("yes");
 				Game.beginMapTransition(Direction.DOWN, oldMap, doorX, doorY + doorHeight + 5);
 			}

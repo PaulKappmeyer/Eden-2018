@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import enemies.Boss;
 import enemies.Enemy;
 import guns.Shell;
+import player.Eden;
 
 public class Map {
 
+	public int mapWidth;
+	public int mapHeight;
 	Eden player = Globals.player;
 	public ArrayList<Enemy> enemies;
 	public ArrayList<Obstacle> obstacles;
@@ -16,8 +19,13 @@ public class Map {
 	public Tile[][] tiles;
 	int tilesWidth;
 	int tilesHeight;
-	
-	public Map(int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies, Tile [][] tiles) {
+	public float worldX;
+	public float worldY;
+
+	//-----------------------------------------------------------CONSTRUCTORS------------------------------------------
+	public Map(int mapWidth, int mapHeight, int playerX, int playerY, ArrayList<Obstacle> obstacles, ArrayList<Enemy> enemies, Tile [][] tiles) {
+		this.mapWidth = mapWidth;
+		this.mapHeight = mapHeight;
 		this.player.x = playerX;
 		this.player.y = playerY;
 		this.obstacles = obstacles;
@@ -28,19 +36,38 @@ public class Map {
 		this.tilesHeight = tiles[0].length;
 	}
 
+	//-----------------------------------------------------------DRAWING------------------------------------------
 	public void draw(Graphics g) {
+		worldX = -Globals.player.x + Globals.screenWidth / 2;
+		worldY = -Globals.player.y + Globals.screenHeight / 2;
+		if(worldX > 0) worldX = 0;
+		if(worldY > 0) worldY = 0;
+		if(Math.abs(worldX) > mapWidth - Globals.screenWidth) {
+			worldX = -mapWidth + Globals.screenWidth;
+		}
+		if(Math.abs(worldY) > mapHeight - Globals.screenHeight) {
+			worldY = -mapHeight + Globals.screenHeight;
+		}
+
+		g.translate((int)worldX, (int)worldY);
+
 		//Drawing the tiles
 		for (int i = 0; i < tilesWidth; i++) {
 			for (int j = 0; j < tilesHeight; j++) {
-				tiles[i][j].draw(g);
+				Tile t = tiles[i][j];
+				if(t.x + worldX < Globals.screenWidth && t.x + t.width > Math.abs(worldX) && t.y + worldY < Globals.screenHeight && t.y + t.height > Math.abs(worldY)) {
+					t.draw(g);
+				}
 			}
 		}
 		
 		//Drawing the shells
 		for (Shell shell : shells) {
-			shell.draw(g);
+			if(shell.x + worldX < Globals.screenWidth && shell.x + Shell.SIZE > Math.abs(worldX) && shell.y + worldY < Globals.screenHeight && shell.y + Shell.SIZE > Math.abs(worldY)) {
+				shell.draw(g);
+			}
 		}
-		
+
 		//Drawing the players gun
 		if(Globals.player.gun != null)Globals.player.gun.draw(g);
 		//Drawing the bosses gun
@@ -52,43 +79,48 @@ public class Map {
 		}
 		//Drawing the enemies
 		for (Enemy e : enemies) {
-			e.draw(g);
+			if(e.x + worldX < Globals.screenWidth && e.x + e.size > Math.abs(worldX) && e.y + worldY < Globals.screenHeight && e.y + e.size > Math.abs(worldY)) {
+				e.draw(g);
+			}
 		}
-		
+
 		//Screenshake
 		if(GameDrawer.screenshake) {
 			g.translate(GameDrawer.screenshakeX, GameDrawer.screenshakeY);
 		}
-		
+
 		//Drawing the obstacles
 		for (Obstacle obs : obstacles) {
 			obs.draw(g);
 		}
-		
+
 		//Screenshake
 		if(GameDrawer.screenshake) {
 			g.translate(-GameDrawer.screenshakeX, -GameDrawer.screenshakeY);
 		}
-		
+
 		//Drawing the player
 		Globals.player.draw(g);
+
+		g.translate((int)-worldX, (int)-worldY);
 	}
-	
+
 	//TODO: UPDATE
+	//-----------------------------------------------------------UPDATING------------------------------------------
 	public void update(float tslf) {
 		//Updating the shells
 		for (Shell shell : shells) {
 			shell.update(tslf);
 		}
-		
+
 		//Updating the obstacles
 		for (Obstacle obs : obstacles) {
 			obs.update(tslf);
 		}
-		
+
 		//Updating the player
 		Globals.player.update(tslf);
-		
+
 		//Updating the enemies && Removal of the enemies; note: this loop runs backwards because we may delete objects
 		int size = enemies.size() - 1;
 		for (int i = size; i >= 0; i--) {
@@ -96,11 +128,12 @@ public class Map {
 			e.update(tslf);
 			if(e.canBeRemoved())enemies.remove(e);
 		}
-		
+
 		//TODO: Y-Sort
 		ysort();
 	}
 
+	//-----------------------------------------------------------METHODS------------------------------------------
 	/**
 	 * This function sorts the list of the enemies based on their y-position, so a higher y-value gets displayed on top of the lower y-value, 
 	 * this creates the feeling of a perspective

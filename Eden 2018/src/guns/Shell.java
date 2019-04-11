@@ -10,8 +10,8 @@ import game.Obstacle;
 
 public class Shell {
 
-	float x;
-	float y;
+	public float x;
+	public float y;
 	float velocityX;
 	float velocityY;
 	float baseSpeed = 15;

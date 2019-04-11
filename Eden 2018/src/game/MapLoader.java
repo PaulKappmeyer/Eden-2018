@@ -8,8 +8,16 @@ import java.util.Scanner;
 
 import enemies.Enemy;
 import enemies.ZombieEnemy;
+import objects.Sign;
+import objects.Stone;
 public class MapLoader {
 
+	/**
+	 * Can load Flare-Mapfiles (.txt) with CSV
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	public static Map loadMap(File path) throws Exception {
 		if(!path.exists()) throw new FileNotFoundException("This file could not be found");
 		if(!path.isFile()) throw new Exception("The given path is not a file");
@@ -69,6 +77,10 @@ public class MapLoader {
 			tileIds += scanner.nextLine();
 		}
 		String[] ids = tileIds.split(",");
+		
+		tileWidth *= 3;
+		tileHeight *= 3;
+		
 		for (int y = 0; y < mapHeight; y++) {
 			for (int x = 0; x < mapWidth; x++) {
 				int index = y*mapWidth + x;
@@ -81,7 +93,7 @@ public class MapLoader {
 		int playerX = 0, playerY = 0;
 		ArrayList<Obstacle>obstacles = new ArrayList<>();
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-
+		
 		scanner.nextLine();
 		while (scanner.nextLine().equals("[Objekte]")) {
 			String type = scanner.nextLine();
@@ -128,7 +140,7 @@ public class MapLoader {
 		}
 
 		scanner.close();
-		Map map = new Map(playerX, playerY, obstacles, enemies, tiles);
+		Map map = new Map(mapWidth * tileWidth, mapHeight * tileHeight, playerX, playerY, obstacles, enemies, tiles);
 		return map;
 	}
 

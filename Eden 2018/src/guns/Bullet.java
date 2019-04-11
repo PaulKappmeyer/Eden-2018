@@ -3,11 +3,12 @@ package guns;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.BulletBouncer;
 import game.Collision;
+import game.Game;
 import game.Globals;
 import game.Gameobject;
 import game.Obstacle;
+import objects.BulletBouncer;
 import game.GameDrawer;
 
 public class Bullet extends Projectile{
@@ -180,7 +181,7 @@ public class Bullet extends Projectile{
 	 * Checks if the bullet goes out of the screen
 	 */
 	public void checkCollisionToWall() {
-		if(this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Globals.width || this.y + Bullet.SIZE > Globals.height) {
+		if(this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Game.currentMap.mapWidth || this.y + Bullet.SIZE > Game.currentMap.mapHeight) {
 			this.hitSomething();
 		}
 	}

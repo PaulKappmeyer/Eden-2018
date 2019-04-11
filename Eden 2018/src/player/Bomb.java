@@ -1,9 +1,11 @@
-package game;
+package player;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import enemies.Enemy;
+import game.Game;
+import game.Globals;
 
 public class Bomb {
 

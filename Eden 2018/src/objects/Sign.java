@@ -1,8 +1,13 @@
-package game;
+package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+import game.Game;
+import game.Gamestate;
+import game.Globals;
+import game.Obstacle;
+import game.Textbox;
 import input.Input;
 
 public class Sign extends Obstacle{

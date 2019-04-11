@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import enemies.Enemy;
-import game.Eden;
 import game.Game;
 import game.Globals;
 import game.MovingObject;
+import player.Eden;
 
 public abstract class Gun {
 
@@ -124,7 +124,9 @@ public abstract class Gun {
 	 */
 	public void checkCollisionProjectilesToObjects() {
 		if(owner == Globals.player) {
-			for (Enemy e : Game.currentMap.enemies) {
+			int size = Game.currentMap.enemies.size() - 1;
+			for (int i = size; i >= 0; i--) {
+				Enemy e = Game.currentMap.enemies.get(i);
 				if(!e.alive) continue;
 				for (Projectile projectile : projectiles) {
 					if(projectile.hitSomething || !projectile.isActive) continue;

@@ -1,14 +1,21 @@
-package game;
+package player;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import enemies.Enemy;
+import game.Collision;
+import game.Direction;
+import game.Game;
+import game.Globals;
+import game.MovingObject;
+import game.Obstacle;
 import guns.Gun;
 import guns.SinglefireGun;
 import input.Input;
 import input.MouseinputManager;
+import objects.BulletBouncer;
 
 /**
  * This is the class of the player named "Eden"
@@ -29,11 +36,11 @@ public class Eden extends MovingObject{
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
 	public static final int SHOOTING = 2;
-	int state = 0; // the state the player is currently in
+	public int state = 0; // the state the player is currently in
 
 	public Gun gun;
 
-	Direction shotDirection;
+	public Direction shotDirection;
 	
 	int MAX_HEALTH;
 	float health;
@@ -311,8 +318,8 @@ public class Eden extends MovingObject{
 
 				state = SHOOTING;
 				//TODO: Rework the angle system
-				float mcx = MouseinputManager.getMouseX();
-				float mcy = MouseinputManager.getMouseY();
+				float mcx = MouseinputManager.getMouseX() + -Game.currentMap.worldX;
+				float mcy = MouseinputManager.getMouseY() + -Game.currentMap.worldY;
 				float pcx = this.x + this.size/2;
 				float pcy = this.y + this.size/2;
 
@@ -437,11 +444,11 @@ public class Eden extends MovingObject{
 		if(this.y < 0) {
 			this.y = 0;
 		}
-		if(this.x + this.size > Globals.width) {
-			this.x = Globals.width - this.size;
+		if(this.x + this.size > Game.currentMap.mapWidth) {
+			this.x = Game.currentMap.mapWidth - this.size;
 		}
-		if(this.y + this.size > Globals.height) {
-			this.y = Globals.height - this.size;
+		if(this.y + this.size > Game.currentMap.mapHeight) {
+			this.y = Game.currentMap.mapHeight - this.size;
 		}
 	}
 

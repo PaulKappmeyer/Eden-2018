@@ -162,7 +162,7 @@ public class Rocket extends Projectile{
 	 * 
 	 */
 	public void checkCollisionRocketToWall() {
-		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Globals.width || this.y + Rocket.SIZE > Globals.height) {
+		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Game.currentMap.mapWidth || this.y + Rocket.SIZE > Game.currentMap.mapHeight) {
 			this.hitSomething();
 		}
 	}

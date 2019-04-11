@@ -28,7 +28,7 @@ public class Tile {
 	}
 	
 	public void draw(Graphics g) {
-		g.drawImage(image, (int)x + Globals.insetX, (int)y + Globals.insetY, null);
+		g.drawImage(image, (int)x + Globals.insetX, (int)y + Globals.insetY, width, height,  null);
 	}
 	
 	public void update(float tslf) {

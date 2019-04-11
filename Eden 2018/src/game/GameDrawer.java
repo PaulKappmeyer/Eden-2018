@@ -20,7 +20,7 @@ public class GameDrawer extends Window{
 	 * Constructor; initializes the JFrame and the BufferStrategy
 	 */
 	public GameDrawer(Game game) {
-		super("Eden", Globals.width, Globals.height);
+		super("Eden", Globals.screenWidth, Globals.screenHeight);
 		
 		this.addKeyListener(new KeyboardinputManager());
 		MouseinputManager m = new MouseinputManager();

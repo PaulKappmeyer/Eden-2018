@@ -36,31 +36,31 @@ public class ScreenTransition {
 		switch (direction) {
 		case RIGHT:
 			transitionWidth += speed*tslf;
-			if(transitionWidth >= Globals.width) {
-				transitionWidth = Globals.width*1.25f;
+			if(transitionWidth >= Globals.screenWidth) {
+				transitionWidth = Globals.screenWidth*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
 		case LEFT:
 			transitionX -= speed*tslf;
 			if(transitionX <= 0) {
-				transitionX = 0 - Globals.width*0.25f;
-				transitionWidth = Globals.width*1.25f;
+				transitionX = 0 - Globals.screenWidth*0.25f;
+				transitionWidth = Globals.screenWidth*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
 		case DOWN:
 			transitionHeight += speed*tslf;
-			if(transitionHeight >= Globals.height) {
-				transitionHeight = Globals.height*1.25f;
+			if(transitionHeight >= Globals.screenHeight) {
+				transitionHeight = Globals.screenHeight*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
 		case UP:
 			transitionY -= speed*tslf;
 			if(transitionY <= 0) {
-				transitionY = 0 - Globals.height*0.25f;
-				transitionHeight = Globals.height*1.25f;
+				transitionY = 0 - Globals.screenHeight*0.25f;
+				transitionHeight = Globals.screenHeight*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
@@ -80,7 +80,7 @@ public class ScreenTransition {
 			break;
 		case LEFT:
 			transitionX += speed*tslf;
-			if(transitionX >= Globals.width) {
+			if(transitionX >= Globals.screenWidth) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;
@@ -92,7 +92,7 @@ public class ScreenTransition {
 			break;
 		case UP:
 			transitionY += speed * tslf;
-			if(transitionY >= Globals.height) {
+			if(transitionY >= Globals.screenHeight) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;
@@ -109,25 +109,25 @@ public class ScreenTransition {
 			transitionX = 0;
 			transitionY = 0;
 			transitionWidth = 0;
-			transitionHeight = Globals.height;
+			transitionHeight = Globals.screenHeight;
 			break;
 		case LEFT:
-			transitionX = Globals.width;
+			transitionX = Globals.screenWidth;
 			transitionY = 0;
-			transitionWidth = Globals.width;
-			transitionHeight = Globals.height;
+			transitionWidth = Globals.screenWidth;
+			transitionHeight = Globals.screenHeight;
 			break;
 		case DOWN:
 			transitionX = 0;
 			transitionY = 0;
-			transitionWidth = Globals.width;
+			transitionWidth = Globals.screenWidth;
 			transitionHeight = 0;
 			break;
 		case UP:
 			transitionX = 0;
-			transitionY = Globals.height;
-			transitionWidth = Globals.width;
-			transitionHeight = Globals.height;
+			transitionY = Globals.screenHeight;
+			transitionWidth = Globals.screenWidth;
+			transitionHeight = Globals.screenHeight;
 			break;
 		default:
 			break;

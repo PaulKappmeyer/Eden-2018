@@ -3,10 +3,12 @@ package game;
 import java.awt.Graphics;
 import java.io.File;
 
+import enemies.ZombieNest;
+
 public class Game {
 
 	static int mapX = 0;
-	static int mapY = 0;
+	public static int mapY = 0;
 	Map[][]maps;
 	public static Map currentMap;
 
@@ -17,13 +19,14 @@ public class Game {
 	public Game() {
 		//Maps
 		maps = new Map[1][1];
-		File path = new File(".\\src\\maps\\Eden_Testmap_1.2.txt");
+		File path = new File(".\\src\\maps\\Eden_Testmap_2.txt");
 		try {
 			maps[0][0] = MapLoader.loadMap(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		currentMap = maps[mapX][mapY];
+		currentMap.enemies.add(new ZombieNest(400, 400));
 	}
 
 	//TODO:Update System
@@ -98,17 +101,17 @@ public class Game {
 		if(Game.state == Gamestate.MAP_TRANSITION_IN) return;
 		if(Globals.player.x <= 0 && mapX > 0) {
 			mapX --;
-			beginMapTransition(Direction.LEFT, maps[mapX][mapY], Globals.width - 5 - Globals.player.size, Globals.player.y);
+			beginMapTransition(Direction.LEFT, maps[mapX][mapY], Game.currentMap.mapWidth - 5 - Globals.player.size, Globals.player.y);
 		}
 		if(Globals.player.y <= 0 && mapY > 0) {
 			mapY --;
-			beginMapTransition(Direction.UP, maps[mapX][mapY], Globals.player.x, Globals.height - 5 - Globals.player.size);
+			beginMapTransition(Direction.UP, maps[mapX][mapY], Globals.player.x, Game.currentMap.mapHeight - 5 - Globals.player.size);
 		}
-		if(Globals.player.x + Globals.player.size >= Globals.width && mapX < maps.length-1) {
+		if(Globals.player.x + Globals.player.size >= Game.currentMap.mapWidth && mapX < maps.length-1) {
 			mapX ++;
 			beginMapTransition(Direction.RIGHT, maps[mapX][mapY], 5, Globals.player.y);
 		}
-		if(Globals.player.y + Globals.player.size >= Globals.height && mapY < maps[mapX].length-1) {
+		if(Globals.player.y + Globals.player.size >= Game.currentMap.mapHeight && mapY < maps[mapX].length-1) {
 			mapY ++;
 			beginMapTransition(Direction.DOWN, maps[mapX][mapY], Globals.player.x, 5);
 		}

@@ -2,10 +2,10 @@ package enemies;
 
 import java.awt.Graphics;
 
-import game.BulletBouncer;
 import game.Collision;
 import game.Globals;
 import game.Obstacle;
+import objects.BulletBouncer;
 
 /**
  * 

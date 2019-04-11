@@ -2,6 +2,8 @@ package game;
 
 import java.util.Random;
 
+import player.Eden;
+
 /**
  * A class for all the global variables
  * @author Paul Kappmeyer
@@ -12,8 +14,8 @@ import java.util.Random;
  *
  */
 public class Globals {
-	public static int width = 1280;
-	public static int height = 800;
+	public static int screenWidth = 1280;
+	public static int screenHeight = 800;
 	public static int insetX;
 	public static int insetY;
 	public static Eden player = new Eden();

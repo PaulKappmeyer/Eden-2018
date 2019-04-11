@@ -1,12 +1,15 @@
-package game;
+package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+import game.Globals;
+import game.Obstacle;
+
 public class BulletBouncer extends Obstacle{
 	
-	float power = 400;
-	float time = 0.2f;
+	public float power = 400;
+	public float time = 0.2f;
 	
 	public BulletBouncer(int x, int y, int width, int height) {
 		super(x, y, width, height);

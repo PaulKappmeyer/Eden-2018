@@ -6,9 +6,9 @@ import java.awt.Graphics;
 public class Textbox {
 
 	float x = 50;
-	float y = Globals.height;
+	float y = Globals.screenHeight;
 	float width = 0;
-	float maxWidth = Globals.width - 100;
+	float maxWidth = Globals.screenWidth - 100;
 	float height = 100;
 	int speed = 1000;
 	float time;
@@ -20,8 +20,8 @@ public class Textbox {
 	public static final int FROM_TOP = 1;
 	public static final int FROM_BOTTOM = 2;
 	public int direction;
-	String[] text;
-	int index = 0;
+	public String[] text;
+	public int index = 0;
 
 	public Textbox(String[] text) {
 		this.text = text;
@@ -43,11 +43,11 @@ public class Textbox {
 	public void update(float tslf) {
 		if(state == APPEAR) {
 			if(direction == FROM_BOTTOM) {
-				if(y <= Globals.height - height - 10) {
+				if(y <= Globals.screenHeight - height - 10) {
 					state = HIGHEST_POINT;
 					width = maxWidth;
 					time = 1;
-					y = Globals.height - height - 10;
+					y = Globals.screenHeight - height - 10;
 				}else {
 					time += tslf;
 					width = maxWidth * time;
@@ -67,8 +67,8 @@ public class Textbox {
 			}
 		}else if(state == DISAPPEAR){
 			if(direction == FROM_BOTTOM) {
-				if(y >= Globals.height) {
-					y = Globals.height;
+				if(y >= Globals.screenHeight) {
+					y = Globals.screenHeight;
 					time = 0;
 					state = HIDE;
 				}else {
@@ -92,11 +92,11 @@ public class Textbox {
 
 	public void appear() {
 		if(state == HIGHEST_POINT) return;
-		if (Globals.player.y < Globals.height/2) {
+		if (Globals.player.y < Globals.screenHeight/2) {
 			direction = FROM_BOTTOM;
 			if(state == HIDE) {
 				width = 0;
-				y = Globals.height;
+				y = Globals.screenHeight;
 			}
 		}else {
 			direction = FROM_TOP;
