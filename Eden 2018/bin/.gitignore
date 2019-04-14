@@ -1,10 +1,9 @@
+/mapeditor/
 /enemies/
-/game/
+/gfx/
 /guns/
 /input/
-/mapeditor/
 /maps/
-/gfx/
-/tilesets/
-/objects/
 /player/
+/mapEditor/
+/objects/
