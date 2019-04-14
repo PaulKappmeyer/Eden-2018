@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
@@ -8,17 +11,11 @@ import java.awt.Graphics;
  *
  */
 public abstract class Gameobject {
-	/**
-	 * The x-coordinate of the object
-	 */
+	/** The x-coordinate of the object */
 	public float x;
-	/**
-	 * The y-coordinate of the object
-	 */
+	/** The y-coordinate of the object */
 	public float y;
-	/**
-	 * The size of the object
-	 */
+	/** The size of the object */
 	public int size;
 	
 	//-----------------------------------------------------------CONSTRUCTORS------------------------------------------

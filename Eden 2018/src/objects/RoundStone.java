@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -8,6 +11,11 @@ import game.Game;
 import game.Globals;
 import player.Eden;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class RoundStone {
 
 	int x;

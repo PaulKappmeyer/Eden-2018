@@ -17,6 +17,7 @@ public abstract class Projectile {
 	//Die animation attributes
 	public boolean dieAnimation;			//if is in die animation
 	public float maxExplosionRadius;		//maximal radius
+	
 	float explosionRadiusIncrease; 	//increase per second
 	float currentRadius; 			//current radius
 	

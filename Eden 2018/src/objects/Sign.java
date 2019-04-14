@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -10,12 +13,17 @@ import game.Obstacle;
 import game.Textbox;
 import input.Input;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Sign extends Obstacle{
 
 	public static int triggerDistance = 16;
+	
 	boolean pressed;
 	boolean checkForPlayer = true;
-
 	Textbox textbox;
 	
 	public Sign(int x, int y, int width, int height) {

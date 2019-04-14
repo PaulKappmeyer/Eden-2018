@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -6,6 +9,11 @@ import java.awt.Graphics;
 import game.Globals;
 import game.Obstacle;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class BulletBouncer extends Obstacle{
 	
 	public float power = 400;

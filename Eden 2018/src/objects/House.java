@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -12,6 +15,11 @@ import game.Map;
 import game.Obstacle;
 import player.Eden;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class House extends Obstacle{
 
 	int doorX;

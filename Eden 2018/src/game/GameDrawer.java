@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Color;
@@ -12,7 +15,7 @@ import input.MouseinputManager;
  *
  */
 @SuppressWarnings("serial")
-public class GameDrawer extends Window{
+public final class GameDrawer extends Window{
 	
 	private Game game;
 	
@@ -63,7 +66,7 @@ public class GameDrawer extends Window{
 	public static int screenshakeY;
 	public static int screenshakeStrength = 0;
 	public static float screenshakeDuration = 0;
-	public float tslsc;
+	public static float tslsc;
 	
 	public void update(float tslf) {
 		//Updating the screenshake 

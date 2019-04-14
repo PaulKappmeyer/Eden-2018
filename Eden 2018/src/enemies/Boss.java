@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import java.awt.Color;

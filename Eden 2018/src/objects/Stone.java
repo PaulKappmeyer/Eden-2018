@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -5,6 +8,11 @@ import java.awt.Graphics;
 
 import game.Obstacle;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Stone extends Obstacle{
 
 	public Color c;

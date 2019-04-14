@@ -1,7 +1,11 @@
+/*
+ * 
+ */
 package player;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import enemies.Enemy;
@@ -13,7 +17,9 @@ import game.MovingObject;
 import game.Obstacle;
 import guns.Gun;
 import guns.SinglefireGun;
+import guns.TripleMachineGun;
 import input.Input;
+import input.KeyboardinputManager;
 import input.MouseinputManager;
 import objects.BulletBouncer;
 
@@ -27,24 +33,30 @@ import objects.BulletBouncer;
 public class Eden extends MovingObject{
 
 	//TODO: revise the variable mess
-	/**
-	 * The walking speed in idle mode (in pixels per seconds)
-	 */
-	int idleWalkSpeed = 250;
-	int shotWalkSpeed = 200;
 
 	public static final int IDLE = 0;
 	public static final int WALKING = 1;
 	public static final int SHOOTING = 2;
+
 	public int state = 0; // the state the player is currently in
-
 	public Gun gun;
-
 	public Direction shotDirection;
-	
+	//Got-Hit
+	public final float bulletImpact = 250;
+	public final float bulletImpactTime = 0.25f;
+	//Got-Hit animation
+	public boolean gotHit = false;
+	float blink;
+	float blinktime = 0.05f;
+	float blinkfromStart;
+	float maxBlinkTime = 1f;
+	//Got-Hit enemy
+	float enemyImpact = 500;
+	/** The walking speed in idle mode (in pixels per seconds) */
+	int idleWalkSpeed = 250;
+	int shotWalkSpeed = 200;
 	int MAX_HEALTH;
 	float health;
-	
 	//Knockback
 	boolean gotKnockbacked;
 	float maxKnockback;
@@ -53,19 +65,6 @@ public class Eden extends MovingObject{
 	double knockbackVelocityY;
 	float currentKnockbackSpeed;
 	float timeKnockedBack;
-	
-	//got hit
-	float enemyImpact = 500;
-	public final float bulletImpact = 250;
-	public final float bulletImpactTime = 0.25f;
-
-	//Got-Hit animation
-	public boolean gotHit = false;
-	float blink;
-	float blinktime = 0.05f;
-	float blinkfromStart;
-	float maxBlinkTime = 1f;
-
 	//Shockwave
 	boolean shockwave = false;
 	float shockwaveX;
@@ -88,7 +87,7 @@ public class Eden extends MovingObject{
 
 		walkDirection = Direction.UP;
 		shotDirection = Direction.UP;
-		
+
 		this.MAX_HEALTH = 5000;
 		this.health = MAX_HEALTH;
 	}
@@ -146,7 +145,7 @@ public class Eden extends MovingObject{
 			bomb.draw(g);
 		}
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------UPDATIN
 	/**
 	 * This function updates the player; gets called every frame; first checks for input; second updates the movement
@@ -311,6 +310,15 @@ public class Eden extends MovingObject{
 			state = IDLE;
 		}
 
+		//Switch Weapon
+		if(KeyboardinputManager.isKeyDown(KeyEvent.VK_1)) {
+			this.gun = new SinglefireGun(this);
+		}
+		else if(KeyboardinputManager.isKeyDown(KeyEvent.VK_2)) {
+			this.gun = new TripleMachineGun(this);
+		}
+
+
 		//Shooting
 		if(Input.isShootingKeyDown() && !gotHit && gun != null) {
 			if(gun.canShot) {
@@ -346,7 +354,7 @@ public class Eden extends MovingObject{
 				}
 
 				gun.shot(angle);
-//				resetWalking();
+				//				resetWalking();
 			}
 		}
 		if(state == SHOOTING && !Input.isShootingKeyDown()) {
@@ -433,7 +441,7 @@ public class Eden extends MovingObject{
 			}
 		}
 	}
-	
+
 	/**
 	 * This function checks the {@link #x} and {@link #y} position of the player and looks for collision with the bounding of the map
 	 */
@@ -468,12 +476,12 @@ public class Eden extends MovingObject{
 			}
 		}
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------KNOCKBACK
 	public void startKnockback(double knockbackVelocityX, double knockbackVelocityY, float ammount, float time) {
 		double length = (knockbackVelocityX * knockbackVelocityX + knockbackVelocityY * knockbackVelocityY);
 		if(Math.round(length) != 1) System.err.println("Eden.startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
-		
+
 		gotKnockbacked = true;
 		this.knockbackVelocityX = knockbackVelocityX;
 		this.knockbackVelocityY = knockbackVelocityY;

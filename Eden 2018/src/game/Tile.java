@@ -1,8 +1,16 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Tile {
 
 	float x;

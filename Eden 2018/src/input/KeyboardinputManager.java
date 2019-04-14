@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package input;
 
 import java.awt.event.KeyEvent;
@@ -9,8 +12,7 @@ import java.awt.event.KeyListener;
  * @param keys The boolean Array which set the index of the key as true if it is pressed
  * @see KeyListener
  */
-
-public class KeyboardinputManager implements KeyListener{
+public final class KeyboardinputManager implements KeyListener{
 
 	private static boolean [] keys = new boolean[1024];
 	public static boolean isKeyDown(int keyCode){

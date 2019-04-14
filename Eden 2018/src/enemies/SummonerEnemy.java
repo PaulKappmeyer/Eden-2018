@@ -1,7 +1,15 @@
+/*
+ * 
+ */
 package enemies;
 
 import game.Game;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class SummonerEnemy extends ZombieEnemy{
 
 	float spawnTime = 3f;

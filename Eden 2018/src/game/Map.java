@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
@@ -8,6 +11,11 @@ import enemies.Enemy;
 import guns.Shell;
 import player.Eden;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Map {
 
 	public int mapWidth;

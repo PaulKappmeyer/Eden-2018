@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
@@ -7,10 +10,15 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Window extends JFrame{
-	private BufferStrategy strat;
 	public int insetX;
 	public int insetY;
+	private BufferStrategy strat;
 	
 	public Window(String title, int width, int height) {
 		this.setTitle(title);

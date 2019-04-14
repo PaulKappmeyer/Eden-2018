@@ -1,8 +1,16 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class ScreenTransition {
 
 	//Transition

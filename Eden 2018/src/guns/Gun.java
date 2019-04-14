@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package guns;
 
 import java.awt.Color;
@@ -9,22 +12,25 @@ import game.Globals;
 import game.MovingObject;
 import player.Eden;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public abstract class Gun {
 
-	int mode;
-	//Delay
+	public Projectile[] projectiles;
+	/** Delay */
 	public float shottime = 0.125f;
-	//Time since last shot
-	float tsls = shottime;
-	//Can shot again?
+	/** Can shot again? */
 	public boolean canShot;
-
+	
+	int mode;
+	/** Time since last shot */
+	float tsls = shottime;
 	float bulletSpeed = 600;
-
 	float damage;
 	MovingObject owner;
-
-	public Projectile[] projectiles;
 
 	//-----------------------------------------------------------CONSTRUCTORS------------------------------------------
 	public Gun(MovingObject owner) {

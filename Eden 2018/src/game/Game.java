@@ -1,32 +1,36 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
 import java.io.File;
 
-import enemies.ZombieNest;
-
-public class Game {
-
-	static int mapX = 0;
-	public static int mapY = 0;
-	Map[][]maps;
-	public static Map currentMap;
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class Game {
 
 	public static Gamestate state = Gamestate.RUNNING;
-
+	public static Map currentMap;
+	public static int mapX = 0;
+	public static int mapY = 0;
 	static ScreenTransition transition = new ScreenTransition();
+	
+	Map[][]maps;
 
 	public Game() {
 		//Maps
 		maps = new Map[1][1];
-		File path = new File(".\\src\\maps\\Eden_Testmap_2.txt");
+		File path = new File(".\\src\\maps\\Eden_Testmap_1.2.txt");
 		try {
 			maps[0][0] = MapLoader.loadMap(path);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		currentMap = maps[mapX][mapY];
-		currentMap.enemies.add(new ZombieNest(400, 400));
 	}
 
 	//TODO:Update System

@@ -1,12 +1,21 @@
+/*
+ * 
+ */
 package guns;
 
 import game.Game;
 import game.Globals;
 import game.MovingObject;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class TripleMachineGun extends Gun{
 
 	public static final int TRIPLEMACHINEGUN = 2;
+	
 	float tripleMachineGunRadius = 10;
 	int bulletspray = 3;
 	

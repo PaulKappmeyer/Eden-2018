@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 /**
@@ -5,7 +8,7 @@ package game;
  * @author Paul Kappmeyer
  *
  */
-public class Main {
+public final class Gamestarter {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Eden started");
 		

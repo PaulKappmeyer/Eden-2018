@@ -1,9 +1,17 @@
+/*
+ * 
+ */
 package guns;
 
 import game.Game;
 import game.Globals;
 import game.MovingObject;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class RocketLuncher extends Gun{
 
 	public static final int ROCKET_SINGLE_FIRE_MODE = 4;

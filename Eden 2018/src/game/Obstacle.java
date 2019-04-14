@@ -1,28 +1,26 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Graphics;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public abstract class Obstacle {
 
-	/**
-	 * The X-coordinate of the obstacle
-	 */
+	/** The X-coordinate of the obstacle */
 	public int x;
-	/**
-	 * The Y-coordinate of the obstacle
-	 */
+	/** The Y-coordinate of the obstacle */
 	public int y;
-	/**
-	 * The width of the obstacle
-	 */
+	/** The width of the obstacle */
 	public int width;
-	/**
-	 * The height of the obstacle
-	 */
+	/** The height of the obstacle */
 	public int height;
-	/**
-	 * 
-	 */
+	/** If it gets checked for collision */
 	public boolean isObstacle = true;
 	
 	//--------------------------------------------Constructors

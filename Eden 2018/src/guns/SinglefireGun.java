@@ -1,12 +1,21 @@
+/*
+ * 
+ */
 package guns;
 
 import game.Game;
 import game.Globals;
 import game.MovingObject;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class SinglefireGun extends Gun{
 
 	public static final int SINGLEFIRE = 1;
+	
 	int bulletspray = 0;
 
 	public SinglefireGun(MovingObject owner) {

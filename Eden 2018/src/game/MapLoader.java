@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.image.BufferedImage;
@@ -10,7 +13,13 @@ import enemies.Enemy;
 import enemies.ZombieEnemy;
 import objects.Sign;
 import objects.Stone;
-public class MapLoader {
+
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class MapLoader {
 
 	/**
 	 * Can load Flare-Mapfiles (.txt) with CSV

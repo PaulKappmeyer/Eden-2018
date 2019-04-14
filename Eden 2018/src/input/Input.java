@@ -1,9 +1,17 @@
+/*
+ * 
+ */
 package input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Input {
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class Input {
 
 	//Key inputs
 

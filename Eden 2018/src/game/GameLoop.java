@@ -1,14 +1,22 @@
+/*
+ * 
+ */
 package game;
 
 import input.Input;
 
-public class GameLoop implements Runnable{
-	boolean running = true;
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class GameLoop implements Runnable{
 	public static final int MAXFPS = 120;
 	public static final long MAXLOOPTIME = 1000/MAXFPS;
-	
 	public static long firstFrame;
 	public static int frames;
+	
+	boolean running = true;
 	Game game;
 	GameDrawer screen;
 	

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.Color;
@@ -5,6 +8,11 @@ import java.awt.Graphics;
 
 import enemies.Enemy;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Healthbar {
 
 	Enemy owner;

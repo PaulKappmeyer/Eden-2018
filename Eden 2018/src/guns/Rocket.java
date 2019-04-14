@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package guns;
 
 import java.awt.Color;
@@ -10,6 +13,11 @@ import game.Gameobject;
 import game.Obstacle;
 import game.GameDrawer;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Rocket extends Projectile{
 
 	public static final int SIZE = 6;

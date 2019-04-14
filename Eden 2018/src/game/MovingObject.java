@@ -1,5 +1,13 @@
+/*
+ * 
+ */
 package game;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public abstract class MovingObject extends Gameobject{
 
 	//MOVEMENT

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.util.Random;
@@ -13,7 +16,7 @@ import player.Eden;
  * @param insetY The value of the top window bounding; should be added whenever something is drawn to the screen
  *
  */
-public class Globals {
+public final class Globals {
 	public static int screenWidth = 1280;
 	public static int screenHeight = 800;
 	public static int insetX;

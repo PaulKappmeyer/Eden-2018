@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import java.awt.Color;
@@ -9,6 +12,11 @@ import game.Healthbar;
 import game.MovingObject;
 import guns.Projectile;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public abstract class Enemy extends MovingObject {
 	//POSITION
 	Direction lookDirection = Direction.DOWN;
@@ -138,7 +146,7 @@ public abstract class Enemy extends MovingObject {
 				timeKnockedBack += tslf;
 				resetSpeedUp();
 				currentKnockbackSpeed = MAX_KNOCKBACK_SPEED * ((MAX_KNOCKBACK_TIME - timeKnockedBack) / MAX_KNOCKBACK_TIME);
-			}else {
+			} else {
 				gotKnockbacked = false;
 				timeKnockedBack = 0;
 				currentKnockbackSpeed = 0;

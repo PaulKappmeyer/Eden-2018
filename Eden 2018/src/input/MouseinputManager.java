@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package input;
 
 import java.awt.event.MouseEvent;
@@ -6,7 +9,12 @@ import javax.swing.event.MouseInputListener;
 
 import game.Globals;
 
-public class MouseinputManager implements MouseInputListener{
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class MouseinputManager implements MouseInputListener{
 
 	private static boolean[] mousebutton = new boolean[5];
 	private static float mouseX;

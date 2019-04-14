@@ -8,8 +8,15 @@ import game.Game;
 import game.Globals;
 import game.Obstacle;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Shell {
 
+	public static final int SIZE = 4;
+	
 	public float x;
 	public float y;
 	float velocityX;
@@ -18,7 +25,6 @@ public class Shell {
 	float speedVariation = 5;
 	float finalSpeed;
 	float speed;
-	public static final int SIZE = 4;
 	int direction;
 	int angleVariation = 30;
 	boolean disabled = false;

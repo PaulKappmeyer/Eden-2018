@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package game;
 
 import java.awt.image.BufferedImage;
@@ -6,7 +9,12 @@ import java.io.FileNotFoundException;
 
 import javax.imageio.ImageIO;
 
-public class ImageLoader {
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class ImageLoader {
 
 	public static BufferedImage loadImage(File path) throws Exception{
 		if(!path.exists()) throw new FileNotFoundException("This file could not be found");

@@ -1,9 +1,17 @@
+/*
+ * 
+ */
 package game;
 
 import guns.Bullet;
 import guns.Projectile;
 
-public class Collision {
+/**
+ * 
+ * @author Paul
+ *
+ */
+public final class Collision {
 
 	public static final int TOP_SIDE = 0;
 	public static final int BOTTOM_SIDE = 1;

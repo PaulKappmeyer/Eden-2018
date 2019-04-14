@@ -1,12 +1,19 @@
+/*
+ * 
+ */
 package guns;
 
 import game.Game;
 import game.MovingObject;
 
+/**
+ * 
+ */
 public class CirclefireGun extends Gun{
 
 	public static final int CIRCLESHOT = 3;
 	public static final int CIRCLESHOT_SINGLE = 5;
+	
 	int numBulletsPerShot = 36;
 	int a = 0;
 	

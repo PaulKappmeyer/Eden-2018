@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import game.Direction;
@@ -11,7 +14,6 @@ public class ZombieNest extends Enemy{
 		super(x, y);
 		this.size = 16;
 		this.lookDirection = Direction.UNDEFINED;
-		// TODO Auto-generated constructor stub
 		
 		this.MAX_HEALTH = 2000;
 		this.health = MAX_HEALTH;
@@ -29,11 +31,12 @@ public class ZombieNest extends Enemy{
 		if(alive == false) {
 			float centerX = (float) (this.x + this.size/2);
 			float centerY = (float) (this.y + this.size/2);
+			
 			for (int i = 0; i < numOfSpawns; i++) {
 				float angle = 360/numOfSpawns * i;
 				ZombieEnemy z = new ZombieEnemy(centerX, centerY);
 				z.followplayer = true;
-				z.startKnockback(Math.sin(angle), Math.cos(angle), 1000, 0.1f);
+				z.startKnockback(Math.sin(Math.toRadians(angle)), Math.cos(Math.toRadians(angle)), 1000, 0.1f);
 				Game.currentMap.enemies.add(z);
 			}
 		}

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package player;
 
 import java.awt.Color;
@@ -7,6 +10,11 @@ import enemies.Enemy;
 import game.Game;
 import game.Globals;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Bomb {
 
 	float x;
@@ -24,7 +32,6 @@ public class Bomb {
 	float radius = 0;
 	float radiusIncrease = 2500;
 	float maxRadius = 250;
-
 	Color color;
 
 	public Bomb(float x, float y) {

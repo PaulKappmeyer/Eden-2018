@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import java.awt.Color;
@@ -7,6 +10,11 @@ import game.Collision;
 import game.Globals;
 import game.Obstacle;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class JumpEnemy extends ZombieEnemy{
 
 	float chargeTime = 1.1f;
@@ -161,7 +169,7 @@ public class JumpEnemy extends ZombieEnemy{
 					if(timeJumped <= jumpTime) {
 						timeJumped += tslf;
 						currentJumpSpeed = jumpSpeed * ((jumpTime - timeJumped) / jumpTime);
-					}else {
+					} else {
 						isJumping = false;
 						resetSpeedUp();
 						timeJumped = 0;

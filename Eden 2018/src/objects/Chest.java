@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package objects;
 
 import java.awt.Color;
@@ -11,12 +14,17 @@ import game.Textbox;
 import guns.SinglefireGun;
 import input.Input;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Chest extends Obstacle{
 
 	public static int triggerDistance = 75;
+	
 	boolean pressed;
 	boolean checkForPlayer = true;
-
 	Textbox textbox;
 
 	public Chest(int x, int y, int width, int height) {

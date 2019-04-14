@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import java.awt.Color;
@@ -8,6 +11,11 @@ import game.Globals;
 import guns.Bullet;
 import guns.Projectile;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class RoundEnemy extends ZombieEnemy{
 
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -68,7 +76,7 @@ public class RoundEnemy extends ZombieEnemy{
 						bullet.velocityY = (float) Math.cos(Math.toRadians(bullet.angle + angle));
 						angle += bullet.speed * tslf;
 						angles.set(index, angle);
-					}else {
+					} else {
 						if(shotAtPlayer) {
 							float ecx = this.x + this.size/2;
 							float ecy = this.y + this.size/2;
@@ -86,7 +94,7 @@ public class RoundEnemy extends ZombieEnemy{
 
 							bullet.velocityX = (float) Math.sin(Math.toRadians(newAngle + 180));
 							bullet.velocityY = (float) Math.cos(Math.toRadians(newAngle + 180));
-						}else {
+						} else {
 							bullet.velocityX = (float) Math.sin(Math.toRadians(bullet.angle + angle));
 							bullet.velocityY = (float) Math.cos(Math.toRadians(bullet.angle + angle));
 						}

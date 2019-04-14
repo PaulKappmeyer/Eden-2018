@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package enemies;
 
 import java.awt.Graphics;
@@ -108,7 +111,7 @@ public class ZombieEnemy extends Enemy{
 			if(obs instanceof BulletBouncer) {
 				startKnockback(0, -1, 100, 0.4f);
 				this.y = obs.y - size;	
-			}else {
+			} else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
 				this.y = obs.y - size;	
@@ -120,7 +123,7 @@ public class ZombieEnemy extends Enemy{
 			if(obs instanceof BulletBouncer) {
 				startKnockback(0, 1, 100, 0.4f);
 				this.y = obs.y + obs.height;
-			}else {
+			} else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
 				this.y = obs.y + obs.height;
@@ -132,7 +135,7 @@ public class ZombieEnemy extends Enemy{
 			if(obs instanceof BulletBouncer) {
 				startKnockback(-1, 0, 100, 0.4f);
 				this.x = obs.x - size;
-			}else {
+			} else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;
 				this.x = obs.x - size;
@@ -144,7 +147,7 @@ public class ZombieEnemy extends Enemy{
 			if(obs instanceof BulletBouncer) {
 				startKnockback(1, 0, 100, 0.4f);
 				this.x = obs.x + obs.width;
-			}else {
+			} else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;
 				this.x = obs.x + obs.width;
