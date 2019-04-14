@@ -1,4 +1,7 @@
 /mapeditor/
-/.gitignore
-/game/
-/mapEditor/
+/enemies/
+/gfx/
+/guns/
+/input/
+/maps/
+/player/
