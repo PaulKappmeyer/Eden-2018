@@ -1,10 +1,4 @@
-/enemies/
-/game/
-/guns/
-/input/
 /mapeditor/
-/maps/
-/gfx/
-/tilesets/
+/.gitignore
+/game/
 /objects/
-/player/
