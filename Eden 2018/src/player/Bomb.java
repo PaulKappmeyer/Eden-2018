@@ -8,6 +8,7 @@ import java.awt.Graphics;
 
 import enemies.Enemy;
 import game.Game;
+import game.GameDrawer;
 import game.Globals;
 
 /**
@@ -95,6 +96,7 @@ public class Bomb {
 		}
 		//Explosion animation
 		if(explode) {
+			GameDrawer.addScreenshake(30, 0.5f);
 			radius += radiusIncrease * tslf;
 			if(radius >= maxRadius) {
 				explode = false;
