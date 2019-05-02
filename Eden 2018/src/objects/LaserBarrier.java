@@ -6,8 +6,6 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.Globals;
-
 /**
  * 
  * @author Paul
@@ -33,11 +31,11 @@ public class LaserBarrier {
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, width, height);
+		g.fillRect((int)x, (int)y, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, width, height);
+		g.drawRect((int)x, (int)y, width, height);
 		
-		g.fillRect((int)(x - width/2 + Globals.insetX), (int)(y - width/2 + Globals.insetY), width*2, width*2);
+		g.fillRect((int)(x - width/2), (int)(y - width/2), width*2, width*2);
 	}
 	
 }

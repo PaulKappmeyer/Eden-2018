@@ -30,9 +30,9 @@ public class RoundStone {
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillOval(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.fillOval(x, y, size, size);
 		g.setColor(Color.BLACK);
-		g.drawOval(x + Globals.insetX, y + Globals.insetY, size, size);
+		g.drawOval(x, y, size, size);
 	}
 	
 	public void update(float tslf) {

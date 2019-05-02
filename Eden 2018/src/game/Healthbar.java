@@ -24,9 +24,9 @@ public class Healthbar {
 	public void draw(Graphics g) {
 		if(owner.isInHitAnimation) {
 			g.setColor(Color.GREEN);
-			g.fillRect((int)owner.x + Globals.insetX, (int)owner.y - 10 + Globals.insetY, (int)(owner.size * (owner.health / owner.MAX_HEALTH)), 5);
+			g.fillRect((int)owner.x, (int)owner.y - 10, (int)(owner.size * (owner.health / owner.MAX_HEALTH)), 5);
 			g.setColor(Color.BLACK);
-			g.drawRect((int)owner.x + Globals.insetX, (int)owner.y - 10 + Globals.insetY, owner.size, 5);
+			g.drawRect((int)owner.x, (int)owner.y - 10, owner.size, 5);
 		}
 	}
 	

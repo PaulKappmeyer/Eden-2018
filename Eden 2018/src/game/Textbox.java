@@ -38,12 +38,12 @@ public class Textbox {
 	public void draw(Graphics g) {
 		if(state != HIDE) {
 			g.setColor(Color.BLACK);
-			g.drawRoundRect((int) (x + Globals.insetX), (int) (y + Globals.insetY), (int)width, (int)height, 10, 10);
+			g.drawRoundRect((int) (x), (int) (y), (int)width, (int)height, 10, 10);
 			g.setColor(new Color(100, 100, 100, 100));
-			g.fillRoundRect((int) (x + Globals.insetX), (int) (y + Globals.insetY), (int)width, (int)height, 10, 10);
+			g.fillRoundRect((int) (x), (int) (y), (int)width, (int)height, 10, 10);
 			if(state == HIGHEST_POINT) {
 				g.setColor(Color.BLACK);
-				g.drawString(text[index], (int)(x + Globals.insetX + 10), (int)(y + Globals.insetY + 15 ));
+				g.drawString(text[index], (int)(x + 10), (int)(y + 15 ));
 			}
 		}
 	}

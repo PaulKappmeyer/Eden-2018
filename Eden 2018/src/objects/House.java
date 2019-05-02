@@ -49,13 +49,13 @@ public class House extends Obstacle{
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.ORANGE);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.fillRect(x, y, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.drawRect(x, y, width, height);
 		g.setColor(Color.RED);
-		g.fillRect(doorX + Globals.insetX, doorY + Globals.insetY, doorWidth, doorHeight);
+		g.fillRect(doorX, doorY, doorWidth, doorHeight);
 		g.setColor(Color.BLACK);
-		g.drawRect(doorX + Globals.insetX, doorY + Globals.insetY, doorWidth, doorHeight);
+		g.drawRect(doorX, doorY, doorWidth, doorHeight);
 
 	}
 

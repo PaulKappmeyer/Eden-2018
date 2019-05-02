@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import game.Direction;
-import game.Globals;
 import game.Healthbar;
 import game.MovingObject;
 import guns.Projectile;
@@ -77,23 +76,23 @@ public abstract class Enemy extends MovingObject {
 	public void draw(Graphics g) {
 		if(!showBlink) {
 			g.setColor(Color.RED);
-			g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			g.fillRect((int)x, (int)y, this.size, this.size);
 			g.setColor(Color.BLACK);
-			g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+			g.drawRect((int)x, (int)y, this.size, this.size);
 			
 			g.setColor(Color.BLUE);
 			switch (lookDirection) {
 			case UP:
-				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size/2 - a/2), (int)this.y, a, a);
 				break;
 			case DOWN:
-				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size/2 - a/2), (int)this.y + size - a, a, a);
 				break;
 			case RIGHT:
-				g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size - a), (int)this.y + size/2 - a/2, a, a);
 				break;
 			case LEFT:
-				g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				g.fillOval((int)(this.x), (int)this.y + size/2 - a/2, a, a);
 				break;
 			default:
 				break;
@@ -102,13 +101,13 @@ public abstract class Enemy extends MovingObject {
 		if(isInHitAnimation) {
 			if(showBlink) {
 				g.setColor(Color.WHITE);
-				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				g.fillRect((int)x, (int)y, this.size, this.size);
+				g.drawRect((int)x, (int)y, this.size, this.size);
 			}
 		}
 		if(isInDieAnimation) {
 			g.setColor(Color.BLACK);
-			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
+			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
 		
 		healthbar.draw(g);

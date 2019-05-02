@@ -19,8 +19,6 @@ import player.Eden;
 public final class Globals {
 	public static int screenWidth = 1280;
 	public static int screenHeight = 800;
-	public static int insetX;
-	public static int insetY;
 	public static Eden player = new Eden();
 	public static Random random = new Random();
 	public static int fps;

@@ -81,12 +81,12 @@ public class Bullet extends Projectile{
 	 */
 	@Override
 	public void draw(Graphics g) {
-		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
+		g.fillOval((int)x, (int)y, SIZE, SIZE);
 		g.setColor(Color.BLACK);
-		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
+		g.drawOval((int)x, (int)y, SIZE, SIZE);
 		if(dieAnimation) {
 			g.setColor(new Color(0, 0, 0, 200));
-			g.fillOval((int)(x + SIZE/2 - currentRadius/2 + Globals.insetX), (int)(y + SIZE/2 - currentRadius/2 + Globals.insetY), (int)currentRadius, (int)currentRadius);
+			g.fillOval((int)(x + SIZE/2 - currentRadius/2), (int)(y + SIZE/2 - currentRadius/2), (int)currentRadius, (int)currentRadius);
 		}
 	}
 	//---------------------------------Updating---------------------------------------------------------------

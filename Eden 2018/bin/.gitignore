@@ -5,3 +5,7 @@
 >>>>>>> branch 'master' of https://github.com/PaulKappmeyer/Eden-2018
 /game/
 /objects/
+/enemies/
+/guns/
+/input/
+/player/

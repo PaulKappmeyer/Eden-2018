@@ -30,9 +30,6 @@ public final class GameDrawer extends Window{
 		this.addMouseListener(m);
 		this.addMouseMotionListener(m);
 		
-		Globals.insetX = this.insetX;
-		Globals.insetY = this.insetY;
-		
 		this.game = game;
 	}
 	
@@ -44,7 +41,7 @@ public final class GameDrawer extends Window{
 	public void draw(Graphics g){
 		//Clear the screen
 		g.setColor(Color.WHITE);
-		g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
 		//Game
 		game.draw(g);
@@ -52,12 +49,12 @@ public final class GameDrawer extends Window{
 		//Draw the alpha mask
 		if(Game.state == Gamestate.INTERACTING) {
 			g.setColor(new Color(100, 100, 100, 50));
-			g.fillRect(Globals.insetX, Globals.insetY, this.getWidth(), this.getHeight());
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		}
 		
 		//FPS
 		g.setColor(Color.RED);
-		g.drawString(Globals.fps + " fps", 5 + Globals.insetX, g.getFont().getSize() + Globals.insetY);
+		g.drawString(Globals.fps + " fps", 5, g.getFont().getSize());
 	}
 	
 	//Screenshake

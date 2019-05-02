@@ -42,13 +42,13 @@ public class Bomb {
 
 	public void draw(Graphics g) {
 		g.setColor(color);
-		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.fillOval((int)x, (int)y, size, size);
 		g.setColor(Color.BLACK);
-		g.drawOval((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.drawOval((int)x, (int)y, size, size);
 
 		if(explode) {
 			g.setColor(Color.BLACK);
-			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
+			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
 	}
 

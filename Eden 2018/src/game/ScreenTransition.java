@@ -24,7 +24,7 @@ public class ScreenTransition {
 	//DRAW
 	public void draw(Graphics g) {
 		g.setColor(new Color(0, 0, 0, 150));
-		g.fillRect((int)transitionX + Globals.insetX, (int)transitionY + Globals.insetY, (int)transitionWidth, (int)transitionHeight);
+		g.fillRect((int)transitionX, (int)transitionY, (int)transitionWidth, (int)transitionHeight);
 	}
 
 	//UPDATE

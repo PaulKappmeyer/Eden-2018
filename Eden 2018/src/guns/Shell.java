@@ -47,7 +47,7 @@ public class Shell {
 
 	public void draw(Graphics g){
 		g.setColor(Color.BLACK);
-		g.fillOval((int)x + Globals.insetX, (int)y + Globals.insetY, SIZE, SIZE);
+		g.fillOval((int)x, (int)y, SIZE, SIZE);
 	}
 
 	float time;

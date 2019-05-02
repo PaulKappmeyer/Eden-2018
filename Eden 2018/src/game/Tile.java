@@ -36,7 +36,7 @@ public class Tile {
 	}
 	
 	public void draw(Graphics g) {
-		g.drawImage(image, (int)x + Globals.insetX, (int)y + Globals.insetY, width, height,  null);
+		g.drawImage(image, (int)x, (int)y, width, height,  null);
 	}
 	
 	public void update(float tslf) {

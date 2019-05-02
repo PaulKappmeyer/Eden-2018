@@ -16,8 +16,8 @@ import javax.swing.JFrame;
  *
  */
 public class Window extends JFrame{
-	public int insetX;
-	public int insetY;
+	private int insetX;
+	private int insetY;
 	private BufferStrategy strat;
 	
 	public Window(String title, int width, int height) {
@@ -45,6 +45,7 @@ public class Window extends JFrame{
 	 */
 	public void repaintScreen(){
 		Graphics g = strat.getDrawGraphics();
+		g.translate(insetX, insetY);
 		draw(g);
 		g.dispose();
 		strat.show();

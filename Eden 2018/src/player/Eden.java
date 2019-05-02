@@ -102,23 +102,23 @@ public class Eden extends MovingObject{
 	public void draw(Graphics g) {
 		//Drawing of the player
 		g.setColor(Color.BLUE);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.fillRect((int)x, (int)y, size, size);
 		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, size, size);
+		g.drawRect((int)x, (int)y, size, size);
 
 		g.setColor(Color.RED);
 		switch (shotDirection) {
 		case UP:
-			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+			g.fillOval((int)(this.x + size/2 - a/2), (int)this.y, a, a);
 			break;
 		case DOWN:
-			g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+			g.fillOval((int)(this.x + size/2 - a/2), (int)this.y + size - a, a, a);
 			break;
 		case RIGHT:
-			g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			g.fillOval((int)(this.x + size - a), (int)this.y + size/2 - a/2, a, a);
 			break;
 		case LEFT:
-			g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+			g.fillOval((int)(this.x), (int)this.y + size/2 - a/2, a, a);
 			break;
 		default:
 			break;
@@ -128,8 +128,8 @@ public class Eden extends MovingObject{
 		if(gotHit) {
 			if(blink > blinktime) {
 				g.setColor(Color.WHITE);
-				g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
-				g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size);
+				g.fillRect((int)x, (int)y, this.size, this.size);
+				g.drawRect((int)x, (int)y, this.size, this.size);
 			}
 			if(blink > blinktime*2) {
 				blink -= blinktime*2;
@@ -138,7 +138,7 @@ public class Eden extends MovingObject{
 
 		//Shockwave
 		g.setColor(Color.BLACK);
-		g.drawOval((int)(shockwaveX - currentStunRange/2 + Globals.insetX), (int)(shockwaveY - currentStunRange/2 + Globals.insetY), (int)currentStunRange, (int)currentStunRange);
+		g.drawOval((int)(shockwaveX - currentStunRange/2), (int)(shockwaveY - currentStunRange/2), (int)currentStunRange, (int)currentStunRange);
 
 		//Bombs
 		for (Bomb bomb : bombs) {

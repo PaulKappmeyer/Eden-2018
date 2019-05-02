@@ -38,9 +38,9 @@ public class Chest extends Obstacle{
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.ORANGE);
-		g.fillRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.fillRect(x, y, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + Globals.insetX, y + Globals.insetY, width, height);
+		g.drawRect(x, y, width, height);
 
 		textbox.draw(g);
 	}

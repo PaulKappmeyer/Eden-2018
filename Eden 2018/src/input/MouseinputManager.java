@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputListener;
 
-import game.Globals;
-
 /**
  * 
  * @author Paul
@@ -66,14 +64,14 @@ public final class MouseinputManager implements MouseInputListener{
 		int button = mouseEvent.getButton();
 		if(button >= 0 && button < mousebutton.length) mousebutton[button] = true;
 		
-		mouseX = mouseEvent.getX() - Globals.insetX;
-		mouseY = mouseEvent.getY() - Globals.insetY;
+		mouseX = mouseEvent.getX();
+		mouseY = mouseEvent.getY();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent mouseEvent) {
-		mouseX = mouseEvent.getX() - Globals.insetX;
-		mouseY = mouseEvent.getY() - Globals.insetY;
+		mouseX = mouseEvent.getX();
+		mouseY = mouseEvent.getY();
 	}
 
 }

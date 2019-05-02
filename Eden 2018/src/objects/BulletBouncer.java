@@ -6,7 +6,6 @@ package objects;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import game.Globals;
 import game.Obstacle;
 
 /**
@@ -25,9 +24,9 @@ public class BulletBouncer extends Obstacle{
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.BLUE);
-		g.fillRect((int)x + Globals.insetX, (int)y + Globals.insetY, width, height);
+		g.fillRect((int)x, (int)y, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect((int)x + Globals.insetX, (int)y + Globals.insetY, width, height);
+		g.drawRect((int)x, (int)y, width, height);
 	}
 	
 	public void update(float tslf) {

@@ -52,23 +52,23 @@ public class JumpEnemy extends ZombieEnemy{
 				g.translate(xa, ya);
 			}
 			g.setColor(Color.RED);
-			g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+			g.fillRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
 			g.setColor(Color.BLACK);
-			g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+			g.drawRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
 			
 			g.setColor(Color.BLUE);
 			switch (lookDirection) {
 			case UP:
-				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size/2 - a/2), (int)this.y, a, a);
 				break;
 			case DOWN:
-				g.fillOval((int)(this.x + size/2 - a/2 + Globals.insetX), (int)this.y + size - a + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size/2 - a/2), (int)this.y + size - a, a, a);
 				break;
 			case RIGHT:
-				g.fillOval((int)(this.x + size - a + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				g.fillOval((int)(this.x + size - a), (int)this.y + size/2 - a/2, a, a);
 				break;
 			case LEFT:
-				g.fillOval((int)(this.x + Globals.insetX), (int)this.y + size/2 - a/2 + Globals.insetY, a, a);
+				g.fillOval((int)(this.x), (int)this.y + size/2 - a/2, a, a);
 				break;
 			default:
 				break;
@@ -84,13 +84,13 @@ public class JumpEnemy extends ZombieEnemy{
 		if(isInHitAnimation) {
 			if(showBlink) {
 				g.setColor(Color.WHITE);
-				g.fillRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
-				g.drawRoundRect((int)x + Globals.insetX, (int)y + Globals.insetY, this.size, this.size, 10, 10);
+				g.fillRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
+				g.drawRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
 			}
 		}
 		if(isInDieAnimation) {
 			g.setColor(Color.BLACK);
-			g.fillOval((int)(x + size/2 - radius/2 + Globals.insetX), (int)(y + size/2 - radius/2 + Globals.insetY), (int)radius, (int)radius);
+			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
 	}
 
