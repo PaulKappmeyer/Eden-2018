@@ -1,11 +1,9 @@
-<<<<<<< HEAD
-=======
 /mapeditor/
-/.gitignore
->>>>>>> branch 'master' of https://github.com/PaulKappmeyer/Eden-2018
-/game/
-/objects/
 /enemies/
+/game/
+/gfx/
+/maps/
+/objects/
 /guns/
 /input/
 /player/
