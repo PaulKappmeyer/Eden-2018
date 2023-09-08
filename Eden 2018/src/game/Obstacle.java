@@ -29,6 +29,7 @@ public abstract class Obstacle {
 	 */
 	public Obstacle() {
 	}
+	
 	/**
 	 * Basic constructor
 	 * @param x The X-coordinate of the object
@@ -38,6 +39,7 @@ public abstract class Obstacle {
 		this.x = x;
 		this.y = y;
 	}	
+	
 	public Obstacle(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;

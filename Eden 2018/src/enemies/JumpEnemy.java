@@ -45,8 +45,8 @@ public class JumpEnemy extends ZombieEnemy{
 	int ya;
 	@Override
 	public void draw(Graphics g) {
-		if(!showBlink) {
-			if(startCharge) {
+		if (!showBlink) {
+			if (startCharge) {
 				xa = Globals.random.nextInt(5);
 				ya = Globals.random.nextInt(5);
 				g.translate(xa, ya);
@@ -74,21 +74,21 @@ public class JumpEnemy extends ZombieEnemy{
 				break;
 			}
 			
-			if(startCharge) {
+			if (startCharge) {
 				g.translate(-xa, -ya);
 			}
 			
 			healthbar.draw(g);
 		}
 
-		if(isInHitAnimation) {
-			if(showBlink) {
+		if (isInHitAnimation) {
+			if (showBlink) {
 				g.setColor(Color.WHITE);
 				g.fillRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
 				g.drawRoundRect((int)x, (int)y, this.size, this.size, 10, 10);
 			}
 		}
-		if(isInDieAnimation) {
+		if (isInDieAnimation) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
@@ -96,7 +96,7 @@ public class JumpEnemy extends ZombieEnemy{
 
 	@Override
 	public void update(float tslf) {
-		if(alive) {
+		if (alive) {
 			//Knockback
 			updateKnockback(tslf);
 
@@ -107,23 +107,27 @@ public class JumpEnemy extends ZombieEnemy{
 			float enemycentery = this.y + size/2;
 			float distx = enemycenterx - playercenterx;
 			float disty = enemycentery - playercentery;
-			if(!followplayer) {
+			if (!followplayer) {
 				float distanceToPlayer = distx * distx + disty * disty;
-				if(distanceToPlayer < triggerDistance * triggerDistance) {
+				if (distanceToPlayer < triggerDistance * triggerDistance) {
 					followplayer = true;
 				}
 			}
 			//Movement follow player
-			if(followplayer) {
+			if (followplayer) {
 				float angle = (float) Math.atan(distx / disty);
 				angle = (float) Math.toDegrees(angle);
-				if(playercentery > enemycentery) angle =  -90 - (90-angle);
-				if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
+				if (playercentery > enemycentery) {
+					angle =  -90 - (90-angle);
+				}
+				if (playercenterx < enemycenterx && playercentery < enemycentery) {
+					angle = -270 - (90-angle);
+				}
 
 				walkVelocityX = (float) -Math.sin(Math.toRadians(angle));
 				walkVelocityY = (float) -Math.cos(Math.toRadians(angle));
 
-				if(distx == 0 && disty == 0) {
+				if (distx == 0 && disty == 0) {
 					walkVelocityX = 0;
 					walkVelocityY = 0;
 				}
@@ -135,28 +139,32 @@ public class JumpEnemy extends ZombieEnemy{
 				updateSpeedUp(tslf);
 
 				//Search for player
-				if(!startCharge && !startJump && !isJumping && followplayer) {
+				if (!startCharge && !startJump && !isJumping && followplayer) {
 					float distanceToPlayer = distx * distx + disty * disty;
-					if(distanceToPlayer < distance * distance && distanceToPlayer > Globals.player.size * Globals.player.size) {
+					if (distanceToPlayer < distance * distance && distanceToPlayer > Globals.player.size * Globals.player.size) {
 						startCharge = true;
 						currentWalkSpeed = 0;
 						isSpeedingUP = false;
 					}
 				}
 				//Charge
-				if(startCharge) {
+				if (startCharge) {
 					timeCharged += tslf;
-					if(timeCharged >= chargeTime) {
+					if (timeCharged >= chargeTime) {
 						stopCharge();
 						startJump = true;
 					}
 				}
 				//Start Jump
-				if(startJump) {
+				if (startJump) {
 					angle = (float) Math.atan(distx / disty);
 					angle = (float) Math.toDegrees(angle);
-					if(playercentery > enemycentery) angle =  -90 - (90-angle);
-					if(playercenterx < enemycenterx && playercentery < enemycentery) angle = -270 - (90-angle);
+					if (playercentery > enemycentery) {
+						angle =  -90 - (90-angle);
+					}
+					if (playercenterx < enemycenterx && playercentery < enemycentery) {
+						angle = -270 - (90-angle);
+					}
 
 					jumpVeloctiyX = (float) -Math.sin(Math.toRadians(angle));
 					jumpVeloctiyY = (float) -Math.cos(Math.toRadians(angle));
@@ -165,8 +173,8 @@ public class JumpEnemy extends ZombieEnemy{
 					startJump = false;
 				}
 				//Update Jump
-				if(isJumping) {
-					if(timeJumped <= jumpTime) {
+				if (isJumping) {
+					if (timeJumped <= jumpTime) {
 						timeJumped += tslf;
 						currentJumpSpeed = jumpSpeed * ((jumpTime - timeJumped) / jumpTime);
 					} else {
@@ -199,33 +207,33 @@ public class JumpEnemy extends ZombieEnemy{
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed + jumpVeloctiyX * currentJumpSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed + jumpVeloctiyY * currentJumpSpeed) * tslf);
 
-		if(nextX == this.x && nextY == this.y) return;
+		if (nextX == this.x && nextY == this.y) return;
 
 		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
 		
 		Obstacle obs = collisions[Collision.TOP_SIDE];
-		if(obs != null) {
+		if (obs != null) {
 			walkVelocityY = 0;
 			knockbackVelocityY = 0;
 			jumpVeloctiyY = 0;
 			nextY = obs.y - size;
 		}
 		obs = collisions[Collision.BOTTOM_SIDE];
-		if(obs != null) {
+		if (obs != null) {
 			walkVelocityY = 0;
 			knockbackVelocityY = 0;
 			jumpVeloctiyY = 0;
 			nextY = obs.y + obs.height;
 		}
 		obs = collisions[Collision.LEFT_SIDE];
-		if(obs != null) {
+		if (obs != null) {
 			walkVelocityX = 0;
 			knockbackVelocityX = 0;
 			jumpVeloctiyX = 0;
 			nextX = obs.x - size;
 		}
 		obs = collisions[Collision.RIGHT_SIDE];
-		if(obs != null) {
+		if (obs != null) {
 			walkVelocityX = 0;
 			knockbackVelocityX = 0;
 			jumpVeloctiyX = 0;

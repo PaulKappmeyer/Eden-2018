@@ -62,11 +62,11 @@ public class House extends Obstacle{
 	@Override
 	public void update(float tslf) {
 		Eden player = Globals.player;
-		if(player.shotDirection == Direction.UP && player.state == Eden.WALKING) {
-			if(player.x > doorX - 5 && player.x < doorX + 5 && player.y == this.y + this.height) {
+		if (player.shotDirection == Direction.UP && player.state == Eden.WALKING) {
+			if (player.x > doorX - 5 && player.x < doorX + 5 && player.y == this.y + this.height) {
 				opened += tslf;
-				if(opened >= openTime) {
-					if(Game.state == Gamestate.RUNNING) {
+				if (opened >= openTime) {
+					if (Game.state == Gamestate.RUNNING) {
 						oldMap = Game.currentMap;
 						Game.mapY--;
 						Game.beginMapTransition(Direction.UP, indoor, Globals.screenWidth/2 - player.size/2, Globals.screenHeight - 25 - player.size);
@@ -77,9 +77,9 @@ public class House extends Obstacle{
 			opened = 0;
 		}
 		
-		if(Game.currentMap.equals(indoor)) {
+		if (Game.currentMap.equals(indoor)) {
 			System.out.println("yes13");
-			if(Globals.player.y + Globals.player.size >= Globals.screenHeight) {
+			if (Globals.player.y + Globals.player.size >= Globals.screenHeight) {
 				System.out.println("yes");
 				Game.beginMapTransition(Direction.DOWN, oldMap, doorX, doorY + doorHeight + 5);
 			}

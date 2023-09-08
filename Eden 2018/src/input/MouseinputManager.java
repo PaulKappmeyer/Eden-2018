@@ -19,12 +19,18 @@ public final class MouseinputManager implements MouseInputListener{
 	private static float mouseY;
 	
 	public static boolean isButtonDown(int mouseButtoon) {
-		if(mouseButtoon >= 0 && mouseButtoon < mousebutton.length && mousebutton[mouseButtoon]) return true;
-		else return false;
+		if (mouseButtoon >= 0 && mouseButtoon < mousebutton.length && mousebutton[mouseButtoon]) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
+	
 	public static float getMouseX () {
 		return mouseX;
 	}
+	
 	public static float getMouseY () {
 		return mouseY;
 	}
@@ -32,7 +38,9 @@ public final class MouseinputManager implements MouseInputListener{
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = false;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = false;
+		}
 	}
 
 	@Override
@@ -50,19 +58,25 @@ public final class MouseinputManager implements MouseInputListener{
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = true;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = true;
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = false;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = false;
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = true;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = true;
+		}
 		
 		mouseX = mouseEvent.getX();
 		mouseY = mouseEvent.getY();

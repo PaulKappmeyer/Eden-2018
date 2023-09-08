@@ -125,13 +125,13 @@ public class Eden extends MovingObject{
 		}
 
 		//Got-Hit-animation
-		if(gotHit) {
-			if(blink > blinktime) {
+		if (gotHit) {
+			if (blink > blinktime) {
 				g.setColor(Color.WHITE);
 				g.fillRect((int)x, (int)y, this.size, this.size);
 				g.drawRect((int)x, (int)y, this.size, this.size);
 			}
-			if(blink > blinktime*2) {
+			if (blink > blinktime*2) {
 				blink -= blinktime*2;
 			}
 		}
@@ -154,14 +154,16 @@ public class Eden extends MovingObject{
 	 */
 	public void update(float tslf) {	
 		//Update the gun
-		if(gun != null) gun.update(tslf);
+		if (gun != null) {
+			gun.update(tslf);
+		}
 
 		//Knockback
-		if(gotKnockbacked) {
-			if(timeKnockedBack <= maxKnockbackTime) {
+		if (gotKnockbacked) {
+			if (timeKnockedBack <= maxKnockbackTime) {
 				timeKnockedBack += tslf;
 				currentKnockbackSpeed = maxKnockback * ((maxKnockbackTime - timeKnockedBack) / maxKnockbackTime);
-			}else {
+			} else {
 				stopKnockback();
 			}
 		}
@@ -170,18 +172,18 @@ public class Eden extends MovingObject{
 		updateInput(tslf);
 
 		//Calculate the walk speed
-		if(state == SHOOTING) {
-			if(timeSpeededUp >= TIME_FOR_MAX_SPEED) {
+		if (state == SHOOTING) {
+			if (timeSpeededUp >= TIME_FOR_MAX_SPEED) {
 				currentWalkSpeed = shotWalkSpeed;
-			}else {
+			} else {
 				timeSpeededUp += tslf;
 				currentWalkSpeed = shotWalkSpeed * (timeSpeededUp / TIME_FOR_MAX_SPEED);
 			}
-		}else if(state == WALKING) {
+		} else if (state == WALKING) {
 			shotDirection = walkDirection;
-			if(timeSpeededUp >= TIME_FOR_MAX_SPEED) {
+			if (timeSpeededUp >= TIME_FOR_MAX_SPEED) {
 				currentWalkSpeed = idleWalkSpeed;
-			}else {
+			} else {
 				timeSpeededUp += tslf;
 				currentWalkSpeed = idleWalkSpeed * (timeSpeededUp / TIME_FOR_MAX_SPEED);
 			}
@@ -192,7 +194,9 @@ public class Eden extends MovingObject{
 		//Collision with the screen
 		checkCollisionPlayerToWall();
 		//Collision to enemies
-		if(!gotHit)checkCollisionPlayerToEnemies();
+		if (!gotHit) {
+			checkCollisionPlayerToEnemies();
+		}
 
 
 		//Movement
@@ -200,26 +204,26 @@ public class Eden extends MovingObject{
 		this.y += (float) ((walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
 
 		//Got-Hit-animation
-		if(gotHit) {
+		if (gotHit) {
 			//Animation
 			blink += tslf;
 			blinkfromStart += tslf;
-			if(blinkfromStart > maxBlinkTime) {
+			if (blinkfromStart > maxBlinkTime) {
 				blinkfromStart = 0;
 				gotHit = false;
 			}
 		}
 
 		//Shockwave
-		if(shockwave) {
+		if (shockwave) {
 			currentStunRange += stunRageIncrease * tslf;
-			if(currentStunRange >= maxStunRange) {
+			if (currentStunRange >= maxStunRange) {
 				shockwave = false;
 				currentStunRange = 0;
 			}
 
 			for (Enemy e : Game.currentMap.enemies) {
-				if(Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
+				if (Globals.checkCollisionRectangleToCircle(shockwaveX-size/2 - currentStunRange/2, shockwaveY-size/2 - currentStunRange/2, currentStunRange, e.x, e.y, e.size, e.size)) {
 					float ecx = e.x + e.size/2;
 					float ecy = e.y + e.size/2;
 
@@ -229,8 +233,8 @@ public class Eden extends MovingObject{
 					//TODO: Rework the angle system
 					float newAngle = (float) Math.atan(distx / disty);
 					newAngle = (float) Math.toDegrees(newAngle);
-					if(shockwaveY > ecy) newAngle =  -90 - (90-newAngle);
-					if(shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
+					if (shockwaveY > ecy) newAngle =  -90 - (90-newAngle);
+					if (shockwaveX < ecx && shockwaveY < ecy) newAngle = -270 - (90-newAngle);
 
 					//e.getDamaged(50);
 					e.startKnockback(-e.walkVelocityX, -e.walkVelocityY, e.bulletImpact, e.bulletImpactTime);
@@ -245,7 +249,9 @@ public class Eden extends MovingObject{
 		//Removal of the bombs
 		for (int i = 0; i < bombs.size(); i++) {
 			Bomb b = bombs.get(i);
-			if(!b.ticking && !b.explode) bombs.remove(b);
+			if (!b.ticking && !b.explode) {
+				bombs.remove(b);
+			}
 		}
 	}
 
@@ -256,73 +262,87 @@ public class Eden extends MovingObject{
 	 */
 	public void updateInput(float tslf) {
 		//Up
-		if(Input.isUpKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())) {
-			if(state == IDLE) state = WALKING;
+		if (Input.isUpKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())) {
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkDirection = Direction.UP;
 			walkVelocityX = 0;
 			walkVelocityY = -1;
 		}
-		if(Input.isUpKeyDown() && Input.isLeftKeyDown()) {
-			if(state == IDLE) state = WALKING;
+		if (Input.isUpKeyDown() && Input.isLeftKeyDown()) {
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkVelocityX = Math.sin(Math.PI * 5/4);
 			walkVelocityY = Math.cos(Math.PI * 5/4);
 		}
-		if(Input.isUpKeyDown() && Input.isRightKeyDown()) {
-			if(state == IDLE) state = WALKING;
+		if (Input.isUpKeyDown() && Input.isRightKeyDown()) {
+			if (state == IDLE) state = WALKING;
 			walkVelocityX = Math.sin(Math.PI * 3/4);
 			walkVelocityY = Math.cos(Math.PI * 3/4);
 		}
 		//Down
-		if(Input.isDownKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())){
-			if(state == IDLE) state = WALKING;
+		if (Input.isDownKeyDown() && !(Input.isLeftKeyDown() || Input.isRightKeyDown())){
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkDirection = Direction.DOWN;
 			walkVelocityX = 0;
 			walkVelocityY = 1;
 		}
-		if(Input.isDownKeyDown() && Input.isLeftKeyDown()){
-			if(state == IDLE) state = WALKING;
+		if (Input.isDownKeyDown() && Input.isLeftKeyDown()){
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkVelocityX = Math.sin(Math.PI * 7/4);
 			walkVelocityY = Math.cos(Math.PI * 7/4);
 		}
-		if(Input.isDownKeyDown() && Input.isRightKeyDown()){
-			if(state == IDLE) state = WALKING;
+		if (Input.isDownKeyDown() && Input.isRightKeyDown()){
+			if (state == IDLE) state = WALKING;
 			walkVelocityX = Math.sin(Math.PI * 1/4);
 			walkVelocityY = Math.cos(Math.PI * 1/4);
 		}
 		//Left
-		if(Input.isLeftKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
-			if(state == IDLE) state = WALKING;
+		if (Input.isLeftKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkDirection = Direction.LEFT ;
 			walkVelocityX = -1;
 			walkVelocityY = 0;
 		}
 		//Right
-		if(Input.isRightKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
-			if(state == IDLE) state = WALKING;
+		if (Input.isRightKeyDown() && !(Input.isUpKeyDown() || Input.isDownKeyDown())) {
+			if (state == IDLE) {
+				state = WALKING;
+			}
 			walkDirection = Direction.RIGHT;
 			walkVelocityX = 1;
 			walkVelocityY = 0;
 		}
 
 		//Reset Walking
-		if(state != IDLE && !(Input.isUpKeyDown() || Input.isDownKeyDown() || Input.isLeftKeyDown()|| Input.isRightKeyDown())) {
+		if (state != IDLE && !(Input.isUpKeyDown() || Input.isDownKeyDown() || Input.isLeftKeyDown()|| Input.isRightKeyDown())) {
 			resetSpeedUp();
 			state = IDLE;
 		}
 
 		//Switch Weapon
-		if(KeyboardinputManager.isKeyDown(KeyEvent.VK_1)) {
+		if (KeyboardinputManager.isKeyDown(KeyEvent.VK_1)) {
 			this.gun = new SinglefireGun(this);
 		}
-		else if(KeyboardinputManager.isKeyDown(KeyEvent.VK_2)) {
+		else if (KeyboardinputManager.isKeyDown(KeyEvent.VK_2)) {
 			this.gun = new TripleMachineGun(this);
 		}
 
 
 		//Shooting
-		if(Input.isShootingKeyDown() && !gotHit && gun != null) {
-			if(gun.canShot) {
-				if(state == IDLE || state == WALKING) shotDirection = walkDirection;
+		if (Input.isShootingKeyDown() && !gotHit && gun != null) {
+			if (gun.canShot) {
+				if (state == IDLE || state == WALKING) {
+					shotDirection = walkDirection;
+				}
 
 				state = SHOOTING;
 				//TODO: Rework the angle system
@@ -335,21 +355,25 @@ public class Eden extends MovingObject{
 				float disty = pcy - mcy;
 				float angle = (float) Math.atan(distx / disty);
 				angle = (float) Math.toDegrees(angle);
-				if(pcy > mcy) angle =  -90 - (90-angle);
-				if(pcx < mcx && pcy < mcy) angle = -270 - (90-angle); 
+				if (pcy > mcy) {
+					angle =  -90 - (90-angle);
+				}
+				if (pcx < mcx && pcy < mcy) {
+					angle = -270 - (90-angle); 
+				}
 				float sin = (float) Math.sin(Math.toRadians(angle));
 				float cos = (float) Math.cos(Math.toRadians(angle));
 
-				if(cos >= -1 && cos <= -0.45) {
+				if (cos >= -1 && cos <= -0.45) {
 					shotDirection = Direction.UP;
 				}
-				if(cos >= 0.45 && cos <= 1) {
+				if (cos >= 0.45 && cos <= 1) {
 					shotDirection = Direction.DOWN;
 				}
-				if(sin >= -1 && sin <= -0.45) {
+				if (sin >= -1 && sin <= -0.45) {
 					shotDirection = Direction.LEFT;
 				}
-				if(sin >= 0.45 && sin <= 1) {
+				if (sin >= 0.45 && sin <= 1) {
 					shotDirection = Direction.RIGHT;
 				}
 
@@ -357,12 +381,12 @@ public class Eden extends MovingObject{
 				//				resetWalking();
 			}
 		}
-		if(state == SHOOTING && !Input.isShootingKeyDown()) {
+		if (state == SHOOTING && !Input.isShootingKeyDown()) {
 			state = Eden.IDLE;
 		}
 
 		//Shockwave
-		if(Input.isSpecialKey1Down() && shockwave == false) {
+		if (Input.isSpecialKey1Down() && shockwave == false) {
 			shockwave = true;
 			shockwaveX = this.x + size/2;
 			shockwaveY = this.y + size/2;
@@ -370,8 +394,10 @@ public class Eden extends MovingObject{
 		}
 
 		//Bombs
-		if(Input.isSpecialKey2Down()) {
-			if(gun.canShot) bombs.add(new Bomb(this.x, this.y));
+		if (Input.isSpecialKey2Down()) {
+			if (gun.canShot) {
+				bombs.add(new Bomb(this.x, this.y));
+			}
 			gun.canShot = false;
 		}
 	}
@@ -380,19 +406,21 @@ public class Eden extends MovingObject{
 	public void checkCollisionToObstacles(float tslf) {
 		float nextX = (float) (this.x + (walkVelocityX * currentWalkSpeed + knockbackVelocityX * currentKnockbackSpeed) * tslf);
 		float nextY = (float) (this.y + (walkVelocityY * currentWalkSpeed + knockbackVelocityY * currentKnockbackSpeed) * tslf);
-		if(nextX == this.x && nextY == this.y) return;
+		if (nextX == this.x && nextY == this.y) {
+			return;
+		}
 
 		Obstacle[] collisions = Collision.checkCollisionMovingobjToObstacle(this, nextX, nextY);
 
 		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
 		Obstacle obs = collisions[Collision.TOP_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				BulletBouncer b = ((BulletBouncer) obs);
 				startKnockback(0, -1, b.power, b.time);
 				this.resetSpeedUp();
 				this.y = obs.y - size;	
-			}else {
+			} else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
 				this.y = obs.y - size;	
@@ -400,13 +428,13 @@ public class Eden extends MovingObject{
 		}
 		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
 		obs = collisions[Collision.BOTTOM_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				BulletBouncer b = ((BulletBouncer) obs);
 				startKnockback(0, 1, b.power, b.time);
 				this.resetSpeedUp();
 				this.y = obs.y + obs.height;
-			}else {
+			} else {
 				walkVelocityY = 0;
 				knockbackVelocityY = 0;
 				this.y = obs.y + obs.height;
@@ -414,13 +442,13 @@ public class Eden extends MovingObject{
 		}
 		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.LEFT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				BulletBouncer b = ((BulletBouncer) obs);
 				startKnockback(-1, 0, b.power, b.time);
 				this.resetSpeedUp();
 				this.x = obs.x - size;
-			}else {
+			} else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;
 				this.x = obs.x - size;
@@ -428,13 +456,13 @@ public class Eden extends MovingObject{
 		}
 		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.RIGHT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				BulletBouncer b = ((BulletBouncer) obs);
 				startKnockback(1, 0, b.power, b.time);
 				this.resetSpeedUp();
 				this.x = obs.x + obs.width;
-			}else {
+			} else {
 				walkVelocityX = 0;
 				knockbackVelocityX = 0;
 				this.x = obs.x + obs.width;
@@ -446,16 +474,16 @@ public class Eden extends MovingObject{
 	 * This function checks the {@link #x} and {@link #y} position of the player and looks for collision with the bounding of the map
 	 */
 	public void checkCollisionPlayerToWall() {
-		if(this.x < 0) {
+		if (this.x < 0) {
 			this.x = 0;
 		}
-		if(this.y < 0) {
+		if (this.y < 0) {
 			this.y = 0;
 		}
-		if(this.x + this.size > Game.currentMap.mapWidth) {
+		if (this.x + this.size > Game.currentMap.mapWidth) {
 			this.x = Game.currentMap.mapWidth - this.size;
 		}
-		if(this.y + this.size > Game.currentMap.mapHeight) {
+		if (this.y + this.size > Game.currentMap.mapHeight) {
 			this.y = Game.currentMap.mapHeight - this.size;
 		}
 	}
@@ -466,8 +494,10 @@ public class Eden extends MovingObject{
 	 */
 	public void checkCollisionPlayerToEnemies() {
 		for (Enemy e : Game.currentMap.enemies) {
-			if(!e.alive) continue;
-			if(this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
+			if (!e.alive) {
+				continue;
+			}
+			if (this.x + this.size > e.x && this.x < e.x + e.size && this.y + this.size > e.y && this.y < e.y + e.size) {
 				e.resetSpeedUp();
 				this.startKnockback(e.walkVelocityX, e.walkVelocityY, enemyImpact, 0.2f);
 				this.resetSpeedUp();
@@ -480,7 +510,9 @@ public class Eden extends MovingObject{
 	//-----------------------------------------------------------------------------------------------------------------KNOCKBACK
 	public void startKnockback(double knockbackVelocityX, double knockbackVelocityY, float ammount, float time) {
 		double length = (knockbackVelocityX * knockbackVelocityX + knockbackVelocityY * knockbackVelocityY);
-		if(Math.round(length) != 1) System.err.println("Eden.startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
+		if (Math.round(length) != 1) {
+			System.err.println("Eden.startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
+		}
 
 		gotKnockbacked = true;
 		this.knockbackVelocityX = knockbackVelocityX;

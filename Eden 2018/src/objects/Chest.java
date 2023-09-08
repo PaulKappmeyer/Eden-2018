@@ -46,22 +46,22 @@ public class Chest extends Obstacle{
 	}
 
 	public void interact() {
-		if(textbox.state == Textbox.HIGHEST_POINT) {
-			if(Input.isInteractingKeyDown() && !pressed) {
+		if (textbox.state == Textbox.HIGHEST_POINT) {
+			if (Input.isInteractingKeyDown() && !pressed) {
 				checkForPlayer = false;
 				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
-				if(textbox.index >= textbox.text.length) {
+				if (textbox.index >= textbox.text.length) {
 					textbox.index = 0;
 					textbox.disappear();
-					if(Globals.player.gun == null) {
+					if (Globals.player.gun == null) {
 						Globals.player.gun = new SinglefireGun(Globals.player);
 					}
 					Game.state = Gamestate.RUNNING;
 				}
 				pressed = true;
 			}
-			if(!Input.isInteractingKeyDown() && pressed) {
+			if (!Input.isInteractingKeyDown() && pressed) {
 				pressed = false;
 			}
 		}
@@ -85,11 +85,11 @@ public class Chest extends Obstacle{
 		float distx = enemycenterx - playercenterx;
 		float disty = enemycentery - playercentery;
 		float distanceToPlayer = distx * distx + disty * disty;
-		if(distanceToPlayer < triggerDistance * triggerDistance) {
-			if(checkForPlayer) {
+		if (distanceToPlayer < triggerDistance * triggerDistance) {
+			if (checkForPlayer) {
 				textbox.appear();
 			}
-		}else {
+		} else {
 			checkForPlayer = true;
 			textbox.disappear();
 		}

@@ -31,12 +31,12 @@ public final class GameLoop implements Runnable{
 		long oldTimestamp;
 		
 		long lastFrame = System.currentTimeMillis();
-		while(running){
+		while (running) {
 			long thisFrame = System.currentTimeMillis();
 			float tslf = (float)(thisFrame - lastFrame) / 1000f;
 			lastFrame = thisFrame;
 			
-			if(thisFrame > firstFrame + 1000){
+			if (thisFrame > firstFrame + 1000) {
 				firstFrame = thisFrame;
 				Globals.fps = frames;
 				frames = 0;
@@ -50,7 +50,7 @@ public final class GameLoop implements Runnable{
 			screen.update(tslf);
 			
 			timestamp = System.currentTimeMillis();
-			if(timestamp - oldTimestamp > MAXLOOPTIME) {
+			if (timestamp - oldTimestamp > MAXLOOPTIME) {
 				System.out.println("Too late");
 				continue;
 			}
@@ -59,7 +59,7 @@ public final class GameLoop implements Runnable{
 			screen.repaintScreen();
 			
 			timestamp = System.currentTimeMillis();
-			if(timestamp - oldTimestamp <= MAXLOOPTIME) {
+			if (timestamp - oldTimestamp <= MAXLOOPTIME) {
 				try {
 					Thread.sleep(MAXLOOPTIME - (timestamp - oldTimestamp));
 				} catch (InterruptedException e) {
@@ -67,7 +67,9 @@ public final class GameLoop implements Runnable{
 				}
 			}
 			
-			if(Input.isEscapeKeyDown())System.exit(0);
+			if (Input.isEscapeKeyDown()) {
+				System.exit(0);
+			}
 		}
 	}
 }

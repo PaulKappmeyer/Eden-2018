@@ -47,7 +47,7 @@ public final class Globals {
 		float absx = cx1 - cx2;
 		float absy = cy1 - cy2;
 		float abs = absx * absx + absy * absy;
-		if(abs <= (cr1 + cr2) * (cr1 + cr2)){
+		if (abs <= (cr1 + cr2) * (cr1 + cr2)){
 			return true;
 		}
 		return false;
@@ -69,39 +69,39 @@ public final class Globals {
 		float cy = circleY + circleSize/2;
 		float r = circleSize/2;
 		//Collision circle in the rectangle
-		if(cx > rectangleX && cx < rectangleX + rectangleWidth && cy > rectangleY && cy < rectangleY + rectangleHeight) {
+		if (cx > rectangleX && cx < rectangleX + rectangleWidth && cy > rectangleY && cy < rectangleY + rectangleHeight) {
 			return true;
 		}
 		//Collision top side of the rectangle to the circle
-		if(cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY - cy) <= r) {
+		if (cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY - cy) <= r) {
 			return true;
 		}
 		//Collision bottom side of the rectangle to the circle
-		if(cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY + rectangleHeight - cy) <= r) {
+		if (cx > rectangleX && cx < rectangleX + rectangleWidth && Math.abs(rectangleY + rectangleHeight - cy) <= r) {
 			return true;
 		}
 		//Collision left side of the rectangle to the circle
-		if(cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX - cx) <= r) {
+		if (cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX - cx) <= r) {
 			return true;
 		}
 		//Collision right side of the rectangle to the circle
-		if(cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX + rectangleWidth - cx) <= r) {
+		if (cy > rectangleY && cy < rectangleY + rectangleHeight && Math.abs(rectangleX + rectangleWidth - cx) <= r) {
 			return true;
 		}
 		//Collision top left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - rectangleY)) <= r) {
+		if (Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - rectangleY)) <= r) {
 			return true;
 		}
 		//Collision top right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - rectangleY)) <= r) {
+		if (Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - rectangleY)) <= r) {
 			return true;
 		}
 		//Collision bottom left corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
+		if (Math.hypot(Math.abs(cx - rectangleX), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
 			return true;
 		}
 		//Collision bottom right corner of the rectangle to the circle
-		if(Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
+		if (Math.hypot(Math.abs(cx - (rectangleX + rectangleWidth)), Math.abs(cy - (rectangleY + rectangleHeight))) <= r) {
 			return true;
 		}
 		//if no Collision happened
@@ -121,7 +121,7 @@ public final class Globals {
 	 * @return
 	 */
 	public static boolean checkCollisionRectangleToRectangle(float rectangleX1, float rectangleY1, float rectangleWidth1, float rectangleHeight1, float rectangleX2, float rectangleY2, float rectangleWidth2, float rectangleHeight2) {
-		if(rectangleX1 <= rectangleX2 + rectangleWidth2 && rectangleX1 + rectangleWidth1 >= rectangleX2 && rectangleY1 <= rectangleY2 + rectangleHeight2 && rectangleY1 + rectangleHeight1 >= rectangleY2) {
+		if (rectangleX1 <= rectangleX2 + rectangleWidth2 && rectangleX1 + rectangleWidth1 >= rectangleX2 && rectangleY1 <= rectangleY2 + rectangleHeight2 && rectangleY1 + rectangleHeight1 >= rectangleY2) {
 			return true;
 		}
 		return false;

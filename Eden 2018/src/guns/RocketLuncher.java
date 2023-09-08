@@ -31,7 +31,7 @@ public class RocketLuncher extends Gun{
 	@Override
 	public void shot() {
 		float angle = 0;
-		if(mode == ROCKET_SINGLE_FIRE_MODE) {
+		if (mode == ROCKET_SINGLE_FIRE_MODE) {
 			switch (owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);

@@ -52,12 +52,12 @@ public class Shell {
 
 	float time;
 	public void update(float tslf) {
-		if(!disabled) {
+		if (!disabled) {
 			this.x += velocityX * speed * tslf;
 			this.y += velocityY * speed * tslf;
 			time += tslf;
 			speed = finalSpeed * (0.5f / time);
-			if(speed <= finalSpeed) {
+			if (speed <= finalSpeed) {
 				disabled = true;
 			}
 
@@ -69,9 +69,9 @@ public class Shell {
 	 * 
 	 */
 	public void checkCollisionToStone() {
-		if(this.collided) return;
+		if (this.collided) return;
 		for (Obstacle obs : Game.currentMap.obstacles) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, obs.x, obs.y, obs.width, obs.height)) {
+			if (Globals.checkCollisionRectangleToCircle(this.x, this.y, Shell.SIZE, obs.x, obs.y, obs.width, obs.height)) {
 				this.velocityX *= -0.5;
 				this.velocityY *= -0.5;
 				this.collided = true;

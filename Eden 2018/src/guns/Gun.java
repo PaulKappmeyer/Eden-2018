@@ -49,10 +49,16 @@ public abstract class Gun {
 	 */
 	public void draw(Graphics g) {
 		Color c = Color.BLACK;
-		if(owner instanceof Eden) c = Color.YELLOW;
-		if(owner instanceof Enemy) c = Color.RED;
+		if (owner instanceof Eden) {
+			c = Color.YELLOW;
+		}
+		else if (owner instanceof Enemy) {
+			c = Color.RED;
+		}
 		for (Projectile projectile : projectiles) {
-			if(!projectile.isActive) continue;
+			if (!projectile.isActive) {
+				continue;
+			}
 			g.setColor(c);
 			projectile.draw(g);
 		}
@@ -65,7 +71,7 @@ public abstract class Gun {
 	 */
 	public void update(float tslf) {
 		//Shooting
-		if(tsls >= shottime) {
+		if (tsls >= shottime) {
 			canShot = true;
 			tsls -= shottime;
 		}else {
@@ -79,7 +85,7 @@ public abstract class Gun {
 			
 			projectile.update(tslf);
 			
-			if(projectile.canBeDeactivated()) {
+			if (projectile.canBeDeactivated()) {
 				projectile.deactivate();
 			}	
 		}
@@ -99,7 +105,7 @@ public abstract class Gun {
 	 */
 	public void fireProjectile(float x, float y, float angle, float speed) {
 		for (int i = 0; i < projectiles.length; i++) {
-			if(!projectiles[i].isActive) {
+			if (!projectiles[i].isActive) {
 				Projectile p = projectiles[i];
 				p.activate(x, y, angle, speed);
 				return;
@@ -129,24 +135,30 @@ public abstract class Gun {
 	 * This function checks for collision with either the player or the enemies depending on who shot
 	 */
 	public void checkCollisionProjectilesToObjects() {
-		if(owner == Globals.player) {
+		if (owner == Globals.player) {
 			int size = Game.currentMap.enemies.size() - 1;
 			for (int i = size; i >= 0; i--) {
 				Enemy e = Game.currentMap.enemies.get(i);
-				if(!e.alive) continue;
+				if (!e.alive) {
+					continue;
+				}
 				for (Projectile projectile : projectiles) {
-					if(projectile.hitSomething || !projectile.isActive) continue;
-					if(projectile.checkCollisionToObject(e)) {
+					if (projectile.hitSomething || !projectile.isActive) {
+						continue;
+					}
+					if (projectile.checkCollisionToObject(e)) {
 						e.getHitByProjectile(projectile, damage);      
 						projectile.maxExplosionRadius = 30;
 						projectile.hitSomething();
 					}
 				}
 			}
-		}else if(owner instanceof Enemy) {
+		} else if (owner instanceof Enemy) {
 			for (Projectile projectile : projectiles) {
-				if(projectile.hitSomething || !projectile.isActive) continue;
-				if(projectile.checkCollisionToObject(Globals.player)) {
+				if (projectile.hitSomething || !projectile.isActive) {
+					continue;
+				}
+				if (projectile.checkCollisionToObject(Globals.player)) {
 					Globals.player.startKnockback(projectile.velocityX, projectile.velocityY, Globals.player.bulletImpact, Globals.player.bulletImpactTime);
 					Globals.player.resetSpeedUp();
 					Globals.player.gotHit = true;

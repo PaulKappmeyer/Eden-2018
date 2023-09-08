@@ -69,7 +69,7 @@ public class Bullet extends Projectile{
 
 	@Override
 	public boolean canBeDeactivated() {
-		if(this.dieAnimation == false && this.hitSomething == true) {
+		if (this.dieAnimation == false && this.hitSomething == true) {
 			return true;
 		}
 		return false;
@@ -84,7 +84,7 @@ public class Bullet extends Projectile{
 		g.fillOval((int)x, (int)y, SIZE, SIZE);
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x, (int)y, SIZE, SIZE);
-		if(dieAnimation) {
+		if (dieAnimation) {
 			g.setColor(new Color(0, 0, 0, 200));
 			g.fillOval((int)(x + SIZE/2 - currentRadius/2), (int)(y + SIZE/2 - currentRadius/2), (int)currentRadius, (int)currentRadius);
 		}
@@ -96,9 +96,11 @@ public class Bullet extends Projectile{
 	 */
 	@Override
 	public void update(float tslf) {
-		if(!isActive) return;
+		if (!isActive) {
+			return;
+		}
 
-		if(!hitSomething) {
+		if (!hitSomething) {
 			//Collision
 			checkCollisionToObstacles(tslf);
 			checkCollisionToWall();
@@ -107,11 +109,11 @@ public class Bullet extends Projectile{
 			x += velocityX * speed * tslf;
 			y += velocityY * speed * tslf;
 		}
-		if(dieAnimation) {
+		if (dieAnimation) {
 			GameDrawer.addScreenshake(3, 0.005f);
 
 			currentRadius += explosionRadiusIncrease * tslf;
-			if(currentRadius >= maxExplosionRadius) {
+			if (currentRadius >= maxExplosionRadius) {
 				dieAnimation = false;
 			}
 		}
@@ -134,16 +136,18 @@ public class Bullet extends Projectile{
 	public void checkCollisionToObstacles(float tslf) {	
 		float nextX = (float) (this.x + (velocityX * speed) * tslf);
 		float nextY = (float) (this.y + (velocityY * speed) * tslf);
-		if(nextX == this.x && nextY == this.y) return;
+		if (nextX == this.x && nextY == this.y) {
+			return;
+		}
 
 		Obstacle[] collisions = Collision.checkCollisionProjectileToObstacle(this, nextX, nextY);
 
 		//COLLISION WITH THE TOP SIDE OF THE OBSTACLE
 		Obstacle obs = collisions[Collision.TOP_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) { //IF IT HIT THE BULLET-BOUNCER LET IT BOUNCE OFF
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) { //IF IT HIT THE BULLET-BOUNCER LET IT BOUNCE OFF
 				velocityX *= -1;
-			}else { 							//IF IT HIT ANYTHING ELSE LIKE: HOUSE; STONE; etc. LET IT EXPLODE
+			} else { 							//IF IT HIT ANYTHING ELSE LIKE: HOUSE; STONE; etc. LET IT EXPLODE
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
@@ -153,10 +157,10 @@ public class Bullet extends Projectile{
 		}
 		//COLLISION WIDTH THE BOTTOM SIDE OF THE OBSTACLE
 		obs = collisions[Collision.BOTTOM_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				velocityY *= -1;
-			}else {
+			} else {
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
@@ -164,10 +168,10 @@ public class Bullet extends Projectile{
 		}
 		//COLLISION WITH THE LEFT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.LEFT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				velocityX *= -1;
-			}else {
+			} else {
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
@@ -175,10 +179,10 @@ public class Bullet extends Projectile{
 		}
 		//COLLISION WITH THE RIGHT SIDE OF THE OBSTACLE
 		obs = collisions[Collision.RIGHT_SIDE];
-		if(obs != null) {
-			if(obs instanceof BulletBouncer) {
+		if (obs != null) {
+			if (obs instanceof BulletBouncer) {
 				velocityX *= -1;
-			}else {
+			} else {
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
@@ -189,7 +193,7 @@ public class Bullet extends Projectile{
 	 * Checks if the bullet goes out of the screen
 	 */
 	public void checkCollisionToWall() {
-		if(this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Game.currentMap.mapWidth || this.y + Bullet.SIZE > Game.currentMap.mapHeight) {
+		if (this.x < 0 || this.y < 0 || this.x + Bullet.SIZE > Game.currentMap.mapWidth || this.y + Bullet.SIZE > Game.currentMap.mapHeight) {
 			this.hitSomething();
 		}
 	}

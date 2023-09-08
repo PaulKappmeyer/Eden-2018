@@ -17,8 +17,12 @@ import javax.imageio.ImageIO;
 public final class ImageLoader {
 
 	public static BufferedImage loadImage(File path) throws Exception{
-		if(!path.exists()) throw new FileNotFoundException("This file could not be found");
-		if(!path.isFile()) throw new Exception("The given path is not a file");
+		if (!path.exists()) {
+			throw new FileNotFoundException("This file could not be found: " + path.getAbsolutePath());
+		}
+		if (!path.isFile()) {
+			throw new Exception("The given path is not a file: " + path.getAbsolutePath());
+		}
 		System.out.println("Start loading Image: " + path.getAbsolutePath());
 		
 		BufferedImage image = ImageIO.read(path);

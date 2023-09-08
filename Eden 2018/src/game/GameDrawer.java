@@ -47,7 +47,7 @@ public final class GameDrawer extends Window{
 		game.draw(g);
 		
 		//Draw the alpha mask
-		if(Game.state == Gamestate.INTERACTING) {
+		if (Game.state == Gamestate.INTERACTING) {
 			g.setColor(new Color(100, 100, 100, 50));
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		}
@@ -67,11 +67,11 @@ public final class GameDrawer extends Window{
 	
 	public void update(float tslf) {
 		//Updating the screenshake 
-		if(screenshake) {
+		if (screenshake) {
 			screenshakeX = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
 			screenshakeY = -screenshakeStrength/2 + Globals.random.nextInt(screenshakeStrength);
 			tslsc += tslf;
-			if(tslsc >= screenshakeDuration) {
+			if (tslsc >= screenshakeDuration) {
 				tslsc = -screenshakeDuration;
 				screenshake = false;
 				screenshakeStrength = 0;

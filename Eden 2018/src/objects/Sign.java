@@ -32,6 +32,7 @@ public class Sign extends Obstacle{
 		textbox = new Textbox(text);
 		isObstacle = false;
 	}
+	
 	public Sign(int x, int y, int width, int height, String[]text) {
 		super(x, y, width, height);
 		textbox = new Textbox(text);
@@ -48,12 +49,12 @@ public class Sign extends Obstacle{
 	}
 
 	public void interact() {
-		if(textbox.state == Textbox.HIGHEST_POINT) {
-			if(Input.isInteractingKeyDown() && !pressed) {
+		if (textbox.state == Textbox.HIGHEST_POINT) {
+			if (Input.isInteractingKeyDown() && !pressed) {
 				checkForPlayer = false;
 				Game.state = Gamestate.INTERACTING;
 				textbox.index++;
-				if(textbox.index >= textbox.text.length) {
+				if (textbox.index >= textbox.text.length) {
 					textbox.index = textbox.text.length - 1;
 					textbox.disappear();
 					Game.state = Gamestate.RUNNING;
@@ -61,7 +62,7 @@ public class Sign extends Obstacle{
 				}
 				pressed = true;
 			}
-			if(!Input.isInteractingKeyDown() && pressed) {
+			if (!Input.isInteractingKeyDown() && pressed) {
 				pressed = false;
 			}
 		}
@@ -84,11 +85,11 @@ public class Sign extends Obstacle{
 		float distx = enemycenterx - playercenterx;
 		float disty = enemycentery - playercentery;
 		float distanceToPlayer = distx * distx + disty * disty;
-		if(distanceToPlayer < triggerDistance * triggerDistance) {
-			if(checkForPlayer) {
+		if (distanceToPlayer < triggerDistance * triggerDistance) {
+			if (checkForPlayer) {
 				textbox.appear();
 			}
-		}else {
+		} else {
 			checkForPlayer = true;
 			textbox.disappear();
 		}

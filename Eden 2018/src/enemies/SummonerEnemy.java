@@ -31,7 +31,7 @@ public class SummonerEnemy extends ZombieEnemy{
 		super.update(tslf);
 		
 		tsls += tslf;
-		if(tsls >= spawnTime) {
+		if (tsls >= spawnTime) {
 			resetSpeedUp();
 			
 			ZombieEnemy e = new ZombieEnemy(this.x, this.y);

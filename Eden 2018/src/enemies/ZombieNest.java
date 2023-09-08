@@ -28,7 +28,7 @@ public class ZombieNest extends Enemy{
 	public void getDamaged(float damage) {
 		super.getDamaged(damage);
 		
-		if(alive == false) {
+		if (alive == false) {
 			float centerX = (float) (this.x + this.size/2);
 			float centerY = (float) (this.y + this.size/2);
 			

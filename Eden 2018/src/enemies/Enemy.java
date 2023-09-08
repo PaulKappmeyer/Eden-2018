@@ -74,7 +74,7 @@ public abstract class Enemy extends MovingObject {
 	 */
 	int a = 5;
 	public void draw(Graphics g) {
-		if(!showBlink) {
+		if (!showBlink) {
 			g.setColor(Color.RED);
 			g.fillRect((int)x, (int)y, this.size, this.size);
 			g.setColor(Color.BLACK);
@@ -98,14 +98,14 @@ public abstract class Enemy extends MovingObject {
 				break;
 			}
 		}
-		if(isInHitAnimation) {
-			if(showBlink) {
+		if (isInHitAnimation) {
+			if (showBlink) {
 				g.setColor(Color.WHITE);
 				g.fillRect((int)x, (int)y, this.size, this.size);
 				g.drawRect((int)x, (int)y, this.size, this.size);
 			}
 		}
-		if(isInDieAnimation) {
+		if (isInDieAnimation) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
@@ -140,8 +140,8 @@ public abstract class Enemy extends MovingObject {
 	 * @param tslf
 	 */
 	public void updateKnockback(float tslf) {
-		if(gotKnockbacked) {
-			if(timeKnockedBack <= MAX_KNOCKBACK_TIME) {
+		if (gotKnockbacked) {
+			if (timeKnockedBack <= MAX_KNOCKBACK_TIME) {
 				timeKnockedBack += tslf;
 				resetSpeedUp();
 				currentKnockbackSpeed = MAX_KNOCKBACK_SPEED * ((MAX_KNOCKBACK_TIME - timeKnockedBack) / MAX_KNOCKBACK_TIME);
@@ -159,14 +159,14 @@ public abstract class Enemy extends MovingObject {
 	 * @param tslf
 	 */
 	public void updateGotHitAnimation(float tslf) {
-		if(isInHitAnimation) {
+		if (isInHitAnimation) {
 			timeBlinked += tslf;
-			if(timeBlinked > swapBlinkTime) {
+			if (timeBlinked > swapBlinkTime) {
 				showBlink = !showBlink;
 				blinksDone ++;
 				timeBlinked -= swapBlinkTime;
 			}
-			if(blinksDone > maxBlinks) {
+			if (blinksDone > maxBlinks) {
 				timeBlinked = 0;
 				blinksDone = 0;
 				isInHitAnimation = false;
@@ -178,9 +178,9 @@ public abstract class Enemy extends MovingObject {
 	 * @param tslf
 	 */
 	public void updateDieAnimation(float tslf) {
-		if(isInDieAnimation) {
+		if (isInDieAnimation) {
 			radius += radiusIncrease * tslf;
-			if(radius >= maxRadius) {
+			if (radius >= maxRadius) {
 				isInDieAnimation = false;
 			}
 		}
@@ -196,7 +196,7 @@ public abstract class Enemy extends MovingObject {
 	 */
 	public void startKnockback(double knockbackVelocityX, double knockbackVelocityY, float amount, float time) {
 		double length = (knockbackVelocityX * knockbackVelocityX + knockbackVelocityY * knockbackVelocityY);
-		if(Math.round(length) != 1) System.err.println(this.toString() + ".startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
+		if (Math.round(length) != 1) System.err.println(this.toString() + ".startKnockback: Directions vectors should have a length of 1 insead of: " + length + " x:" + knockbackVelocityX + " y:" + knockbackVelocityY);
 		
 		gotKnockbacked = true;
 		this.knockbackVelocityX = knockbackVelocityX;
@@ -222,7 +222,7 @@ public abstract class Enemy extends MovingObject {
 	public void getDamaged(float damage) {
 		isInHitAnimation = true;
 		health -= damage;
-		if(health <= 0 && alive) {
+		if (health <= 0 && alive) {
 			isInDieAnimation = true;
 			alive = false;
 		}
@@ -235,8 +235,8 @@ public abstract class Enemy extends MovingObject {
 	 * @return
 	 */
 	public boolean canBeRemoved() {
-		if(alive) return false;
-		if(isInDieAnimation) return false;
+		if (alive) return false;
+		if (isInDieAnimation) return false;
 		return true;
 	}
 }

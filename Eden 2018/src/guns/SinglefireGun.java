@@ -32,7 +32,7 @@ public class SinglefireGun extends Gun{
 	@Override
 	public void shot() {
 		float angle = 0;
-		if(mode == SINGLEFIRE) {
+		if (mode == SINGLEFIRE) {
 			switch(owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);
@@ -64,7 +64,9 @@ public class SinglefireGun extends Gun{
 
 	@Override
 	public void shot(float angle) {
-		if(bulletspray > 0) angle += -bulletspray/2 + Globals.random.nextInt(bulletspray);
+		if (bulletspray > 0) {
+			angle += -bulletspray/2 + Globals.random.nextInt(bulletspray);
+		}
 		
 		float centerX = (float) (owner.x + owner.size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(angle)) * owner.size/2);
 		float centerY = (float) (owner.y + owner.size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(angle)) * owner.size/2);

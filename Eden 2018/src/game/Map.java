@@ -48,12 +48,16 @@ public class Map {
 	public void draw(Graphics g) {
 		worldX = -Globals.player.x + Globals.screenWidth / 2;
 		worldY = -Globals.player.y + Globals.screenHeight / 2;
-		if(worldX > 0) worldX = 0;
-		if(worldY > 0) worldY = 0;
-		if(Math.abs(worldX) > mapWidth - Globals.screenWidth) {
+		if (worldX > 0) {
+			worldX = 0;
+		}
+		if (worldY > 0) {
+			worldY = 0;
+		}
+		if (Math.abs(worldX) > mapWidth - Globals.screenWidth) {
 			worldX = -mapWidth + Globals.screenWidth;
 		}
-		if(Math.abs(worldY) > mapHeight - Globals.screenHeight) {
+		if (Math.abs(worldY) > mapHeight - Globals.screenHeight) {
 			worldY = -mapHeight + Globals.screenHeight;
 		}
 
@@ -63,7 +67,7 @@ public class Map {
 		for (int i = 0; i < tilesWidth; i++) {
 			for (int j = 0; j < tilesHeight; j++) {
 				Tile t = tiles[i][j];
-				if(t.x + worldX < Globals.screenWidth && t.x + t.width > Math.abs(worldX) && t.y + worldY < Globals.screenHeight && t.y + t.height > Math.abs(worldY)) {
+				if (t.x + worldX < Globals.screenWidth && t.x + t.width > Math.abs(worldX) && t.y + worldY < Globals.screenHeight && t.y + t.height > Math.abs(worldY)) {
 					t.draw(g);
 				}
 			}
@@ -71,29 +75,29 @@ public class Map {
 		
 		//Drawing the shells
 		for (Shell shell : shells) {
-			if(shell.x + worldX < Globals.screenWidth && shell.x + Shell.SIZE > Math.abs(worldX) && shell.y + worldY < Globals.screenHeight && shell.y + Shell.SIZE > Math.abs(worldY)) {
+			if (shell.x + worldX < Globals.screenWidth && shell.x + Shell.SIZE > Math.abs(worldX) && shell.y + worldY < Globals.screenHeight && shell.y + Shell.SIZE > Math.abs(worldY)) {
 				shell.draw(g);
 			}
 		}
 
 		//Drawing the players gun
-		if(Globals.player.gun != null)Globals.player.gun.draw(g);
+		if (Globals.player.gun != null)Globals.player.gun.draw(g);
 		//Drawing the bosses gun
 		for (Enemy enemy : enemies) {
-			if(enemy instanceof Boss) {
+			if (enemy instanceof Boss) {
 				Boss boss = (Boss) enemy;
 				boss.gun.draw(g);
 			}
 		}
 		//Drawing the enemies
 		for (Enemy e : enemies) {
-			if(e.x + worldX < Globals.screenWidth && e.x + e.size > Math.abs(worldX) && e.y + worldY < Globals.screenHeight && e.y + e.size > Math.abs(worldY)) {
+			if (e.x + worldX < Globals.screenWidth && e.x + e.size > Math.abs(worldX) && e.y + worldY < Globals.screenHeight && e.y + e.size > Math.abs(worldY)) {
 				e.draw(g);
 			}
 		}
 
 		//Screenshake
-		if(GameDrawer.screenshake) {
+		if (GameDrawer.screenshake) {
 			g.translate(GameDrawer.screenshakeX, GameDrawer.screenshakeY);
 		}
 
@@ -103,7 +107,7 @@ public class Map {
 		}
 
 		//Screenshake
-		if(GameDrawer.screenshake) {
+		if (GameDrawer.screenshake) {
 			g.translate(-GameDrawer.screenshakeX, -GameDrawer.screenshakeY);
 		}
 
@@ -134,7 +138,7 @@ public class Map {
 		for (int i = size; i >= 0; i--) {
 			Enemy e = enemies.get(i);
 			e.update(tslf);
-			if(e.canBeRemoved())enemies.remove(e);
+			if (e.canBeRemoved())enemies.remove(e);
 		}
 
 		//TODO: Y-Sort
@@ -153,7 +157,7 @@ public class Map {
 			Enemy e = enemies.get(i);
 			Enemy e1 = enemies.get(i + 1);
 
-			if(e.y > e1.y) {
+			if (e.y > e1.y) {
 				newEnemies.set(i, e1);
 				newEnemies.set(i + 1, e);
 				i = 0;

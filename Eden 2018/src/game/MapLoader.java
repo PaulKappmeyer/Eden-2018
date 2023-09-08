@@ -28,8 +28,12 @@ public final class MapLoader {
 	 * @throws Exception
 	 */
 	public static Map loadMap(File path) throws Exception {
-		if(!path.exists()) throw new FileNotFoundException("This file could not be found");
-		if(!path.isFile()) throw new Exception("The given path is not a file");
+		if (!path.exists()) {
+			throw new FileNotFoundException("This file could not be found: " + path.getAbsolutePath());
+		}
+		if (!path.isFile()) {
+			throw new Exception("The given path is not a file: " + path.getAbsolutePath());
+		}
 		System.out.println("Start loading Map: " + path.getAbsolutePath());
 
 		Scanner scanner = new Scanner(path);
@@ -52,12 +56,12 @@ public final class MapLoader {
 			tileset_path = tileset_path.substring(0, tileset_path.length()-1);
 		}
 		for (int i = tileset_path.length() - 1; i >= 0; i--) {
-			if(tileset_path.charAt(i) == '/') {
+			if (tileset_path.charAt(i) == '/') {
 				tileset_path = tileset_path.substring(i + 1, tileset_path.length());
 				break;
 			}
 		}
-		tileset_path = ".\\src\\gfx\\" + tileset_path;
+		tileset_path = "res/gfx/" + tileset_path;
 		scanner.nextLine();
 		
 		BufferedImage tileset = ImageLoader.loadImage(new File(tileset_path));
@@ -82,7 +86,7 @@ public final class MapLoader {
 		scanner.nextLine();
 
 		String tileIds = scanner.nextLine();
-		while(tileIds.endsWith(",")) {
+		while (tileIds.endsWith(",")) {
 			tileIds += scanner.nextLine();
 		}
 		String[] ids = tileIds.split(",");
@@ -108,14 +112,14 @@ public final class MapLoader {
 			String type = scanner.nextLine();
 
 			//Player
-			if(type.equals("# Player")) {
+			if (type.equals("# Player")) {
 				scanner.nextLine();
 				String[] data = scanner.nextLine().substring(9).split(",");
 				playerX = Integer.parseInt(data[0]) * tileWidth;
 				playerY = Integer.parseInt(data[1]) * tileHeight;
 				scanner.nextLine();
 			}
-			else if(type.equals("# ZombieEnemy")) {
+			else if (type.equals("# ZombieEnemy")) {
 				scanner.nextLine();
 				String[] data = scanner.nextLine().substring(9).split(",");
 				int x = Integer.parseInt(data[0]) * tileWidth;
@@ -123,7 +127,7 @@ public final class MapLoader {
 				enemies.add(new ZombieEnemy(x, y));
 				scanner.nextLine();
 			}
-			else if(type.equals("# Stone")) {
+			else if (type.equals("# Stone")) {
 				scanner.nextLine();
 				String[] data = scanner.nextLine().substring(9).split(",");
 				int x = Integer.parseInt(data[0]) * tileWidth;
@@ -133,7 +137,7 @@ public final class MapLoader {
 				obstacles.add(new Stone(x, y, w, h));
 				scanner.nextLine();
 			}
-			else if(type.equals("# Sign")) {
+			else if (type.equals("# Sign")) {
 				scanner.nextLine();
 				String[] data = scanner.nextLine().substring(9).split(",");
 				int x = Integer.parseInt(data[0]) * tileWidth;
@@ -145,7 +149,9 @@ public final class MapLoader {
 				scanner.nextLine();
 			}
 
-			if(!scanner.hasNextLine()) break;
+			if (!scanner.hasNextLine()) {
+				break;
+			}
 		}
 
 		scanner.close();

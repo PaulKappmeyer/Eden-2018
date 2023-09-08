@@ -61,7 +61,7 @@ public class Rocket extends Projectile{
 	
 	@Override
 	public boolean canBeDeactivated() {
-		if(this.dieAnimation == false && this.hitSomething == true) {
+		if (this.dieAnimation == false && this.hitSomething == true) {
 			return true;
 		}
 		return false;
@@ -74,7 +74,7 @@ public class Rocket extends Projectile{
 		g.fillOval((int)x, (int)y, SIZE, SIZE);
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x, (int)y, SIZE, SIZE);
-		if(dieAnimation) {
+		if (dieAnimation) {
 			g.setColor(new Color(0, 0, 0, 200));
 			g.fillOval((int)(x + SIZE/2 - currentRadius/2), (int)(y + SIZE/2 - currentRadius/2), (int)currentRadius, (int)currentRadius);
 		}
@@ -82,9 +82,11 @@ public class Rocket extends Projectile{
 	//---------------------------------Updating---------------------------------------------------------------
 	@Override
 	public void update(float tslf) {
-		if(!isActive) return;
+		if (!isActive) {
+			return;
+		}
 
-		if(!hitSomething) {
+		if (!hitSomething) {
 			searchEnemy(tslf);
 
 			this.x += velocityX * speed * tslf;
@@ -95,11 +97,11 @@ public class Rocket extends Projectile{
 			checkCollisionRocketToStone();
 			checkCollisionRocketToWall();
 		}
-		if(dieAnimation) {
+		if (dieAnimation) {
 			GameDrawer.addScreenshake(3, 0.005f);
 
 			currentRadius += explosionRadiusIncrease * tslf;
-			if(currentRadius >= maxExplosionRadius) {
+			if (currentRadius >= maxExplosionRadius) {
 				dieAnimation = false;
 			}
 		}
@@ -112,7 +114,9 @@ public class Rocket extends Projectile{
 		float nearestDistance = Float.MAX_VALUE;
 		Enemy nearestEnemy = null;
 		for (Enemy enemy : Game.currentMap.enemies) {
-			if(!enemy.alive)continue;
+			if (!enemy.alive) {
+				continue;
+			}
 			float ecx = enemy.x + enemy.size/2;
 			float ecy = enemy.y + enemy.size/2;
 			float pcx = this.x + SIZE/2;
@@ -121,12 +125,12 @@ public class Rocket extends Projectile{
 			float distx = pcx - ecx;
 			float disty = pcy - ecy;
 
-			if(distx * distx + disty * disty <= nearestDistance) {
+			if (distx * distx + disty * disty <= nearestDistance) {
 				nearestDistance = distx * distx + disty * disty;
 				nearestEnemy = enemy;
 			}
 		}
-		if(nearestEnemy != null) {
+		if (nearestEnemy != null) {
 			float ecx = nearestEnemy.x + nearestEnemy.size/2;
 			float ecy = nearestEnemy.y + nearestEnemy.size/2;
 			float pcx = this.x + SIZE/2;
@@ -138,8 +142,8 @@ public class Rocket extends Projectile{
 			//TODO: Rework the angle system
 			float newAngle = (float) Math.atan(distx / disty);
 			newAngle = (float) Math.toDegrees(newAngle);
-			if(pcy > ecy) newAngle =  -90 - (90-newAngle);
-			if(pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
+			if (pcy > ecy) newAngle =  -90 - (90-newAngle);
+			if (pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
 
 			this.velocityX = (float) Math.sin(Math.toRadians(newAngle));
 			this.velocityY = (float) Math.cos(Math.toRadians(newAngle));	
@@ -160,7 +164,7 @@ public class Rocket extends Projectile{
 	 */
 	public void checkCollisionRocketToStone() {
 		for (Obstacle obs : Game.currentMap.obstacles) {
-			if(Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, obs.x, obs.y, obs.width, obs.height)) {
+			if (Globals.checkCollisionRectangleToCircle(this.x, this.y, Rocket.SIZE, obs.x, obs.y, obs.width, obs.height)) {
 				this.maxExplosionRadius = 30;
 				this.hitSomething();
 			}
@@ -170,7 +174,7 @@ public class Rocket extends Projectile{
 	 * 
 	 */
 	public void checkCollisionRocketToWall() {
-		if(this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Game.currentMap.mapWidth || this.y + Rocket.SIZE > Game.currentMap.mapHeight) {
+		if (this.x < 0 || this.y < 0 || this.x + Rocket.SIZE > Game.currentMap.mapWidth || this.y + Rocket.SIZE > Game.currentMap.mapHeight) {
 			this.hitSomething();
 		}
 	}

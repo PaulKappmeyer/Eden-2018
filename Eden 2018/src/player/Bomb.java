@@ -46,26 +46,30 @@ public class Bomb {
 		g.setColor(Color.BLACK);
 		g.drawOval((int)x, (int)y, size, size);
 
-		if(explode) {
+		if (explode) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
 	}
 
 	public void update(float tslf) {
-		if(ticking) {
+		if (ticking) {
 			//Ticking
 			blinkTime += tslf;
-			if(blinkTime >= maxBlinkTime) {
+			if (blinkTime >= maxBlinkTime) {
 				blinkTime = 0;
 				maxBlinkTime -= decrease;
 				blinks ++;
 				//swap Color
-				if(this.color == Color.BLACK) color = Color.WHITE;
-				else if(this.color == Color.WHITE) color = Color.BLACK;
+				if (this.color == Color.BLACK) {
+					color = Color.WHITE;
+				}
+				else if (this.color == Color.WHITE) {
+					color = Color.BLACK;
+				}
 			}
 			//Explode
-			if(blinks >= maxBlinks) {
+			if (blinks >= maxBlinks) {
 				blinks = 0;
 				blinkTime = 0;
 				maxBlinkTime = 0.5f;
@@ -74,7 +78,7 @@ public class Bomb {
 				
 				//Collision
 				for (Enemy e : Game.currentMap.enemies) {
-					if(Globals.checkCollisionRectangleToCircle(this.x + size/2 - maxRadius/2, this.y + size/2 -maxRadius/2, maxRadius, e.x, e.y, e.size, e.size)) {
+					if (Globals.checkCollisionRectangleToCircle(this.x + size/2 - maxRadius/2, this.y + size/2 -maxRadius/2, maxRadius, e.x, e.y, e.size, e.size)) {
 						float ecx = e.x + e.size/2;
 						float ecy = e.y + e.size/2;
 
@@ -84,8 +88,12 @@ public class Bomb {
 						//TODO: Rework the angle system
 						float newAngle = (float) Math.atan(distx / disty);
 						newAngle = (float) Math.toDegrees(newAngle);
-						if(this.y + size/2 > ecy) newAngle =  -90 - (90-newAngle);
-						if(this.x + size/2 < ecx && this.y + size/2 < ecy) newAngle = -270 - (90-newAngle);
+						if (this.y + size/2 > ecy) {
+							newAngle =  -90 - (90-newAngle);
+						}
+						if (this.x + size/2 < ecx && this.y + size/2 < ecy) {
+							newAngle = -270 - (90-newAngle);
+						}
 
 						e.getDamaged(200);
 						e.startKnockback(-e.walkVelocityX, -e.walkVelocityY, maxRadius * 2, 0.35f);
@@ -94,9 +102,9 @@ public class Bomb {
 			}
 		}
 		//Explosion animation
-		if(explode) {
+		if (explode) {
 			radius += radiusIncrease * tslf;
-			if(radius >= maxRadius) {
+			if (radius >= maxRadius) {
 				explode = false;
 			}
 		}

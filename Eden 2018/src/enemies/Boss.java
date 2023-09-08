@@ -37,8 +37,8 @@ public class Boss extends ZombieEnemy{
 	@Override
 	public void draw(Graphics g) {
 		//Drawing of the boss
-		if(alive) {
-			if(!showBlink) {
+		if (alive) {
+			if (!showBlink) {
 				g.setColor(Color.DARK_GRAY);
 				g.fillRect((int)x, (int)y, size, size);
 				g.setColor(Color.BLACK);
@@ -62,15 +62,15 @@ public class Boss extends ZombieEnemy{
 					break;
 				}
 			}
-			if(isInHitAnimation) {
-				if(showBlink) {
+			if (isInHitAnimation) {
+				if (showBlink) {
 					g.setColor(Color.WHITE);
 					g.fillRect((int)x, (int)y, this.size, this.size);
 					g.drawRect((int)x, (int)y, this.size, this.size);
 				}
 			}
 		}
-		if(isInDieAnimation) {
+		if (isInDieAnimation) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}
@@ -80,9 +80,9 @@ public class Boss extends ZombieEnemy{
 
 	@Override
 	public boolean canBeRemoved() {
-		if(super.canBeRemoved()) {
+		if (super.canBeRemoved()) {
 			for (Projectile projectile : gun.projectiles) {
-				if(projectile.isActive) return false;
+				if (projectile.isActive) return false;
 			}
 			return true;
 		}
@@ -92,9 +92,9 @@ public class Boss extends ZombieEnemy{
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		if(alive) {
-			if(followplayer) {
-				if(gun.canShot) {
+		if (alive) {
+			if (followplayer) {
+				if (gun.canShot) {
 					gun.shot();
 					resetSpeedUp();
 				}

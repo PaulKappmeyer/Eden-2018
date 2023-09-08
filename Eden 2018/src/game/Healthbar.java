@@ -22,7 +22,7 @@ public class Healthbar {
 	}
 	
 	public void draw(Graphics g) {
-		if(owner.isInHitAnimation) {
+		if (owner.isInHitAnimation) {
 			g.setColor(Color.GREEN);
 			g.fillRect((int)owner.x, (int)owner.y - 10, (int)(owner.size * (owner.health / owner.MAX_HEALTH)), 5);
 			g.setColor(Color.BLACK);

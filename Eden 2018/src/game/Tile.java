@@ -26,6 +26,7 @@ public class Tile {
 		this.width = 16;
 		this.height = 16;
 	}
+	
 	public Tile(int x, int y, int width, int height, int id, BufferedImage image) {
 		this.x = x;
 		this.y = y;

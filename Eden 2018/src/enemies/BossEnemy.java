@@ -35,10 +35,10 @@ public class BossEnemy extends ZombieEnemy{
 	public void update(float tslf) {
 		super.update(tslf);
 
-		if(timeSinceLastAttack >= attackTime) {
+		if (timeSinceLastAttack >= attackTime) {
 			this.resetSpeedUp();
 			this.followplayer = false;
-			if(timeSinceLastSpawn >= spawnTime) {
+			if (timeSinceLastSpawn >= spawnTime) {
 				float centerX = (float) (this.x + this.size/2);
 				float centerY = (float) (this.y + this.size/2);
 
@@ -59,7 +59,7 @@ public class BossEnemy extends ZombieEnemy{
 				timeSinceLastSpawn += tslf;
 			}
 
-			if(atSpawn == numOfSpawns) {
+			if (atSpawn == numOfSpawns) {
 				atSpawn = 0;
 				timeSinceLastAttack = 0;
 			}

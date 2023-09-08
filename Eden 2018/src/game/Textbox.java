@@ -36,12 +36,12 @@ public class Textbox {
 	}
 
 	public void draw(Graphics g) {
-		if(state != HIDE) {
+		if (state != HIDE) {
 			g.setColor(Color.BLACK);
 			g.drawRoundRect((int) (x), (int) (y), (int)width, (int)height, 10, 10);
 			g.setColor(new Color(100, 100, 100, 100));
 			g.fillRoundRect((int) (x), (int) (y), (int)width, (int)height, 10, 10);
-			if(state == HIGHEST_POINT) {
+			if (state == HIGHEST_POINT) {
 				g.setColor(Color.BLACK);
 				g.drawString(text[index], (int)(x + 10), (int)(y + 15 ));
 			}
@@ -49,9 +49,9 @@ public class Textbox {
 	}
 
 	public void update(float tslf) {
-		if(state == APPEAR) {
-			if(direction == FROM_BOTTOM) {
-				if(y <= Globals.screenHeight - height - 10) {
+		if (state == APPEAR) {
+			if (direction == FROM_BOTTOM) {
+				if (y <= Globals.screenHeight - height - 10) {
 					state = HIGHEST_POINT;
 					width = maxWidth;
 					time = 1;
@@ -61,8 +61,8 @@ public class Textbox {
 					width = maxWidth * time;
 					y -= speed * tslf;
 				}
-			}else if(direction == FROM_TOP) {
-				if(y >= 10) {
+			}else if (direction == FROM_TOP) {
+				if (y >= 10) {
 					state = HIGHEST_POINT;
 					width = maxWidth;
 					time = 1;
@@ -73,9 +73,9 @@ public class Textbox {
 					y += speed * tslf;
 				}
 			}
-		}else if(state == DISAPPEAR){
-			if(direction == FROM_BOTTOM) {
-				if(y >= Globals.screenHeight) {
+		}else if (state == DISAPPEAR){
+			if (direction == FROM_BOTTOM) {
+				if (y >= Globals.screenHeight) {
 					y = Globals.screenHeight;
 					time = 0;
 					state = HIDE;
@@ -84,8 +84,8 @@ public class Textbox {
 					width = maxWidth * time;
 					y += speed * tslf;
 				}
-			}else if(direction == FROM_TOP) {
-				if(y <= -height) {
+			}else if (direction == FROM_TOP) {
+				if (y <= -height) {
 					y = -height;
 					time = 0;
 					state = HIDE;
@@ -99,16 +99,16 @@ public class Textbox {
 	}
 
 	public void appear() {
-		if(state == HIGHEST_POINT) return;
+		if (state == HIGHEST_POINT) return;
 		if (Globals.player.y < Globals.screenHeight/2) {
 			direction = FROM_BOTTOM;
-			if(state == HIDE) {
+			if (state == HIDE) {
 				width = 0;
 				y = Globals.screenHeight;
 			}
 		}else {
 			direction = FROM_TOP;
-			if(state == HIDE) {
+			if (state == HIDE) {
 				width = 0;
 				y = -height;
 			}
@@ -116,7 +116,7 @@ public class Textbox {
 		state = APPEAR;
 	}
 	public void disappear() {
-		if(state == HIDE) return;
+		if (state == HIDE) return;
 		state = DISAPPEAR;
 	}
 }

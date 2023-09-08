@@ -32,7 +32,7 @@ public class TripleMachineGun extends Gun{
 	@Override
 	public void shot() {
 		float angle = 0;
-		if(mode == TRIPLEMACHINEGUN) {
+		if (mode == TRIPLEMACHINEGUN) {
 			switch (owner.walkDirection) {
 			case UP:
 				angle = 180 + -bulletspray/2 + Globals.random.nextInt(bulletspray);

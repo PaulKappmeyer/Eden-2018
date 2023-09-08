@@ -37,24 +37,24 @@ public class RoundEnemy extends ZombieEnemy{
 	public void update(float tslf) {
 		super.update(tslf);
 		//Catch the bullets
-		if(Globals.player.gun != null) {
+		if (Globals.player.gun != null) {
 			float enemyCenterX = this.x + size/2;
 			float enemyCenterY = this.y + size/2;
 			for (Projectile projectile : Globals.player.gun.projectiles) {
-				if(!projectile.isActive)continue;
+				if (!projectile.isActive)continue;
 				float bulletCenterX = projectile.x + Bullet.SIZE / 2;
 				float bulletCenterY = projectile.y + Bullet.SIZE / 2;
 
 				float distance = Globals.distanceSquared(enemyCenterX, enemyCenterY, bulletCenterX, bulletCenterY);
-				if(distance <= radius * radius) {
-					if(!followplayer) followplayer = true;
+				if (distance <= radius * radius) {
+					if (!followplayer) followplayer = true;
 					//Add a new Bullet
 					Bullet b = new Bullet();
 					b.activate(0, 0, 0, 500);
 					b.velocityX = 0;
 					b.velocityY = 0;
 					this.bullets.add(b);
-					this.angles.add(new Float(0));
+					this.angles.add(0.f);
 					//Remove old
 					projectile.deactivate();
 				}
@@ -63,13 +63,13 @@ public class RoundEnemy extends ZombieEnemy{
 
 		//Turning the bullet around the enemy
 		int index = -1;
-		if(!angles.isEmpty()) {
+		if (!angles.isEmpty()) {
 			for (Float angle : angles) {
 				index++;
-				if(angle == -1f) continue;
+				if (angle == -1f) continue;
 				Bullet bullet = bullets.get(index);
-				if(!bullet.hitSomething) {
-					if(angle < 360 * 2) {
+				if (!bullet.hitSomething) {
+					if (angle < 360 * 2) {
 						bullet.x = (float) (this.x + size/2 - Bullet.SIZE/2 + Math.sin(Math.toRadians(bullet.angle + angle)) * radius);
 						bullet.y = (float) (this.y + size/2 - Bullet.SIZE/2 + Math.cos(Math.toRadians(bullet.angle + angle)) * radius);
 						bullet.velocityX = (float) Math.sin(Math.toRadians(bullet.angle + angle));
@@ -77,7 +77,7 @@ public class RoundEnemy extends ZombieEnemy{
 						angle += bullet.speed * tslf;
 						angles.set(index, angle);
 					} else {
-						if(shotAtPlayer) {
+						if (shotAtPlayer) {
 							float ecx = this.x + this.size/2;
 							float ecy = this.y + this.size/2;
 							float pcx = Globals.player.x + Globals.player.size/2;
@@ -89,8 +89,8 @@ public class RoundEnemy extends ZombieEnemy{
 							//TODO: Rework the angle system
 							float newAngle = (float) Math.atan(distx / disty);
 							newAngle = (float) Math.toDegrees(newAngle);
-							if(pcy > ecy) newAngle =  -90 - (90-newAngle);
-							if(pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
+							if (pcy > ecy) newAngle =  -90 - (90-newAngle);
+							if (pcx < ecx && pcy < ecy) newAngle = -270 - (90-newAngle);
 
 							bullet.velocityX = (float) Math.sin(Math.toRadians(newAngle + 180));
 							bullet.velocityY = (float) Math.cos(Math.toRadians(newAngle + 180));
@@ -109,8 +109,8 @@ public class RoundEnemy extends ZombieEnemy{
 		for (Bullet bullet : bullets) {
 			bullet.update(tslf);
 			//Hit the player?
-			if(!bullet.hitSomething) {
-				if(bullet.checkCollisionToObject(Globals.player)) {
+			if (!bullet.hitSomething) {
+				if (bullet.checkCollisionToObject(Globals.player)) {
 					Globals.player.startKnockback(bullet.velocityX, bullet.velocityY, Globals.player.bulletImpact, Globals.player.bulletImpactTime);
 					Globals.player.gotHit = true;
 					bullet.maxExplosionRadius = 30;
@@ -119,10 +119,10 @@ public class RoundEnemy extends ZombieEnemy{
 			}
 		}
 		//Removal of the bullets
-		if(!bullets.isEmpty()) {
+		if (!bullets.isEmpty()) {
 			ArrayList<Bullet> removableBullets = new ArrayList<Bullet>();
 			for (Bullet bullet : bullets) {
-				if(bullet.canBeDeactivated()) {
+				if (bullet.canBeDeactivated()) {
 					removableBullets.add(bullet);
 				}
 			}
@@ -141,7 +141,7 @@ public class RoundEnemy extends ZombieEnemy{
 		b.velocityX = 0;
 		b.velocityY = 0;
 		this.bullets.add(b);
-		this.angles.add(new Float(0));
+		this.angles.add(0.f);
 		//Remove old
 		p.deactivate();
 	}
@@ -171,14 +171,14 @@ public class RoundEnemy extends ZombieEnemy{
 			break;
 		}
 		
-		if(isInHitAnimation) {
-			if(showBlink) {
+		if (isInHitAnimation) {
+			if (showBlink) {
 				g.setColor(Color.WHITE);
 				g.fillOval((int)x, (int)y, this.size, this.size);
 				g.drawOval((int)x, (int)y, this.size, this.size);
 			}
 		}
-		if(isInDieAnimation) {
+		if (isInDieAnimation) {
 			g.setColor(Color.BLACK);
 			g.fillOval((int)(x + size/2 - radius/2), (int)(y + size/2 - radius/2), (int)radius, (int)radius);
 		}

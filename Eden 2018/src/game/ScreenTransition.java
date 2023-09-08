@@ -30,11 +30,11 @@ public class ScreenTransition {
 	//UPDATE
 	public void update(float tslf) {
 		//Transition in
-		if(Game.state == Gamestate.MAP_TRANSITION_IN) {
+		if (Game.state == Gamestate.MAP_TRANSITION_IN) {
 			updateTransitionIn(tslf);
 		}
 		//Transition out
-		else if(Game.state == Gamestate.MAP_TRANSITION_OUT) {
+		else if (Game.state == Gamestate.MAP_TRANSITION_OUT) {
 			updateTransitionOut(tslf);
 		}
 	}
@@ -44,14 +44,14 @@ public class ScreenTransition {
 		switch (direction) {
 		case RIGHT:
 			transitionWidth += speed*tslf;
-			if(transitionWidth >= Globals.screenWidth) {
+			if (transitionWidth >= Globals.screenWidth) {
 				transitionWidth = Globals.screenWidth*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
 		case LEFT:
 			transitionX -= speed*tslf;
-			if(transitionX <= 0) {
+			if (transitionX <= 0) {
 				transitionX = 0 - Globals.screenWidth*0.25f;
 				transitionWidth = Globals.screenWidth*1.25f;
 				Game.state = Gamestate.RESET;
@@ -59,14 +59,14 @@ public class ScreenTransition {
 			break;
 		case DOWN:
 			transitionHeight += speed*tslf;
-			if(transitionHeight >= Globals.screenHeight) {
+			if (transitionHeight >= Globals.screenHeight) {
 				transitionHeight = Globals.screenHeight*1.25f;
 				Game.state = Gamestate.RESET;
 			}
 			break;
 		case UP:
 			transitionY -= speed*tslf;
-			if(transitionY <= 0) {
+			if (transitionY <= 0) {
 				transitionY = 0 - Globals.screenHeight*0.25f;
 				transitionHeight = Globals.screenHeight*1.25f;
 				Game.state = Gamestate.RESET;
@@ -82,25 +82,25 @@ public class ScreenTransition {
 		switch (direction) {
 		case RIGHT:
 			transitionWidth -= speed*tslf;
-			if(transitionWidth <= 0) {
+			if (transitionWidth <= 0) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;
 		case LEFT:
 			transitionX += speed*tslf;
-			if(transitionX >= Globals.screenWidth) {
+			if (transitionX >= Globals.screenWidth) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;
 		case DOWN:
 			transitionHeight -= speed*tslf;
-			if(transitionHeight <= 0) {
+			if (transitionHeight <= 0) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;
 		case UP:
 			transitionY += speed * tslf;
-			if(transitionY >= Globals.screenHeight) {
+			if (transitionY >= Globals.screenHeight) {
 				Game.state = Gamestate.RUNNING;
 			}
 			break;

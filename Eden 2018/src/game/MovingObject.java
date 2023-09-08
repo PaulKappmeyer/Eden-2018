@@ -65,11 +65,11 @@ public abstract class MovingObject extends Gameobject{
 	 * @param tslf
 	 */
 	public void updateSpeedUp(float tslf) {
-		if(isSpeedingUP) {
-			if(currentWalkSpeed < MAX_WALK_SPEED) {
+		if (isSpeedingUP) {
+			if (currentWalkSpeed < MAX_WALK_SPEED) {
 				timeSpeededUp += tslf;
 				currentWalkSpeed = MAX_WALK_SPEED * (timeSpeededUp / TIME_FOR_MAX_SPEED);
-			}else {
+			} else {
 				timeSpeededUp = 0;
 				currentWalkSpeed = MAX_WALK_SPEED;
 				isSpeedingUP = false;
@@ -93,16 +93,16 @@ public abstract class MovingObject extends Gameobject{
 	 * @return The direction
 	 */
 	public Direction getDirection(double velocityX, double velocityY) {
-		if(velocityY >= -1 && velocityY <= -0.45) {
+		if (velocityY >= -1 && velocityY <= -0.45) {
 			return(Direction.UP);
 		}
-		if(velocityY >= 0.45 && velocityY <= 1) {
+		if (velocityY >= 0.45 && velocityY <= 1) {
 			return(Direction.DOWN);
 		}
-		if(velocityX >= -1 && velocityX <= -0.45) {
+		if (velocityX >= -1 && velocityX <= -0.45) {
 			return(Direction.LEFT);
 		}
-		if(velocityX >= 0.45 && velocityX <= 1) {
+		if (velocityX >= 0.45 && velocityX <= 1) {
 			return(Direction.RIGHT);
 		}
 		return Direction.UNDEFINED;
